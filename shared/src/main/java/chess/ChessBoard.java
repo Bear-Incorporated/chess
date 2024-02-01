@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Arrays;
+
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
@@ -8,8 +10,9 @@ package chess;
  */
 public class ChessBoard {
 
+    ChessPiece[][] chess_board;
     public ChessBoard() {
-        
+        chess_board = new ChessPiece[8][8];
     }
 
     /**
@@ -19,7 +22,15 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        if (position.getRow()<1 || position.getRow() >8 || position.getColumn() <1 || position.getColumn() >8)
+            return;
+        if(chess_board[position.getRow()-1][position.getColumn()-1] == null)
+        {
+
+            chess_board[position.getRow()-1][position.getColumn()-1] = piece;
+
+        }
+        //throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -30,8 +41,24 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        if (position.getRow()<1 || position.getRow() >8 || position.getColumn() <1 || position.getColumn() >8)
+            return null;
+        if(chess_board[position.getRow()-1][position.getColumn()-1] == null)
+        {
+            return null;
+        }
+        return chess_board[position.getRow()-1][position.getColumn()-1];
+        //throw new RuntimeException("Not implemented");
     }
+
+    //Same as previous question, but using ints for the row and column, for easier use with functions.
+    public ChessPiece getPiece(int row, int col) {
+        ChessPosition position_temp = new ChessPosition(row, col);
+        return getPiece(position_temp);
+    }
+
+
+
 
     /**
      * Sets the board to the default starting board
@@ -39,5 +66,19 @@ public class ChessBoard {
      */
     public void resetBoard() {
         throw new RuntimeException("Not implemented");
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessBoard that)) return false;
+        return Arrays.equals(chess_board, that.chess_board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(chess_board);
     }
 }
