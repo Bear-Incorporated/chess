@@ -24,9 +24,9 @@ public class ChessBoard {
     public void addPiece(ChessPosition position, ChessPiece piece) {
         if (position.getRow()<1 || position.getRow() >8 || position.getColumn() <1 || position.getColumn() >8)
             return;
-        if(chess_board[position.getColumn()-1][position.getRow()-1] == null)
+        if(chess_board[position.getRow()-1][position.getColumn()-1] == null)
         {
-            chess_board[position.getColumn()-1][position.getRow()-1] = piece;
+            chess_board[position.getRow()-1][position.getColumn()-1] = piece;
         }
         //throw new RuntimeException("Not implemented");
     }
@@ -41,11 +41,11 @@ public class ChessBoard {
     public ChessPiece getPiece(ChessPosition position) {
         if (position.getRow()<1 || position.getRow() >8 || position.getColumn() <1 || position.getColumn() >8)
             return null;
-        if(chess_board[position.getColumn()-1][position.getRow()-1] == null)
+        if(chess_board[position.getRow()-1][position.getColumn()-1] == null)
         {
             return null;
         }
-        return chess_board[position.getColumn()-1][position.getRow()-1];
+        return chess_board[position.getRow()-1][position.getColumn()-1];
         //throw new RuntimeException("Not implemented");
     }
 
@@ -64,7 +64,7 @@ public class ChessBoard {
         {
             for(int c=0; c<8; c++)
             {
-                chess_board[c][r] = null;
+                chess_board[r][c] = null;
             }
         }
     }
@@ -116,11 +116,11 @@ public class ChessBoard {
         addPiece(new ChessPosition(8, 7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT));
         addPiece(new ChessPosition(8, 8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
 
-        checkBoard();
+        //printBoard();
         //System.out.println(this.toString());
     }
 
-    public void checkBoard() {
+    public void printBoard() {
         System.out.println("Board:" + System.lineSeparator());
         for(int r=7; r>-1; r--)
         {
@@ -130,13 +130,13 @@ public class ChessBoard {
             {
                 int co=c+1;
                 System.out.println("c" + co + ": ");
-                if(chess_board[c][r] == null)
+                if(chess_board[r][c] == null)
                 {
                     System.out.println("null ");
                 }
                 else
                 {
-                    System.out.println(chess_board[c][r].toString() + " ");
+                    System.out.println(chess_board[r][c].toString() + " ");
                 }
             }
             System.out.println(System.lineSeparator());
