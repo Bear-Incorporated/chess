@@ -109,6 +109,11 @@ public class ChessGame {
     }
 
     @Override
+    public String toString() {
+        return "ChessGame{}";
+    }
+
+    @Override
     public int hashCode() {
         return super.hashCode();
     }

@@ -67,18 +67,268 @@ public class ChessPiece {
         //moves_output = new ChessMove[64];
 
 
-
         PieceType piece_type_move = board.getPiece(myPosition).getPieceType();
         ChessGame.TeamColor piece_color_move = board.getPiece(myPosition).getTeamColor();
+        int row_start =  myPosition.getRow();
+        int col_start =  myPosition.getColumn();
 
         if (piece_type_move == PieceType.KING){
-            throw new RuntimeException("Not implemented");
+            int row_current, col_current;
+            //Check up right
+            row_current = row_start + 1;
+            col_current = col_start + 1;
+            if (row_current <= 8 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current++;
+                    col_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 10;
+                } else {
+                    row_current = 10;
+                }
+            }
+            //Check down right
+            row_current = row_start - 1;
+            col_current = col_start + 1;
+            if (row_current >= 1 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current--;
+                    col_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check down left
+            row_current = row_start - 1;
+            col_current = col_start - 1;
+            if (row_current >= 1 && col_current >= 1){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current--;
+                    col_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check up left
+            row_current = row_start + 1;
+            col_current = col_start - 1;
+            if (row_current <= 8 && col_current >= 1){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current++;
+                    col_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 10;
+                } else {
+                    row_current = 10;
+                }
+            }
+            //Check up
+            row_current = row_start + 1;
+            col_current = col_start ;
+            if (row_current <= 8 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 10;
+                } else {
+                    row_current = 10;
+                }
+            }
+            //Check down
+            row_current = row_start - 1;
+            col_current = col_start;
+            if (row_current >= 1 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check left
+            row_current = row_start;
+            col_current = col_start - 1;
+            if (row_current >= 1 && col_current >= 1){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    col_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check right
+            row_current = row_start;
+            col_current = col_start + 1;
+            if (row_current >= 1 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    col_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+
+
+
         } else if (piece_type_move == PieceType.QUEEN){
-            throw new RuntimeException("Not implemented");
+            int row_current, col_current;
+            //Check up right
+            row_current = row_start + 1;
+            col_current = col_start + 1;
+            while (row_current <= 8 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current++;
+                    col_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 10;
+                } else {
+                    row_current = 10;
+                }
+            }
+            //Check down right
+            row_current = row_start - 1;
+            col_current = col_start + 1;
+            while (row_current >= 1 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current--;
+                    col_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check down left
+            row_current = row_start - 1;
+            col_current = col_start - 1;
+            while (row_current >= 1 && col_current >= 1){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current--;
+                    col_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check up left
+            row_current = row_start + 1;
+            col_current = col_start - 1;
+            while (row_current <= 8 && col_current >= 1){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current++;
+                    col_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 10;
+                } else {
+                    row_current = 10;
+                }
+            }
+            //Check up
+            row_current = row_start + 1;
+            col_current = col_start ;
+            while (row_current <= 8 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 10;
+                } else {
+                    row_current = 10;
+                }
+            }
+            //Check down
+            row_current = row_start - 1;
+            col_current = col_start;
+            while (row_current >= 1 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check left
+            row_current = row_start;
+            col_current = col_start - 1;
+            while (row_current >= 1 && col_current >= 1){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    col_current--;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
+            //Check right
+            row_current = row_start;
+            col_current = col_start + 1;
+            while (row_current >= 1 && col_current <= 8){
+                if (board.getPiece(row_current, col_current) == null){
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    col_current++;
+                    //throw new RuntimeException(new ChessMove(row_start, col_start, row_current, col_current, piece_type).toString());
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                    row_current = 0;
+                } else {
+                    row_current = 0;
+                }
+            }
 
         } else if (piece_type_move == PieceType.BISHOP){
-            int row_start =  myPosition.getRow();
-            int col_start =  myPosition.getColumn();
             int row_current, col_current;
             //Check up right
             row_current = row_start + 1;
@@ -147,11 +397,96 @@ public class ChessPiece {
 
 
         } else if (piece_type_move == PieceType.KNIGHT){
-            throw new RuntimeException("Not implemented");
+            int row_current, col_current;
+
+            // Check Down-left
+            row_current = row_start - 1;
+            col_current = col_start - 2;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+            row_current = row_start - 2;
+            col_current = col_start - 1;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+
+            // Check Down-right
+            row_current = row_start - 1;
+            col_current = col_start + 2;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+            row_current = row_start - 2;
+            col_current = col_start + 1;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+
+            // Check Up-left
+            row_current = row_start + 1;
+            col_current = col_start - 2;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+            row_current = row_start + 2;
+            col_current = col_start - 1;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+
+            // Check Up-right
+            row_current = row_start + 1;
+            col_current = col_start + 2;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+            row_current = row_start + 2;
+            col_current = col_start + 1;
+            if (row_current >= 1 && row_current <= 8 && col_current >= 1 && col_current <= 8) {
+                if (board.getPiece(row_current, col_current) == null) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                } else if (board.getPiece(row_current, col_current).piece_color != piece_color_move) {
+                    moves_output.add(new ChessMove(row_start, col_start, row_current, col_current, null));
+                }
+            }
+
+
+
+
+
+
+            //throw new RuntimeException("Not implemented");
 
         } else if (piece_type_move == PieceType.ROOK){
-            int row_start =  myPosition.getRow();
-            int col_start =  myPosition.getColumn();
             int row_current, col_current;
             //Check up
             row_current = row_start + 1;
@@ -215,7 +550,92 @@ public class ChessPiece {
             }
 
         } else if (piece_type_move == PieceType.PAWN){
-            throw new RuntimeException("Not implemented");
+            int promote = 0;
+            //System.out.println(row_start);
+            //System.out.println(col_start);
+            if (row_start < 8 && piece_color_move == ChessGame.TeamColor.WHITE) {
+                if (row_start == 7)
+                    promote = 1;
+                if (board.getPiece(row_start +1, col_start) == null) {
+                    if (promote == 0) {
+                        moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start, null));
+                    } else {
+                        moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start, PieceType.BISHOP));
+                        moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start, PieceType.KNIGHT));
+                        moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start, PieceType.QUEEN));
+                        moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start, PieceType.ROOK));
+                    }
+                    if (row_start == 2 && board.getPiece(4, col_start) == null) {
+                        moves_output.add(new ChessMove(row_start, col_start, row_start+2, col_start, null));
+                    }
+                }
+                if (col_start > 1 && board.getPiece(row_start +1, col_start-1) != null) {
+                    if (board.getPiece(row_start +1, col_start-1).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        if (promote == 0) {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start +1, col_start-1, null));
+                        } else {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start-1, PieceType.BISHOP));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start-1, PieceType.KNIGHT));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start-1, PieceType.QUEEN));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start-1, PieceType.ROOK));
+                        }
+                    }
+                }
+                if (col_start < 8 && board.getPiece(row_start +1, col_start+1) != null) {
+                    if (board.getPiece(row_start +1, col_start+1).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        if (promote == 0) {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start + 1, col_start + 1, null));
+                        } else {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start+1, PieceType.BISHOP));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start+1, PieceType.KNIGHT));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start+1, PieceType.QUEEN));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start+1, col_start+1, PieceType.ROOK));
+                        }
+                    }
+                }
+            } else if (row_start > 1 && piece_color_move == ChessGame.TeamColor.BLACK) {
+                if (row_start == 2)
+                    promote = 1;
+                if (board.getPiece(row_start -1, col_start) == null) {
+                    if (promote == 0) {
+                        moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start, null));
+                    } else {
+                        moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start, PieceType.BISHOP));
+                        moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start, PieceType.KNIGHT));
+                        moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start, PieceType.QUEEN));
+                        moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start, PieceType.ROOK));
+                    }
+                    if (row_start == 7 && board.getPiece(5, col_start) == null) {
+                        moves_output.add(new ChessMove(row_start, col_start, row_start-2, col_start, null));
+                    }
+                }
+                if (col_start > 1 && board.getPiece(row_start -1, col_start-1) != null) {
+                    if (board.getPiece(row_start -1, col_start-1).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        if (promote == 0) {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start -1, col_start-1, null));
+                        } else {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start-1, PieceType.BISHOP));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start-1, PieceType.KNIGHT));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start-1, PieceType.QUEEN));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start-1, PieceType.ROOK));
+                        }
+                    }
+                }
+                if (col_start < 8 && board.getPiece(row_start -1, col_start+1) != null) {
+                    if (board.getPiece(row_start -1, col_start+1).getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        if (promote == 0) {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start -1, col_start+1, null));
+                        } else {
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start+1, PieceType.BISHOP));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start+1, PieceType.KNIGHT));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start+1, PieceType.QUEEN));
+                            moves_output.add(new ChessMove(row_start, col_start, row_start-1, col_start+1, PieceType.ROOK));
+                        }
+                    }
+                }
+            }
+
+
 
         }
 
@@ -224,6 +644,15 @@ public class ChessPiece {
 
 
         //throw new RuntimeException("Not implemented");
+    }
+
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "piece_type=" + piece_type +
+                ", piece_color=" + piece_color +
+                '}';
     }
 
     @Override
