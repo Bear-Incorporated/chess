@@ -31,6 +31,12 @@ public class ChessBoard {
         //throw new RuntimeException("Not implemented");
     }
 
+    public void remove_piece(ChessPosition position) {
+        if (position.getRow()<1 || position.getRow() >8 || position.getColumn() <1 || position.getColumn() >8)
+            return;
+        chess_board[position.getRow()-1][position.getColumn()-1] = null;
+    }
+
     /**
      * Gets a chess piece on the chessboard
      *
