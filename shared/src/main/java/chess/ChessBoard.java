@@ -28,7 +28,7 @@ public class ChessBoard {
         {
             chess_board[position.getRow()-1][position.getColumn()-1] = piece;
         }
-        System.out.println("aDDING PIECE @" + position);
+        //System.out.println("aDDING PIECE @" + position);
         //throw new RuntimeException("Not implemented");
     }
 
