@@ -151,9 +151,33 @@ public class ChessBoard {
 
     @Override
     public String toString() {
-        return "ChessBoard{" +
-                "chess_board=" + Arrays.toString(chess_board) +
-                '}';
+        StringBuilder string_output = new StringBuilder();
+        string_output.append("ChessBoard{\r\n");
+
+        for(int r=7; r>=0; r--)
+        {
+            for(int c=0; c<8; c++)
+            {
+                string_output.append("|");
+                if (chess_board[r][c] == null) {
+                    string_output.append(" ");
+                }
+                else
+                {
+                    string_output.append(chess_board[r][c].toString());
+                }
+
+            }
+            string_output.append("|\r\n");
+        }
+
+        return string_output.toString();
+
+
+
+
+
+
     }
 
     @Override

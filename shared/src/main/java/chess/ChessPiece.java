@@ -649,10 +649,35 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return "ChessPiece{" +
-                "piece_type=" + piece_type +
-                ", piece_color=" + piece_color +
-                '}';
+        if(piece_color == ChessGame.TeamColor.WHITE)
+        {
+            if(piece_type == PieceType.BISHOP)
+                return "B";
+            if(piece_type == PieceType.KING)
+                return "K";
+            if(piece_type == PieceType.KNIGHT)
+                return "N";
+            if(piece_type == PieceType.PAWN)
+                return "P";
+            if(piece_type == PieceType.QUEEN)
+                return "Q";
+            if(piece_type == PieceType.ROOK)
+                return "R";
+        } else {
+            if(piece_type == PieceType.BISHOP)
+                return "b";
+            if(piece_type == PieceType.KING)
+                return "k";
+            if(piece_type == PieceType.KNIGHT)
+                return "n";
+            if(piece_type == PieceType.PAWN)
+                return "p";
+            if(piece_type == PieceType.QUEEN)
+                return "q";
+            if(piece_type == PieceType.ROOK)
+                return "r";
+        }
+        return " ";
     }
 
     @Override
