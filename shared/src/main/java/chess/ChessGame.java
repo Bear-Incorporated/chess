@@ -60,17 +60,25 @@ public class ChessGame {
         if (chess_board.getPiece(startPosition) == null)
             return null;
 
+        ChessPiece piece_moving = chess_board.getPiece(startPosition);
+
+        // Check the color of the piece in question
+        if(piece_moving.getTeamColor() != turn_color)
+            return null;
+
         // Get the moves possible, without taking check into consideration
         Set<ChessMove> moves_input = (Set<ChessMove>) chess_board.getPiece(startPosition).pieceMoves(chess_board, startPosition);
-
-
 
         // Check every move
         for (ChessMove move : moves_input)
         {
-            // This imaginary board will be the board if it completes the specific move
-            ChessBoard chess_board_imaginary = chess_board;
+            System.out.println("Checking if " + move.getStartPosition() + " can move to " + move.getEndPosition());
 
+            // This imaginary board will be the board if it completes the specific move
+            ChessBoard chess_board_imaginary = chess_board.copy_board();
+
+
+            //ChessBoard chess_board_imaginary = chess_board;
 
             // Kill the previous piece and add the new piece in its place
             chess_board_imaginary.remove_piece(move.getEndPosition());
@@ -79,11 +87,16 @@ public class ChessGame {
             // remove the piece from start position
             chess_board_imaginary.remove_piece(startPosition);
 
-            if (isInCheck(chess_board.getPiece(startPosition).getTeamColor(), chess_board_imaginary)) {
+
+            if (isInCheck(piece_moving.getTeamColor(), chess_board_imaginary)) {
                 // It is in check, so it won't be added
+                System.out.println("It is in check, so it won't be added");
             } else {
+                System.out.println("It is not in check, so it will be added");
                 moves_output.add(move);
             }
+
+
         }
 
         return moves_output;
@@ -96,7 +109,47 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        ChessPosition startPosition = move.getStartPosition();
+        ChessPosition end_position = move.getEndPosition();
+        Set<ChessMove> moves_possible = (Set<ChessMove>) validMoves(startPosition);
+
+        System.out.println("Checking if " + startPosition + " can move to " + end_position);
+        // Check every move
+        for (ChessMove move_checking : moves_possible)
+        {
+            System.out.println("Checking move: " + move_checking);
+            // See if move is the same
+            if (move_checking.equals(move)) {
+                // Kill the previous piece and add the new piece in its place
+                System.out.println("Removing piece @" + end_position);
+                chess_board.remove_piece(end_position);
+                System.out.println(chess_board);
+                System.out.println("Add piece @" + end_position);
+                chess_board.addPiece(end_position, chess_board.getPiece(startPosition));
+                System.out.println(chess_board);
+
+                // remove the piece from start position
+                System.out.println("Removing piece @" + startPosition);
+                chess_board.remove_piece(startPosition);
+                System.out.println(chess_board);
+
+                // piece is moved, so we're done here
+                System.out.println("Piece has been moved");
+
+                // Change to new color turn
+                if (turn_color == TeamColor.WHITE) {
+                    turn_color = TeamColor.BLACK;
+                } else {
+                    turn_color = TeamColor.WHITE;
+                }
+
+                System.out.println(chess_board);
+                return;
+            }
+        }
+        System.out.println("Invalid move, did not find it on the list");
+        // It wasn't there, throw exception
+        // throw new InvalidMoveException("Can't move to " + move.getEndPosition());
     }
 
     /**
