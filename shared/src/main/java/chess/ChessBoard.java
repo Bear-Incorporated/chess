@@ -28,6 +28,7 @@ public class ChessBoard {
         {
             chess_board[position.getRow()-1][position.getColumn()-1] = piece;
         }
+        System.out.println("aDDING PIECE @" + position);
         //throw new RuntimeException("Not implemented");
     }
 
@@ -126,6 +127,22 @@ public class ChessBoard {
         //System.out.println(this.toString());
     }
 
+
+    public ChessBoard copy_board() {
+        ChessBoard board_copy = new ChessBoard();
+        for(int r=0; r<8; r++)
+        {
+            for(int c=0; c<8; c++)
+            {
+                if (chess_board[r][c] != null)
+                {
+                    board_copy.addPiece(new ChessPosition(r+1, c+1), new ChessPiece(chess_board[r][c].getTeamColor(), chess_board[r][c].getPieceType()));
+                }
+            }
+        }
+        return board_copy;
+    }
+
     public void printBoard() {
         System.out.println("Board:" + System.lineSeparator());
         for(int r=7; r>-1; r--)
@@ -148,6 +165,8 @@ public class ChessBoard {
             System.out.println(System.lineSeparator());
         }
     }
+
+
 
     @Override
     public String toString() {
@@ -191,4 +210,6 @@ public class ChessBoard {
     public int hashCode() {
         return Arrays.deepHashCode(chess_board);
     }
+
+
 }
