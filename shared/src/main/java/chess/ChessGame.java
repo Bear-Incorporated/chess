@@ -11,9 +11,11 @@ import java.util.Collection;
 public class ChessGame {
 
     TeamColor player_active;
+    ChessBoard player_board;
 
     public ChessGame() {
         player_active = TeamColor.WHITE;
+        player_board = new ChessBoard();
     }
 
     /**

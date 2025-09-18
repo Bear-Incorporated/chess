@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -54,7 +55,7 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        // throw new RuntimeException("Not implemented");
+
 
         if (board == null)
             return null;
@@ -93,18 +94,24 @@ public class ChessPiece {
 
 
 
-
+        throw new RuntimeException("Not implemented");
 
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessPiece that)) {
+            return false;
+        }
+        return piece_type == that.piece_type && piece_color == that.piece_color;
+    }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+        return Objects.hash(piece_type, piece_color);
     }
 }
