@@ -57,17 +57,21 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
 
-        if (board == null)
-            return null;
-        if (board.getPiece(myPosition) == null) {
-            return null;
-        }
+//        if (board == null)
+//            return null;
+//        if (board.getPiece(myPosition) == null) {
+//            return null;
+//        }
 
 
         Set<ChessMove> return_moves = new HashSet<ChessMove>();
         return_moves.clear();
 
         ChessPiece piece_moving = board.getPiece(myPosition);
+//        if (piece_moving == null)
+//        {
+//            return null;
+//        }
         ChessGame.TeamColor piece_color = piece_moving.getTeamColor();
         PieceType piece_type = piece_moving.getPieceType();
         int piece_row = myPosition.getRow();
@@ -76,6 +80,7 @@ public class ChessPiece {
         int offset_col;
         int temp_row;
         int temp_col;
+        final int OFF_BOARD = 10;
 
         if (piece_type == PieceType.BISHOP)
         {
@@ -86,8 +91,270 @@ public class ChessPiece {
             temp_col = piece_col + offset_col;
             while (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
             {
-                if (board.getPiece(temp_row,temp_col).piece_color == null)
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
             }
+            // check up-left
+            offset_row = 1;
+            offset_col = -1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            while (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check down-right
+            offset_row = -1;
+            offset_col = 1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            while (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check down-left
+            offset_row = -1;
+            offset_col = -1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            while (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+        }
+        else if (piece_type == PieceType.KING)
+        {
+            // check up-right
+            offset_row = 1;
+            offset_col = 1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check up-left
+            offset_row = 1;
+            offset_col = -1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check down-right
+            offset_row = -1;
+            offset_col = 1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check down-left
+            offset_row = -1;
+            offset_col = -1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check up
+            offset_row = 1;
+            offset_col = 0;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check left
+            offset_row = 0;
+            offset_col = -1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check right
+            offset_row = 0;
+            offset_col = 1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check down
+            offset_row = -1;
+            offset_col = 0;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    temp_row = temp_row + offset_row;
+                    temp_col = temp_col + offset_col;
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+        }
+        else if (piece_type == PieceType.ROOK)
+        {
+
         }
 
 
@@ -108,9 +375,9 @@ public class ChessPiece {
 
 
 
+        return return_moves;
 
-
-        throw new RuntimeException("Not implemented");
+        // throw new RuntimeException("Not implemented");
 
     }
 

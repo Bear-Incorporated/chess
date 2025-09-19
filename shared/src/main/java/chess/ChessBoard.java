@@ -15,7 +15,6 @@ public class ChessBoard {
     ChessPiece[][] chess_board;
     public ChessBoard() {
         chess_board = new ChessPiece[8][8];
-        resetBoard();
     }
 
     /**
@@ -105,11 +104,11 @@ public class ChessBoard {
         if (!(o instanceof ChessBoard that)) {
             return false;
         }
-        return Arrays.equals(chess_board, that.chess_board);
+        return Arrays.deepEquals(chess_board, that.chess_board);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(chess_board);
+        return Arrays.deepHashCode(chess_board);
     }
 }
