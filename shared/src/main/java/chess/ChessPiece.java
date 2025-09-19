@@ -93,6 +93,7 @@ public class ChessPiece {
 
 
 
+
         throw new RuntimeException("Not implemented");
 
     }
