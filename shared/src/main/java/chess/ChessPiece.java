@@ -69,10 +69,26 @@ public class ChessPiece {
 
         ChessPiece piece_moving = board.getPiece(myPosition);
         ChessGame.TeamColor piece_color = piece_moving.getTeamColor();
+        PieceType piece_type = piece_moving.getPieceType();
+        int piece_row = myPosition.getRow();
+        int piece_col = myPosition.getColumn();
+        int offset_row;
+        int offset_col;
+        int temp_row;
+        int temp_col;
 
-
-
-
+        if (piece_type == PieceType.BISHOP)
+        {
+            // check up-right
+            offset_row = 1;
+            offset_col = 1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            while (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col).piece_color == null)
+            }
+        }
 
 
 
