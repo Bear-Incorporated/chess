@@ -40,6 +40,18 @@ public class ChessBoard {
     }
 
     /**
+     * Gets a chess piece on the chessboard, but with row and col numbers
+     *
+     * @param row and col gives The position to get the piece from
+     * @return Either the piece at the position, or null if no piece is at that
+     * position
+     */
+    public ChessPiece getPiece(int row, int col) {
+        return chess_board[row-1][col-1];
+    }
+
+
+    /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
