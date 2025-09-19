@@ -531,6 +531,115 @@ public class ChessPiece {
                 }
             }
         }
+        else if (piece_type == PieceType.PAWN)
+        {
+            if (piece_color == ChessGame.TeamColor.WHITE)
+            {
+                offset_row = 1;
+            } else {
+                offset_row = -1;
+            }
+
+            // check right to kill
+            offset_col = 1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    // Nothing
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    // If not at edge of board
+                    if (temp_row >= 2 && temp_row <= 7) {
+                        // Keep going buddy.
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    } else {
+                        // PROMOTED!!!!!
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.ROOK));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.KNIGHT));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.BISHOP));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.QUEEN));
+                    }
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check left to kill
+            offset_col = -1;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 )
+            {
+                if (board.getPiece(temp_row,temp_col) == null)
+                {
+                    // Nothing
+                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                {
+                    // If not at edge of board
+                    if (temp_row >= 2 && temp_row <= 7) {
+                        // Keep going buddy.
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    } else {
+                        // PROMOTED!!!!!
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.ROOK));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.KNIGHT));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.BISHOP));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.QUEEN));
+                    }
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                } else {
+                    // Escape the loop
+                    temp_row = OFF_BOARD;
+                }
+            }
+            // check forward
+            offset_col = 0;
+            temp_row = piece_row + offset_row;
+            temp_col = piece_col + offset_col;
+            if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8 ) {
+                if (board.getPiece(temp_row, temp_col) == null) {
+                    // If not at edge of board
+                    if (temp_row >= 2 && temp_row <= 7) {
+                        // Keep going buddy.
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                    } else {
+                        // PROMOTED!!!!!
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.ROOK));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.KNIGHT));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.BISHOP));
+                        return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), ChessPiece.PieceType.QUEEN));
+                    }
+
+                    // Check if on starting row
+                    // If in starting place for White
+                    if (piece_row == 2 && piece_color == ChessGame.TeamColor.WHITE) {
+                        temp_row = piece_row + offset_row + offset_row;
+                        if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8) {
+                            if (board.getPiece(temp_row, temp_col) == null) {
+                                return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                            }
+                        }
+                    }
+
+                    // Check if on starting row
+                    // If in starting place for Black
+                    if (piece_row == 7 && piece_color == ChessGame.TeamColor.BLACK) {
+                        temp_row = piece_row + offset_row + offset_row;
+                        if (temp_row >= 1 && temp_row <= 8 && temp_col >= 1 && temp_col <= 8) {
+                            if (board.getPiece(temp_row, temp_col) == null) {
+                                return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
+                            }
+                        }
+                    }
+                }
+            }
+        }
         else if (piece_type == PieceType.ROOK)
         {
 
