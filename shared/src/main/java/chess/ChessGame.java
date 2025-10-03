@@ -1,6 +1,8 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -83,7 +85,59 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // check every row
+        for(int r=1; r<=8; r++) {
+            for (int c = 1; c <= 8; c++) {
+                // Check if piece there
+                if (player_board.getPiece(r, c) != null)
+                {
+                    // Check to see if it is the king of the correct color
+                    ChessPiece piece_king = player_board.getPiece(r,c);
+                    ChessPosition piece_king_position = new ChessPosition(r,c);
+                    //System.out.println("Found the KING @" + piece_king_position);
+                    if (piece_king.getTeamColor() == teamColor && piece_king.getPieceType() == ChessPiece.PieceType.KING)
+                    {
+                        // Check every spot on the board to see if it can kill the king
+                        for(int rr=1; rr<=8; rr++)
+                        {
+                            for(int cc=1; cc<=8; cc++)
+                            {
+                                if (player_board.getPiece(rr,cc) != null)
+                                {
+                                    // Check to see if it is the opposite color
+                                    ChessPiece piece_other = player_board.getPiece(rr,cc);
+                                    ChessPosition piece_other_position = new ChessPosition(rr,cc);
+                                    //System.out.println("Checking Piece @" + piece_other_position);
+                                    // Check to see if they are not teammates
+                                    if (piece_other.getTeamColor() != piece_king.getTeamColor())
+                                    {
+                                        //System.out.println("Different Team!!!");
+                                        Set<ChessMove> piece_other_moves = new HashSet<ChessMove>();
+                                        piece_other_moves = (Set<ChessMove>) piece_other.pieceMoves(player_board, piece_other_position);
+
+                                        //System.out.println("Found moves");
+                                        //System.out.println("King @ " + piece_king_position);
+                                        if(piece_other_moves != null)
+                                        {
+                                            for (ChessMove move : piece_other_moves)
+                                            {
+                                                //System.out.println(m.getEndPosition());
+                                                if(move.getEndPosition().equals(piece_king_position))
+                                                {
+                                                    return true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return false;
     }
 
     /**
@@ -113,7 +167,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        player_board = board;
     }
 
     /**
@@ -122,6 +176,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return player_board;
     }
 }
