@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -177,5 +178,29 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return player_board;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "player_board=" + player_board +
+                ", player_active=" + player_active +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ChessGame chessGame)) {
+            return false;
+        }
+        return player_active == chessGame.player_active && Objects.equals(player_board, chessGame.player_board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(player_active, player_board);
     }
 }
