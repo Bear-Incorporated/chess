@@ -63,6 +63,12 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPiece piece_moving = player_board.getPiece(move.getStartPosition());
+        if (piece_moving == null)
+            throw new InvalidMoveException("No Piece There");
+
+
+        player_board.addPiece(move.getEndPosition(),piece_moving);
+        player_board.piece_remove(move.getStartPosition());
 
 
 
