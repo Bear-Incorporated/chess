@@ -28,6 +28,16 @@ public class ChessBoard {
     }
 
     /**
+     * Adds a chess piece to the chessboard
+     *
+     * @param row and col gives The position to get the piece from
+     * @param piece    the piece to add
+     */
+    public void addPiece(int row, int col, ChessPiece piece) {
+        chess_board[row-1][col-1] = piece;
+    }
+
+    /**
      * Removes a chess piece from the chessboard
      *
      * @param position where to remove the piece from
@@ -35,6 +45,16 @@ public class ChessBoard {
      */
     public void piece_remove(ChessPosition position) {
         chess_board[position.getRow()-1][position.getColumn()-1] = null;
+    }
+
+    /**
+     * Removes a chess piece from the chessboard, but with row and col numbers
+     *
+     * @param row and col gives The position to get the piece from
+     *
+     */
+    public void piece_remove(int row, int col) {
+        chess_board[row-1][col-1] = null;
     }
 
     /**

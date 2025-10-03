@@ -16,6 +16,8 @@ public class ChessGame {
     TeamColor player_active;
     ChessBoard player_board;
 
+    ChessPosition player_inactive_last_move;
+
     public ChessGame() {
         player_active = TeamColor.WHITE;
         player_board = new ChessBoard();
@@ -69,14 +71,16 @@ public class ChessGame {
             return null;
         }
 
+        ChessBoard player_board_imaginary = player_board.get_board();
+
         // Check every move
         for (ChessMove move : moves_input)
         {
             System.out.println("Checking if " + move.getStartPosition() + " can move to " + move.getEndPosition());
 
             // This imaginary board will be the board if it completes the specific move
-            ChessBoard player_board_imaginary = player_board.get_board();
-            //ChessBoard chess_board_imaginary = chess_board;
+            player_board_imaginary = player_board.get_board();
+            //ChessBoard player_board_imaginary = player_board;
 
             // Kill the previous piece and add the new piece in its place
             player_board_imaginary.piece_remove(move.getEndPosition());
@@ -99,56 +103,111 @@ public class ChessGame {
 
         // Castling Test
 
-        // Check if Rook
-        if (piece_moving.getPieceType() == ChessPiece.PieceType.ROOK)
+        // Check if King
+        if (piece_moving.getPieceType() == ChessPiece.PieceType.KING)
         {
             // Check if moved already
             if (piece_moving.get_piece_moved() == false)
             {
-                int piece_moving_row = startPosition.getRow();
-                int piece_moving_col = startPosition.getColumn();
-                // Check if King is in position
-                //ChessPosition piece_moving_king = new ChessPosition(piece_moving_row, 5);
-                if (player_board.getPiece(piece_moving_row, 5) != null)
+                // Check if King is in Check
+                if (isInCheck(piece_moving.getTeamColor()) == false)
                 {
-                    if (player_board.getPiece(piece_moving_row, 5).getPieceType() == ChessPiece.PieceType.KING)
+
+                    int piece_moving_row = startPosition.getRow();
+                    int piece_moving_col = startPosition.getColumn();
+                    // Check if Rook is in position
+
+                    // Look left, on Queen's side
+                    if (player_board.getPiece(piece_moving_row, 4) == null)
                     {
-                        // Check if King has moved
-                        if (player_board.getPiece(piece_moving_row, 5).get_piece_moved() == false)
+                        if (player_board.getPiece(piece_moving_row, 3) == null)
                         {
-                            // Check if King is in Check
-                            if (isInCheck(piece_moving.getTeamColor()) == false) {
+                            if (player_board.getPiece(piece_moving_row, 2) == null)
+                            {
+                                if (player_board.getPiece(piece_moving_row, 1) != null)
+                                {
+                                    if (player_board.getPiece(piece_moving_row, 1).getPieceType() == ChessPiece.PieceType.ROOK)
+                                    {
+                                        if (player_board.getPiece(piece_moving_row, 1).get_piece_moved() == false)
+                                        {
+                                            // This imaginary board will be the board if it completes the specific move
+                                            player_board_imaginary = player_board.get_board();
 
-                                if (piece_moving_col == 1) {
-                                    // On Queen's side
-                                    if (player_board.getPiece(piece_moving_row, 2) == null) {
-                                        if (player_board.getPiece(piece_moving_row, 3) == null) {
-                                            if (player_board.getPiece(piece_moving_row, 4) == null) {
+                                            // Move the king left by 1
+                                            player_board_imaginary.addPiece(piece_moving_row, 4, piece_moving);
+                                            player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                            if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
+                                                // It is in check, so it won't be added
+                                                System.out.println("It is in check, so it won't be added");
+                                            } else {
+                                                // This imaginary board will be the board if it completes the specific move
+                                                player_board_imaginary = player_board.get_board();
 
+                                                // Move the king left by 2
+                                                player_board_imaginary.addPiece(piece_moving_row, 3, piece_moving);
+                                                player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                                if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
+                                                    // It is in check, so it won't be added
+                                                    System.out.println("It is in check, so it won't be added");
+                                                } else {
+                                                    System.out.println("It is not in check, so it will be added");
+                                                    moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, 3), null));
+                                                }
                                             }
+
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }
 
+                    // Look right, on King's side
+                    if (player_board.getPiece(piece_moving_row, 6) == null)
+                    {
+                        if (player_board.getPiece(piece_moving_row, 7) == null)
+                        {
+                            if (player_board.getPiece(piece_moving_row, 8) != null)
+                            {
+                                if (player_board.getPiece(piece_moving_row, 8).getPieceType() == ChessPiece.PieceType.ROOK)
+                                {
+                                    if (player_board.getPiece(piece_moving_row, 8).get_piece_moved() == false)
+                                    {
+                                        // This imaginary board will be the board if it completes the specific move
+                                        player_board_imaginary = player_board.get_board();
 
-                                } else {
-                                    // On King's Side
-                                    if (player_board.getPiece(piece_moving_row, 7) == null) {
-                                        if (player_board.getPiece(piece_moving_row, 6) == null) {
+                                        // Move the king right by 1
+                                        player_board_imaginary.addPiece(piece_moving_row, 6, piece_moving);
+                                        player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                        if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
+                                            // It is in check, so it won't be added
+                                            System.out.println("It is in check, so it won't be added");
+                                        } else {
+                                            // This imaginary board will be the board if it completes the specific move
+                                            player_board_imaginary = player_board.get_board();
 
+                                            // Move the king left by 2
+                                            player_board_imaginary.addPiece(piece_moving_row, 7, piece_moving);
+                                            player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                            if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
+                                                // It is in check, so it won't be added
+                                                System.out.println("It is in check, so it won't be added");
+                                            } else {
+                                                System.out.println("It is not in check, so it will be added");
+                                                moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, 7), null));
+                                            }
                                         }
-
                                     }
                                 }
                             }
 
-
                         }
-
                     }
+
                 }
-
-
             }
+
+
 
         }
 
@@ -190,7 +249,7 @@ public class ChessGame {
                 // Kill the previous piece and add the new piece in its place
 
                 player_board.piece_remove(position_end);
-                player_board.getPiece(position_start).set_piece_moved();
+
                 if(move.getPromotionPiece() == null) {
                     player_board.addPiece(position_end, player_board.getPiece(position_start));
                 } else {
@@ -200,6 +259,40 @@ public class ChessGame {
 
                 // remove the piece from start position
                 player_board.piece_remove(position_start);
+
+                // Mark the moved piece as having moved
+                player_board.getPiece(position_end).set_piece_moved();
+
+                // If Castling, move the Rook as well
+                // Check if King
+                if(player_board.getPiece(position_end).getPieceType() == ChessPiece.PieceType.KING)
+                {
+                    // If King in starting location
+                    if (position_start.getColumn() == 5)
+                    {
+                        // If castling left
+                        if(position_end.getColumn() == 3)
+                        {
+                            // Remove the Rook and add the Rook to the new place
+                            player_board.piece_remove(position_end.getRow(),1);
+                            player_board.addPiece(position_end.getRow(), 4, new ChessPiece(player_board.getPiece(position_end).getTeamColor(), ChessPiece.PieceType.ROOK));
+
+                            // Mark the moved piece as having moved
+                            player_board.getPiece(position_end.getRow(), 4).set_piece_moved();
+                        }
+                        // If castling right
+                        if(position_end.getColumn() == 7)
+                        {
+                            // Remove the Rook and add the Rook to the new place
+                            player_board.piece_remove(position_end.getRow(),8);
+                            player_board.addPiece(position_end.getRow(), 6, new ChessPiece(player_board.getPiece(position_end).getTeamColor(), ChessPiece.PieceType.ROOK));
+
+                            // Mark the moved piece as having moved
+                            player_board.getPiece(position_end.getRow(), 6).set_piece_moved();
+                        }
+                    }
+                }
+
 
 
                 // piece is moved, so we're done here
