@@ -253,8 +253,27 @@ public class ChessGame {
         if (!isInCheck(teamColor))
             return false;
         // Check if any moves break you out of check
-        if (!isInStalemate(teamColor))
-            return false;
+        for(int r=1; r<=8; r++)
+        {
+            for(int c=1; c<=8; c++)
+            {
+                if(player_board.getPiece(r,c) != null) {
+                    if(player_board.getPiece(r,c).getTeamColor() == teamColor)
+                    {
+                        if (validMoves(new ChessPosition(r,c)) != null)
+                        {
+                            if (!validMoves(new ChessPosition(r, c)).isEmpty())
+                            {
+                                // Escape found!!!
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
 
 
         // Couldn't find any escapes
@@ -269,6 +288,10 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        if (isInCheck(teamColor))
+        {
+            return false;
+        }
         for(int r=1; r<=8; r++)
         {
             for(int c=1; c<=8; c++)
