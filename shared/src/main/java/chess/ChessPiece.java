@@ -15,10 +15,12 @@ public class ChessPiece {
 
     PieceType piece_type;
     ChessGame.TeamColor piece_color;
+    Boolean piece_moved;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         piece_type = type;
         piece_color = pieceColor;
+        piece_moved = false;
     }
 
     /**
@@ -911,28 +913,22 @@ public class ChessPiece {
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return return_moves;
 
         // throw new RuntimeException("Not implemented");
 
+    }
+
+    public boolean get_piece_moved()
+    {
+        return piece_moved;
+
+    }
+
+    public void set_piece_moved()
+    {
+        piece_moved = true;
+        return;
     }
 
 

@@ -97,6 +97,62 @@ public class ChessGame {
 
         }
 
+        // Castling Test
+
+        // Check if Rook
+        if (piece_moving.getPieceType() == ChessPiece.PieceType.ROOK)
+        {
+            // Check if moved already
+            if (piece_moving.get_piece_moved() == false)
+            {
+                int piece_moving_row = startPosition.getRow();
+                int piece_moving_col = startPosition.getColumn();
+                // Check if King is in position
+                //ChessPosition piece_moving_king = new ChessPosition(piece_moving_row, 5);
+                if (player_board.getPiece(piece_moving_row, 5) != null)
+                {
+                    if (player_board.getPiece(piece_moving_row, 5).getPieceType() == ChessPiece.PieceType.KING)
+                    {
+                        // Check if King has moved
+                        if (player_board.getPiece(piece_moving_row, 5).get_piece_moved() == false)
+                        {
+                            // Check if King is in Check
+                            if (isInCheck(piece_moving.getTeamColor()) == false) {
+
+                                if (piece_moving_col == 1) {
+                                    // On Queen's side
+                                    if (player_board.getPiece(piece_moving_row, 2) == null) {
+                                        if (player_board.getPiece(piece_moving_row, 3) == null) {
+                                            if (player_board.getPiece(piece_moving_row, 4) == null) {
+
+                                            }
+                                        }
+                                    }
+
+
+                                } else {
+                                    // On King's Side
+                                    if (player_board.getPiece(piece_moving_row, 7) == null) {
+                                        if (player_board.getPiece(piece_moving_row, 6) == null) {
+
+                                        }
+
+                                    }
+                                }
+                            }
+
+
+                        }
+
+                    }
+                }
+
+
+            }
+
+        }
+
+
         return moves_output;
 
 
@@ -134,7 +190,7 @@ public class ChessGame {
                 // Kill the previous piece and add the new piece in its place
 
                 player_board.piece_remove(position_end);
-
+                player_board.getPiece(position_start).set_piece_moved();
                 if(move.getPromotionPiece() == null) {
                     player_board.addPiece(position_end, player_board.getPiece(position_start));
                 } else {
