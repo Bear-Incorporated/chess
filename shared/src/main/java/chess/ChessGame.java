@@ -16,12 +16,13 @@ public class ChessGame {
     TeamColor player_active;
     ChessBoard player_board;
 
-    ChessPosition player_inactive_last_move;
+    ChessPosition player_inactive_last_move_position;
 
     public ChessGame() {
         player_active = TeamColor.WHITE;
         player_board = new ChessBoard();
         player_board.resetBoard();
+        player_inactive_last_move_position = new ChessPosition(1,1);
     }
 
     /**
@@ -101,20 +102,22 @@ public class ChessGame {
 
         }
 
+
         // Castling Test
+        int piece_moving_row = startPosition.getRow();
+        int piece_moving_col = startPosition.getColumn();
 
         // Check if King
         if (piece_moving.getPieceType() == ChessPiece.PieceType.KING)
         {
             // Check if moved already
-            if (piece_moving.get_piece_moved() == false)
+            if (piece_moving.get_piece_moved() == 0)
             {
                 // Check if King is in Check
                 if (isInCheck(piece_moving.getTeamColor()) == false)
                 {
 
-                    int piece_moving_row = startPosition.getRow();
-                    int piece_moving_col = startPosition.getColumn();
+
                     // Check if Rook is in position
 
                     // Look left, on Queen's side
@@ -128,7 +131,7 @@ public class ChessGame {
                                 {
                                     if (player_board.getPiece(piece_moving_row, 1).getPieceType() == ChessPiece.PieceType.ROOK)
                                     {
-                                        if (player_board.getPiece(piece_moving_row, 1).get_piece_moved() == false)
+                                        if (player_board.getPiece(piece_moving_row, 1).get_piece_moved() == 0)
                                         {
                                             // This imaginary board will be the board if it completes the specific move
                                             player_board_imaginary = player_board.get_board();
@@ -171,7 +174,7 @@ public class ChessGame {
                             {
                                 if (player_board.getPiece(piece_moving_row, 8).getPieceType() == ChessPiece.PieceType.ROOK)
                                 {
-                                    if (player_board.getPiece(piece_moving_row, 8).get_piece_moved() == false)
+                                    if (player_board.getPiece(piece_moving_row, 8).get_piece_moved() == 0)
                                     {
                                         // This imaginary board will be the board if it completes the specific move
                                         player_board_imaginary = player_board.get_board();
@@ -209,6 +212,38 @@ public class ChessGame {
 
 
 
+        }
+
+        // EnPassant Test
+        // Check if piece moving is a Pawn
+        if(piece_moving.getPieceType() ==  ChessPiece.PieceType.PAWN)
+        {
+            // Check is last moved piece is also a Pawn
+            if (player_board.getPiece(player_inactive_last_move_position).getPieceType() == ChessPiece.PieceType.PAWN)
+            {
+                // Check if inactive pawn only moved one time
+                if (player_board.getPiece(player_inactive_last_move_position).get_piece_moved() == 1)
+                {
+                    // Check to see if they are now on the same row (required for EnPassant
+                    if (player_inactive_last_move_position.getRow() == piece_moving_row)
+                    {
+                        // If one row over from the other pawn
+                        if (piece_moving_col == player_inactive_last_move_position.getColumn() + 1 || piece_moving_col == player_inactive_last_move_position.getColumn() - 1)
+                        {
+                            // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
+                            if (piece_moving_row == 4)
+                            {
+                                moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                            }
+                            else if (piece_moving_row == 5)
+                            {
+                                moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                            }
+                        }
+
+                    }
+                }
+            }
         }
 
 
@@ -261,7 +296,7 @@ public class ChessGame {
                 player_board.piece_remove(position_start);
 
                 // Mark the moved piece as having moved
-                player_board.getPiece(position_end).set_piece_moved();
+                player_board.getPiece(position_end).tick_piece_moved();
 
                 // If Castling, move the Rook as well
                 // Check if King
@@ -278,7 +313,7 @@ public class ChessGame {
                             player_board.addPiece(position_end.getRow(), 4, new ChessPiece(player_board.getPiece(position_end).getTeamColor(), ChessPiece.PieceType.ROOK));
 
                             // Mark the moved piece as having moved
-                            player_board.getPiece(position_end.getRow(), 4).set_piece_moved();
+                            player_board.getPiece(position_end.getRow(), 4).tick_piece_moved();
                         }
                         // If castling right
                         if(position_end.getColumn() == 7)
@@ -288,7 +323,7 @@ public class ChessGame {
                             player_board.addPiece(position_end.getRow(), 6, new ChessPiece(player_board.getPiece(position_end).getTeamColor(), ChessPiece.PieceType.ROOK));
 
                             // Mark the moved piece as having moved
-                            player_board.getPiece(position_end.getRow(), 6).set_piece_moved();
+                            player_board.getPiece(position_end.getRow(), 6).tick_piece_moved();
                         }
                     }
                 }
@@ -297,6 +332,8 @@ public class ChessGame {
 
                 // piece is moved, so we're done here
                 System.out.println("Piece has been moved");
+
+                player_inactive_last_move_position = position_end;
 
                 // Change to new color turn
                 if (player_active == TeamColor.WHITE) {
