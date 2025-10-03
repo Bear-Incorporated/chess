@@ -105,6 +105,21 @@ public class ChessBoard {
         addPiece(new ChessPosition(8, 8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
     }
 
+    public ChessBoard get_board() {
+        ChessBoard board_copy = new ChessBoard();
+        for(int r=0; r<8; r++)
+        {
+            for(int c=0; c<8; c++)
+            {
+                if (chess_board[r][c] != null)
+                {
+                    board_copy.addPiece(new ChessPosition(r+1, c+1), new ChessPiece(chess_board[r][c].getTeamColor(), chess_board[r][c].getPieceType()));
+                }
+            }
+        }
+        return board_copy;
+    }
+
 
     @Override
     public boolean equals(Object o) {

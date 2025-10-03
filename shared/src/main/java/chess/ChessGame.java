@@ -19,6 +19,7 @@ public class ChessGame {
     public ChessGame() {
         player_active = TeamColor.WHITE;
         player_board = new ChessBoard();
+        player_board.resetBoard();
     }
 
     /**
@@ -53,7 +54,50 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        Set<ChessMove> moves_output = new HashSet<ChessMove>();
+
+        // If no piece there, return null
+        if (player_board.getPiece(startPosition) == null)
+            return null;
+
+        ChessPiece piece_moving = player_board.getPiece(startPosition);
+
+        // Get the moves possible, without taking check into consideration
+        Set<ChessMove> moves_input = (Set<ChessMove>) player_board.getPiece(startPosition).pieceMoves(player_board, startPosition);
+        if(moves_input == null)
+        {
+            return null;
+        }
+
+        // Check every move
+        for (ChessMove move : moves_input)
+        {
+            System.out.println("Checking if " + move.getStartPosition() + " can move to " + move.getEndPosition());
+
+            // This imaginary board will be the board if it completes the specific move
+            ChessBoard player_board_imaginary = player_board.get_board();
+            //ChessBoard chess_board_imaginary = chess_board;
+
+            // Kill the previous piece and add the new piece in its place
+            player_board_imaginary.piece_remove(move.getEndPosition());
+            player_board_imaginary.addPiece(move.getEndPosition(), player_board_imaginary.getPiece(startPosition));
+
+            // remove the piece from start position
+            player_board_imaginary.piece_remove(startPosition);
+
+
+            if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
+                // It is in check, so it won't be added
+                System.out.println("It is in check, so it won't be added");
+            } else {
+                System.out.println("It is not in check, so it will be added");
+                moves_output.add(move);
+            }
+
+
+        }
+
+        return moves_output;
 
 
     }
@@ -65,18 +109,61 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        ChessPiece piece_moving = player_board.getPiece(move.getStartPosition());
-        if (piece_moving == null)
-            throw new InvalidMoveException("No Piece There");
+        ChessPosition position_start = move.getStartPosition();
+        ChessPosition position_end = move.getEndPosition();
+        Set<ChessMove> positions_possible = (Set<ChessMove>) validMoves(position_start);
+
+        if(player_board.getPiece(position_start) == null)
+            throw new InvalidMoveException("No Piece there");
+
+        if(player_board.getPiece(move.getStartPosition()).getTeamColor() != player_active)
+            throw new InvalidMoveException("Wrong Turn!!!");
+
+        //System.out.println("Checking if " + startPosition + " can move to " + end_position);
+        // Check every move
+        if(positions_possible == null)
+        {
+            // The list is empty
+            throw new InvalidMoveException("Can't move to " + move.getEndPosition());
+        }
+        for (ChessMove move_checking : positions_possible)
+        {
+            //System.out.println("Checking move: " + move_checking);
+            // See if move is the same
+            if (move_checking.equals(move)) {
+                // Kill the previous piece and add the new piece in its place
+
+                player_board.piece_remove(position_end);
+
+                if(move.getPromotionPiece() == null) {
+                    player_board.addPiece(position_end, player_board.getPiece(position_start));
+                } else {
+                    player_board.addPiece(position_end, new ChessPiece(player_active, move.getPromotionPiece()));
+                }
 
 
-        player_board.addPiece(move.getEndPosition(),piece_moving);
-        player_board.piece_remove(move.getStartPosition());
+                // remove the piece from start position
+                player_board.piece_remove(position_start);
 
 
+                // piece is moved, so we're done here
+                System.out.println("Piece has been moved");
 
+                // Change to new color turn
+                if (player_active == TeamColor.WHITE) {
+                    player_active = TeamColor.BLACK;
+                } else {
+                    player_active = TeamColor.WHITE;
+                }
 
-        throw new RuntimeException("Not implemented");
+                System.out.println(player_board);
+                return;
+            }
+        }
+        System.out.println("Invalid move, did not find it on the list");
+        // It wasn't there, throw exception
+        throw new InvalidMoveException("Can't move to " + move.getEndPosition());
+
     }
 
     /**
@@ -86,14 +173,26 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        return isInCheck(teamColor, player_board);
+    }
+
+    /**
+     * Determines if the given team is in check given any board
+     * Needed for validMoves() to work correctly, so I can check any board
+     *
+     * @param teamColor which team to check for check
+     * @param player_board_checking which board to check for check
+     * @return True if the specified team is in check
+     */
+    public boolean isInCheck(TeamColor teamColor, ChessBoard player_board_checking) {
         // check every row
         for(int r=1; r<=8; r++) {
             for (int c = 1; c <= 8; c++) {
                 // Check if piece there
-                if (player_board.getPiece(r, c) != null)
+                if (player_board_checking.getPiece(r, c) != null)
                 {
                     // Check to see if it is the king of the correct color
-                    ChessPiece piece_king = player_board.getPiece(r,c);
+                    ChessPiece piece_king = player_board_checking.getPiece(r,c);
                     ChessPosition piece_king_position = new ChessPosition(r,c);
                     //System.out.println("Found the KING @" + piece_king_position);
                     if (piece_king.getTeamColor() == teamColor && piece_king.getPieceType() == ChessPiece.PieceType.KING)
@@ -103,10 +202,10 @@ public class ChessGame {
                         {
                             for(int cc=1; cc<=8; cc++)
                             {
-                                if (player_board.getPiece(rr,cc) != null)
+                                if (player_board_checking.getPiece(rr,cc) != null)
                                 {
                                     // Check to see if it is the opposite color
-                                    ChessPiece piece_other = player_board.getPiece(rr,cc);
+                                    ChessPiece piece_other = player_board_checking.getPiece(rr,cc);
                                     ChessPosition piece_other_position = new ChessPosition(rr,cc);
                                     //System.out.println("Checking Piece @" + piece_other_position);
                                     // Check to see if they are not teammates
@@ -114,7 +213,7 @@ public class ChessGame {
                                     {
                                         //System.out.println("Different Team!!!");
                                         Set<ChessMove> piece_other_moves = new HashSet<ChessMove>();
-                                        piece_other_moves = (Set<ChessMove>) piece_other.pieceMoves(player_board, piece_other_position);
+                                        piece_other_moves = (Set<ChessMove>) piece_other.pieceMoves(player_board_checking, piece_other_position);
 
                                         //System.out.println("Found moves");
                                         //System.out.println("King @ " + piece_king_position);
@@ -141,6 +240,8 @@ public class ChessGame {
         return false;
     }
 
+
+
     /**
      * Determines if the given team is in checkmate
      *
@@ -148,7 +249,16 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // Check if it is in check
+        if (!isInCheck(teamColor))
+            return false;
+        // Check if any moves break you out of check
+        if (!isInStalemate(teamColor))
+            return false;
+
+
+        // Couldn't find any escapes
+        return true;
     }
 
     /**
@@ -159,7 +269,27 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        for(int r=1; r<=8; r++)
+        {
+            for(int c=1; c<=8; c++)
+            {
+                if(player_board.getPiece(r,c) != null) {
+                    if(player_board.getPiece(r,c).getTeamColor() == teamColor)
+                    {
+                        if (validMoves(new ChessPosition(r,c)) != null)
+                        {
+                            if (!validMoves(new ChessPosition(r, c)).isEmpty())
+                            {
+                                // Escape found!!!
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // Couldn't find any escapes
+        return true;
     }
 
     /**
