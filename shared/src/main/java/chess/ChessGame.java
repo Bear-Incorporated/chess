@@ -22,7 +22,7 @@ public class ChessGame {
         player_active = TeamColor.WHITE;
         player_board = new ChessBoard();
         player_board.resetBoard();
-        player_inactive_last_move_position = new ChessPosition(1,1);
+
     }
 
     /**
@@ -218,29 +218,35 @@ public class ChessGame {
         // Check if piece moving is a Pawn
         if(piece_moving.getPieceType() ==  ChessPiece.PieceType.PAWN)
         {
-            // Check is last moved piece is also a Pawn
-            if (player_board.getPiece(player_inactive_last_move_position).getPieceType() == ChessPiece.PieceType.PAWN)
+            // Check is last moved piece exists
+            // Check is last moved piece exists
+            if (player_inactive_last_move_position != null)
             {
-                // Check if inactive pawn only moved one time
-                if (player_board.getPiece(player_inactive_last_move_position).get_piece_moved() == 1)
+                if (player_board.getPiece(player_inactive_last_move_position) != null)
                 {
-                    // Check to see if they are now on the same row (required for EnPassant
-                    if (player_inactive_last_move_position.getRow() == piece_moving_row)
+                    if (player_board.getPiece(player_inactive_last_move_position).get_piece_moved() == 1)
                     {
-                        // If one row over from the other pawn
-                        if (piece_moving_col == player_inactive_last_move_position.getColumn() + 1 || piece_moving_col == player_inactive_last_move_position.getColumn() - 1)
+                        // Check if inactive pawn only moved one time
+                        if (player_board.getPiece(player_inactive_last_move_position).get_piece_moved() == 1)
                         {
-                            // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
-                            if (piece_moving_row == 4)
+                            // Check to see if they are now on the same row (required for EnPassant
+                            if (player_inactive_last_move_position.getRow() == piece_moving_row)
                             {
-                                moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
-                            }
-                            else if (piece_moving_row == 5)
-                            {
-                                moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                                // If one row over from the other pawn
+                                if (piece_moving_col == player_inactive_last_move_position.getColumn() + 1 || piece_moving_col == player_inactive_last_move_position.getColumn() - 1)
+                                {
+                                    // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
+                                    if (piece_moving_row == 4)
+                                    {
+                                        moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                                    } else if (piece_moving_row == 5)
+                                    {
+                                        moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                                    }
+                                }
+
                             }
                         }
-
                     }
                 }
             }
@@ -281,8 +287,27 @@ public class ChessGame {
             //System.out.println("Checking move: " + move_checking);
             // See if move is the same
             if (move_checking.equals(move)) {
-                // Kill the previous piece and add the new piece in its place
+                // If EnPassant, kill the Enemy Pawn
+                // This has to be done first, so I can check to see if a pawn moved diagonal into a blank space
 
+                // Only EnPassant if Pawn
+                if(player_board.getPiece(position_start).getPieceType() == ChessPiece.PieceType.PAWN)
+                {
+                    // Check if Pawn moved diagonal
+                    if (position_end.getColumn() == position_start.getColumn() + 1 || position_end.getColumn() == position_start.getColumn() - 1 )
+                    {
+                        // If the pawn moved diagonal without killing anything
+                        if (player_board.getPiece(position_end) == null)
+                        {
+                            // Kill the pawn!!!
+                            // The dead pawn will be on the starting row of the moving pawn and the ending column of the same pawn
+                            player_board.piece_remove(position_start.getRow(), position_end.getColumn());
+                        }
+                    }
+                }
+
+
+                // Kill the previous piece and add the new piece in its place
                 player_board.piece_remove(position_end);
 
                 if(move.getPromotionPiece() == null) {
@@ -327,6 +352,8 @@ public class ChessGame {
                         }
                     }
                 }
+
+
 
 
 
