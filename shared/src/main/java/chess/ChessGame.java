@@ -209,39 +209,45 @@ public class ChessGame {
 
                 }
             }
-
-
-
         }
 
         // EnPassant Test
         // Check if piece moving is a Pawn
         if(piece_moving.getPieceType() ==  ChessPiece.PieceType.PAWN)
         {
-            // Check is last moved piece exists
+            //System.out.println("EnPassant Test 1 Passed");
             // Check is last moved piece exists
             if (player_inactive_last_move_position != null)
             {
+                //System.out.println("EnPassant Test 2 Passed");
+                // Check is last moved piece exists
                 if (player_board.getPiece(player_inactive_last_move_position) != null)
                 {
+                    //System.out.println("EnPassant Test 3 Passed");
                     if (player_board.getPiece(player_inactive_last_move_position).get_piece_moved() == 1)
                     {
+                        //System.out.println("EnPassant Test 4 Passed");
                         // Check if inactive pawn only moved one time
                         if (player_board.getPiece(player_inactive_last_move_position).get_piece_moved() == 1)
                         {
+                            //System.out.println("EnPassant Test 5 Passed");
                             // Check to see if they are now on the same row (required for EnPassant
                             if (player_inactive_last_move_position.getRow() == piece_moving_row)
                             {
+                                //System.out.println("EnPassant Test 6 Passed");
                                 // If one row over from the other pawn
                                 if (piece_moving_col == player_inactive_last_move_position.getColumn() + 1 || piece_moving_col == player_inactive_last_move_position.getColumn() - 1)
                                 {
+                                    //System.out.println("EnPassant Test 7 Passed");
                                     // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
                                     if (piece_moving_row == 4)
                                     {
-                                        moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                                        //System.out.println("EnPassant Test 8 Passed");
+                                        moves_output.add(new ChessMove(startPosition, new ChessPosition(3, player_inactive_last_move_position.getColumn()), null));
                                     } else if (piece_moving_row == 5)
                                     {
-                                        moves_output.add(new ChessMove(startPosition, new ChessPosition(piece_moving_row, player_inactive_last_move_position.getColumn()), null));
+                                        //System.out.println("EnPassant Test 9 Passed");
+                                        moves_output.add(new ChessMove(startPosition, new ChessPosition(6, player_inactive_last_move_position.getColumn()), null));
                                     }
                                 }
 
