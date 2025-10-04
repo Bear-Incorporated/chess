@@ -928,7 +928,7 @@ public class ChessPiece {
 
     public void tick_piece_moved()
     {
-        piece_moved = piece_moved++;
+        piece_moved = piece_moved + 1;
         return;
     }
 
