@@ -1,2 +1,27 @@
-package dataaccess;public class AuthDao {
+package dataaccess;
+
+import com.google.gson.Gson;
+import io.javalin.http.Context;
+import model.AuthData;
+import model.GameData;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+public class AuthDAO
+{
+    private ArrayList<AuthData> Auth_List = new ArrayList<>();
+
+    public void Auth_add(AuthData added) {
+        Auth_List.add(added);
+    }
+
+    public ArrayList<AuthData> Auth_list() {
+        return Auth_List;
+    }
+
+    public void Auth_delete(AuthData removed) {
+        Auth_List.remove(removed);
+    }
+
 }
