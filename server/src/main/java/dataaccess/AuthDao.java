@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessPiece;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import model.AuthData;
@@ -10,8 +11,11 @@ import java.util.Map;
 
 public class AuthDAO
 {
-    private ArrayList<AuthData> Auth_List = new ArrayList<>();
+    private ArrayList<AuthData> Auth_List;
 
+    public AuthDAO() {
+        Auth_List = new ArrayList<>();
+    }
     public void Auth_add(AuthData added) {
         Auth_List.add(added);
     }
@@ -24,4 +28,7 @@ public class AuthDAO
         Auth_List.remove(removed);
     }
 
+    public void Auth_delete_all() {
+        Auth_List.clear();
+    }
 }

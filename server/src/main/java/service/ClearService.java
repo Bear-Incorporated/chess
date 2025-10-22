@@ -1,10 +1,13 @@
 package service;
 
+import model.*;
+
 import chess.ChessPiece;
 import chess.ChessPosition;
 
 public class ClearService
 {
+
 
     /**
      * ClearResult
@@ -12,7 +15,10 @@ public class ClearService
      * @param
      * @return
      */
-    public void clear() {
-        throw new RuntimeException("Not implemented");
+    public Clear_Response clear(Clear_Request data) {
+        Clear_Response output = new Clear_Response();
+
+        return output;
+
     }
 }
