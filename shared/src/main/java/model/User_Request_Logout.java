@@ -1,5 +1,5 @@
 package model;
 
-public record User_Request_Logout()
+public record User_Request_Logout(String authToken)
 {
 }

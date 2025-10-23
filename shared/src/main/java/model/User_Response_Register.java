@@ -1,5 +1,5 @@
 package model;
 
-public record User_Response_Register()
+public record User_Response_Register(String authToken, String username)
 {
 }
