@@ -35,12 +35,12 @@ public class UserService
      */
     public User_Response_Login login(User_Request_Login data) {
         System.out.println("Checking user_list.User_find_name ");
-        String output_auth = user_list.User_find_name(new UserData(data.username(), data.password(), null));
+        String output_auth = user_list.User_login(data);
 
         System.out.println("auth: " + output_auth);
-        if (output_auth == null)
+        if (output_auth.equals(""))
         {
-            return new User_Response_Login(null, null, false);
+            return new User_Response_Login("", "", false);
         }
         return new User_Response_Login(output_auth, data.username(), true);
     }
@@ -52,7 +52,8 @@ public class UserService
      * @return
      */
     public User_Response_Logout logout(User_Request_Logout data) {
-        throw new RuntimeException("Not implemented");
+        user_list.logout(data);
+        return new User_Response_Logout();
     }
 
 

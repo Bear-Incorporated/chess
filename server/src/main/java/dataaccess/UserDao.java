@@ -2,8 +2,7 @@ package dataaccess;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
-import model.GameData;
-import model.UserData;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,6 +25,29 @@ public class UserDAO
     }
 
     public String User_add(UserData added) {
+        if (added.username() == null)
+        {
+            return "404";
+        }
+        if (added.password() == null)
+        {
+            return "404";
+        }
+        if (added.email() == null)
+        {
+            return "404";
+        }
+
+        // Check to see if name already used
+        for (int i = 0; i < User_List.size(); i++)
+        {
+            if (User_List.get(i).username().equals(added.username()))
+            {
+                return "404";
+            }
+        }
+
+
         String authToken =  added.username() + added.password() + randInt();
         User_List_Authorized.add(authToken);
         System.out.println("Added " + authToken + " to List");
@@ -33,12 +55,25 @@ public class UserDAO
 
         User_List.add(added);
         return authToken;
+
+
+
+
     }
 
-    public String User_find_name(UserData finding) {
+
+
+    public String User_login(User_Request_Login finding) {
         System.out.println("Looking for Name!" + finding.username());
         String name = finding.username();
         System.out.println("List Size is " + User_List.size());
+
+        System.out.println("Looking for " + finding.authToken());
+
+        if (authorized(finding.authToken()))
+        {
+            return finding.authToken();
+        }
 
         for (int i = 0; i < User_List.size(); i++)
         {
@@ -57,11 +92,21 @@ public class UserDAO
                 }
             }
         }
-        return null;
+        return "";
     }
 
     public ArrayList<UserData> User_list() {
         return User_List;
+    }
+
+    public void logout(User_Request_Logout data) {
+        for (int i = 0; i < User_List_Authorized.size(); i++)
+        {
+            if (User_List_Authorized.get(i).equals(data.authToken()))
+            {
+                User_List_Authorized.remove(data.authToken());
+            }
+        }
     }
 
     public void User_delete(UserData removed) {
