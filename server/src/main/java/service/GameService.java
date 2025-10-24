@@ -74,17 +74,20 @@ public class GameService
         System.out.println("Game does exist still");
         System.out.println(join_game);
 
+
         String join_whiteUsername = join_game.whiteUsername();
         String join_blackUsername = join_game.blackUsername();
         String join_gameName = join_game.gameName();
         ChessGame join_chessgame = join_game.chessGame();
 
+        // if
+
         if (join_color.equals("BLACK"))
         {
-            if (join_game.blackUsername() == "")
+            if (join_game.blackUsername() == null)
             {
                 data_list.Game_delete_via_gameID(join_gameID);
-                data_list.Game_add(new GameData(join_gameID, join_whiteUsername, join_userName, join_gameName, join_chessgame));
+                data_list.Game_add_keep_gameID(new GameData(join_gameID, join_whiteUsername, join_userName, join_gameName, join_chessgame));
             }
             else
             {
@@ -92,10 +95,10 @@ public class GameService
             }
         } else if (join_color.equals("WHITE"))
         {
-            if (join_game.whiteUsername() == "")
+            if (join_game.whiteUsername() == null)
             {
                 data_list.Game_delete_via_gameID(join_gameID);
-                data_list.Game_add(new GameData(join_gameID, join_userName, join_blackUsername, join_gameName, join_chessgame));
+                data_list.Game_add_keep_gameID(new GameData(join_gameID, join_userName, join_blackUsername, join_gameName, join_chessgame));
             }
             else
             {
@@ -121,7 +124,7 @@ public class GameService
      * @return
      */
     public Game_Response_List list(Game_Request_List data) {
-        return new Game_Response_List(data_list.Game_list());
+        return data_list.Game_list();
     }
 
 

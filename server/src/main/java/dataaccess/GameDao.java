@@ -2,9 +2,7 @@ package dataaccess;
 
 import com.google.gson.Gson;
 import io.javalin.http.Context;
-import model.AuthData;
-import model.GameData;
-import model.UserData;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -25,14 +23,28 @@ public class GameDAO
 
     }
 
+    public void Game_add_keep_gameID(GameData added) {
+        Game_List.add(added);
+        gameID_current ++;
+
+    }
+
     public int Game_add_gameName(String name_adding) {
-        GameData game_adding = new GameData(gameID_current, "", "", name_adding, null);
+        GameData game_adding = new GameData(gameID_current, null, null, name_adding, null);
         Game_add(game_adding);
         return game_adding.gameID();
     }
 
-    public ArrayList<GameData> Game_list() {
-        return Game_List;
+    public Game_Response_List Game_list() {
+        ArrayList<GameData_Short> Game_List_output = new ArrayList<>();
+
+        for (int i = 0; i < Game_List.size(); i++)
+        {
+            Game_List_output.add(new GameData_Short(Game_List.get(i).gameID(), Game_List.get(i).whiteUsername(), Game_List.get(i).blackUsername(), Game_List.get(i).gameName()));
+
+        }
+
+        return new Game_Response_List(Game_List_output);
     }
 
     public boolean Game_found_via_gameName(String finding) {

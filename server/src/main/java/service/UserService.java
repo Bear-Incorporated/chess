@@ -140,10 +140,12 @@ public class UserService
 
 
 
-        // If they already are logged in, send them their current authtoken back
+        // If they already are logged in, logout and log back in
+        // Apparently don't do that, because we want to be easily accessible
         if (auth_list.authorized_via_username(loginer.username()))
         {
-            return auth_list.Auth_get_authToken_via_username(loginer.username());
+            // auth_list.Auth_delete_via_authToken(auth_list.Auth_get_authToken_via_username(loginer.username()));
+
         }
 
 
