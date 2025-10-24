@@ -6,7 +6,6 @@ import model.*;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Random;
 
 
 public class UserDAO
@@ -14,89 +13,21 @@ public class UserDAO
 
     private ArrayList<UserData> User_List;
 
-    Random rand;
 
-    private ArrayList<String> User_List_Authorized;
+
 
     public UserDAO() {
         User_List = new ArrayList<>();
-        User_List_Authorized = new ArrayList<>();
-        rand = new Random();
-    }
-
-    public String User_add(UserData added) {
-
-
-        // Check to see if name already used
-        for (int i = 0; i < User_List.size(); i++)
-        {
-            if (User_List.get(i).username().equals(added.username()))
-            {
-                return "404";
-            }
-        }
-
-
-        String authToken =  added.username() + added.password() + randInt();
-        User_List_Authorized.add(authToken);
-        System.out.println("Added " + authToken + " to List");
-        System.out.println(User_List_Authorized.size() + "tokens in List");
-
-        User_List.add(added);
-        return authToken;
-
-
-
 
     }
 
 
-
-    public String User_login(User_Request_Login finding) {
-        System.out.println("Looking for Name!" + finding.username());
-        String name = finding.username();
-        System.out.println("List Size is " + User_List.size());
-
-        System.out.println("Looking for " + finding.authToken());
-
-        if (authorized(finding.authToken()))
-        {
-            return finding.authToken();
-        }
-
-        for (int i = 0; i < User_List.size(); i++)
-        {
-            System.out.println("Name Check " + i);
-            System.out.println("Name Looking " + name);
-            System.out.println("Name Find " + User_List.get(i).username());
-            if (User_List.get(i).username().equals(name))
-            {
-                System.out.println("Name Found!");
-                if (User_List.get(i).password().equals(finding.password()))
-                {
-                    System.out.println("Password Correct!");
-                    String authToken =  finding.username() + finding.password() + randInt();
-                    User_List_Authorized.add(authToken);
-                    return authToken;
-                }
-            }
-        }
-        return "";
-    }
 
     public ArrayList<UserData> User_list() {
         return User_List;
     }
 
-    public void logout(User_Request_Logout data) {
-        for (int i = 0; i < User_List_Authorized.size(); i++)
-        {
-            if (User_List_Authorized.get(i).equals(data.authToken()))
-            {
-                User_List_Authorized.remove(data.authToken());
-            }
-        }
-    }
+
 
     public void User_delete(UserData removed) {
         User_List.remove(removed);
@@ -104,26 +35,48 @@ public class UserDAO
 
     public void User_delete_all() {
         User_List.clear();
-        User_List_Authorized.clear();
+
     }
 
-    public int randInt() {
 
-        // create an object of Random class
 
-        return rand.nextInt();
+    public void User_add(UserData added) {
+        User_List.add(added);
     }
 
-    public Boolean authorized(String data) {
-        for (int i = 0; i < User_List_Authorized.size(); i++)
+    public boolean User_found_via_username(String username){
+
+        for (int i = 0; i < User_List.size(); i++)
         {
-            if (User_List_Authorized.get(i).equals(data))
+            if (User_List.get(i).username().equals(username))
             {
                 return true;
             }
         }
         return false;
     }
+
+    public boolean User_login_credentials(UserData logging_in) {
+
+        for (int i = 0; i < User_List.size(); i++)
+        {
+            System.out.println("Name Check " + i);
+            System.out.println("Name Looking " + logging_in.username());
+            System.out.println("Name Find " + User_List.get(i).username());
+            if (User_List.get(i).username().equals(logging_in.username()))
+            {
+                System.out.println("Name Found!");
+                if (User_List.get(i).password().equals(logging_in.password()))
+                {
+                    System.out.println("Password Correct!");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 
 
 

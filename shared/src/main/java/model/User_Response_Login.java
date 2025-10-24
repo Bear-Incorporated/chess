@@ -1,5 +1,5 @@
 package model;
 
-public record User_Response_Login(String authToken, String username, Boolean success)
+public record User_Response_Login( String username, String authToken)
 {
 }

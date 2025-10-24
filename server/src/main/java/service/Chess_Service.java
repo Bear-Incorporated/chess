@@ -13,7 +13,7 @@ public class Chess_Service
     private final GameService service_game = new GameService();
     private final UserService service_user = new UserService();
 
-    private final AuthDAO data_list = new AuthDAO();
+    private final AuthDAO service_auth_list = new AuthDAO();
 
     /**
      * ClearResult
@@ -25,7 +25,7 @@ public class Chess_Service
         System.out.println("clear");
         service_game.clear(data);
         service_user.clear(data);
-        data_list.Auth_delete_all();
+        service_auth_list.Auth_delete_all();
         return new Clear_Response();
 
     }
@@ -80,7 +80,8 @@ public class Chess_Service
      * @param
      * @return
      */
-    public User_Response_Register User_Register(User_Request_Register data) {
+    public User_Response_Register User_Register(User_Request_Register data) throws DataAccessException
+    {
         System.out.println("user_register");
         return service_user.register(data);
     }
@@ -91,7 +92,8 @@ public class Chess_Service
      * @param
      * @return
      */
-    public User_Response_Login User_Login(User_Request_Login data) {
+    public User_Response_Login User_Login(User_Request_Login data) throws DataAccessException
+    {
         System.out.println("user_login");
         return service_user.login(data);
 

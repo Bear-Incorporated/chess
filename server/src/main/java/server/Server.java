@@ -309,20 +309,27 @@ public class Server {
                 throw new DataAccessException("400");
             }
 
-            // Run Function
-            User_Response_Register output = service.User_Register(input);
-
-            if (output.authToken().equals("404"))
+            try
             {
-                throw new DataAccessException("403");
+                // Run Function
+                User_Response_Register output = service.User_Register(input);
+
+                if (output.authToken().equals("404"))
+                {
+                    throw new DataAccessException("403");
+                }
+
+                // serialize to JSON
+                var json = serializer.toJson(output);
+                System.out.println("auth java: " + output);
+
+                // Update output
+                context.result(json);
+            } catch (DataAccessException e) {
+                throw new DataAccessException(e.getMessage());
             }
 
-            // serialize to JSON
-            var json = serializer.toJson(output);
-            System.out.println("auth java: " + output);
 
-            // Update output
-            context.result(json);
 
         } else if (context.path().equals("/session"))
         {
@@ -330,7 +337,7 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new User_Request_Login("","","");
+            var input = new User_Request_Login("","");
 
             // deserialize back to ChessGame
             input = serializer.fromJson(context.body(), User_Request_Login.class);
@@ -353,28 +360,28 @@ public class Server {
             }
 
 
-
-            System.out.println("Inputing " + input);
-
-            input = new User_Request_Login(input.username(), input.password(), context.headerMap().get("Authorization"));
-            System.out.println("Inputing " + input);
-
-            // Run Function
-            User_Response_Login output = service.User_Login(input);
-
-            System.out.println(context.headerMap());
-
-            if (output.success())
+            try
             {
+                System.out.println("Inputing " + input);
+
+                input = new User_Request_Login(input.username(), input.password());
+                System.out.println("Inputing " + input);
+
+                // Run Function
+                User_Response_Login output = service.User_Login(input);
+
+                System.out.println(context.headerMap());
+
+
                 // serialize to JSON
                 var json = serializer.toJson(output);
                 System.out.println("auth java: " + output);
 
                 // Update output
                 context.result(json);
-            } else {
-                throw new DataAccessException("401");
 
+            } catch (DataAccessException e) {
+                throw new DataAccessException(e.getMessage());
             }
 
 
@@ -414,7 +421,7 @@ public class Server {
 
             // Errors
 
-            if (output.game_number() == -1)
+            if (output.gameID() == -1)
             {
                 JsonObject output_error = new JsonObject();
                 output_error.addProperty("error", "Bad Input");
@@ -423,7 +430,7 @@ public class Server {
                 context.status(400);
             }
 
-            if (output.game_number() == -2)
+            if (output.gameID() == -2)
             {
                 JsonObject output_error = new JsonObject();
                 output_error.addProperty("error", "duplicate game name");
