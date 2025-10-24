@@ -20,13 +20,13 @@ public class GameDAO
     }
 
     public void Game_add(GameData added) {
-        Game_List.add(new GameData(gameID_current, added.whiteUsername(), added.blackUsername(), added.gameName(), added.game()));
+        Game_List.add(new GameData(gameID_current, added.whiteUsername(), added.blackUsername(), added.gameName(), added.chessGame()));
         gameID_current ++;
 
     }
 
-    public int Game_add_gameName(String added) {
-        GameData game_adding = new GameData(gameID_current, null, null, added, null);
+    public int Game_add_gameName(String name_adding) {
+        GameData game_adding = new GameData(gameID_current, null, null, name_adding, null);
         Game_add(game_adding);
         return game_adding.gameID();
     }
@@ -64,10 +64,20 @@ public class GameDAO
         {
             if (Game_List.get(i).gameID() == finding)
             {
-                return new GameData(Game_List.get(i).gameID(), Game_List.get(i).whiteUsername(), Game_List.get(i).blackUsername(), Game_List.get(i).gameName(), Game_List.get(i).game());
+                return new GameData(Game_List.get(i).gameID(), Game_List.get(i).whiteUsername(), Game_List.get(i).blackUsername(), Game_List.get(i).gameName(), Game_List.get(i).chessGame());
             }
         }
         return null;
+    }
+
+    public void Game_delete_via_gameID(int finding) {
+        for (int i = 0; i < Game_List.size(); i++)
+        {
+            if (Game_List.get(i).gameID() == finding)
+            {
+                Game_List.remove(Game_List.get(i));
+            }
+        }
     }
 
     public void Game_delete(GameData removed) {

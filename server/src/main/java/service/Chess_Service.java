@@ -51,12 +51,16 @@ public class Chess_Service
     {
         System.out.println("game_join");
 
-        // Need to fix so it will correctly connect name and userID
-        // Game_Request_Join data_with_name = new Game_Request_Join(data, data.playerColor(), data.gameID());
+        // Swaps the AuthToken with correct userName
+        String auth_token = data.username(); // actually AuthToken at this point
+        String username = service_auth_list.Auth_get_userName_via_authToken(auth_token);
+        Game_Request_Join data_with_name = new Game_Request_Join(username, data.playerColor(), data.gameID());
 
 
         try {
-            return service_game.join(data);
+            System.out.println("trying game_join");
+            System.out.println(data_with_name);
+            return service_game.join(data_with_name);
         } catch (DataAccessException e)
         {
             throw new DataAccessException(e.getMessage());
