@@ -26,7 +26,7 @@ public class GameDAO
     }
 
     public int Game_add_gameName(String name_adding) {
-        GameData game_adding = new GameData(gameID_current, null, null, name_adding, null);
+        GameData game_adding = new GameData(gameID_current, "", "", name_adding, null);
         Game_add(game_adding);
         return game_adding.gameID();
     }

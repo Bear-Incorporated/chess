@@ -1,6 +1,6 @@
 package service;
 
-import dataaccess.AuthDAO;
+
 import dataaccess.DataAccessException;
 import model.*;
 
@@ -13,7 +13,6 @@ public class Chess_Service
     private final GameService service_game = new GameService();
     private final UserService service_user = new UserService();
 
-    private final AuthDAO service_auth_list = new AuthDAO();
 
     /**
      * ClearResult
@@ -25,7 +24,6 @@ public class Chess_Service
         System.out.println("clear");
         service_game.clear(data);
         service_user.clear(data);
-        service_auth_list.Auth_delete_all();
         return new Clear_Response();
 
     }
@@ -53,14 +51,16 @@ public class Chess_Service
 
         // Swaps the AuthToken with correct userName
         String auth_token = data.username(); // actually AuthToken at this point
-        String username = service_auth_list.Auth_get_userName_via_authToken(auth_token);
+        System.out.println("auth token: " + auth_token);
+        String username = service_user.get_userName_via_authToken(auth_token);
         Game_Request_Join data_with_name = new Game_Request_Join(username, data.playerColor(), data.gameID());
-
+        System.out.println("username: " + username);
 
         try {
             System.out.println("trying game_join");
             System.out.println(data_with_name);
-            return service_game.join(data_with_name);
+            Game_Response_Join Game_Response_Join_temp = service_game.join(data_with_name);
+            return Game_Response_Join_temp;
         } catch (DataAccessException e)
         {
             throw new DataAccessException(e.getMessage());

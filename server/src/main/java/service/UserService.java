@@ -11,8 +11,8 @@ import java.util.Random;
 public class UserService
 {
 
-    private UserDAO user_list = new UserDAO();
-    private AuthDAO auth_list = new AuthDAO();
+    private UserDAO user_list;
+    private AuthDAO auth_list;
 
     Random rand;
 
@@ -80,8 +80,13 @@ public class UserService
 
 
 
+    public String get_userName_via_authToken(String data) {
+        return auth_list.Auth_get_userName_via_authToken(data);
+    }
+
     public Clear_Response clear(Clear_Request data) {
         user_list.User_delete_all();
+        auth_list.Auth_delete_all();
         return new Clear_Response();
     }
 
@@ -144,7 +149,9 @@ public class UserService
 
 
         // Login the new user
+
         String authToken =  loginer.username() + loginer.password() + randInt();
+        System.out.println("New Auth Token " + authToken + " for " + loginer.username());
         auth_list.Auth_add(new AuthData(authToken, loginer.username()));
 
         return authToken;

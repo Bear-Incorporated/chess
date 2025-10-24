@@ -59,23 +59,29 @@ public class GameService
         int join_gameID = data.gameID();
         String join_color = data.playerColor();
 
+        System.out.println("I am in GameService.java join!!");
+
         // If the game doesn't exist, give error
         if (!data_list.Game_found_via_gameID(join_gameID))
         {
+            System.out.println("Game doesn't exist");
             throw new DataAccessException("400");
         }
+        System.out.println("Game does exist");
 
         // Find the game
         GameData join_game = data_list.Game_get_via_gameID(join_gameID);
+        System.out.println("Game does exist still");
+        System.out.println(join_game);
 
         String join_whiteUsername = join_game.whiteUsername();
         String join_blackUsername = join_game.blackUsername();
         String join_gameName = join_game.gameName();
         ChessGame join_chessgame = join_game.chessGame();
 
-        if (join_color == "BLACK")
+        if (join_color.equals("BLACK"))
         {
-            if (join_game.blackUsername() == null)
+            if (join_game.blackUsername() == "")
             {
                 data_list.Game_delete_via_gameID(join_gameID);
                 data_list.Game_add(new GameData(join_gameID, join_whiteUsername, join_userName, join_gameName, join_chessgame));
@@ -84,9 +90,9 @@ public class GameService
             {
                 throw new DataAccessException("403");
             }
-        } else if (join_color == "WHITE")
+        } else if (join_color.equals("WHITE"))
         {
-            if (join_game.blackUsername() == null)
+            if (join_game.whiteUsername() == "")
             {
                 data_list.Game_delete_via_gameID(join_gameID);
                 data_list.Game_add(new GameData(join_gameID, join_userName, join_blackUsername, join_gameName, join_chessgame));
