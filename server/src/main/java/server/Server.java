@@ -2,6 +2,7 @@ package server;
 
 import com.google.gson.Gson;
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import io.javalin.*;
@@ -36,6 +37,8 @@ public class Server {
         javalin.stop();
     }
     public Server() {
+
+
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
 
         // Register your endpoints and exception handlers here.
@@ -54,6 +57,8 @@ public class Server {
 
             if (!authenticated) {
                 throw new UnauthorizedResponse();
+
+
             }
 
 
@@ -77,50 +82,144 @@ public class Server {
 
         .post("/user", (ctx) -> {
             JsonObject output = new JsonObject();
-            parse_post(ctx);
+            try
+            {
+                parse_post(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+                if (e.getMessage().equals("400"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    ctx.status(400);
+                } else if (e.getMessage().equals("403"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_403);
+                    ctx.status(403);
+                }
+                ctx.result(output_error.toString());
+            }
+
 
         })
         .post("/session", (ctx) -> {
             JsonObject output = new JsonObject();
-            parse_post(ctx);
-
+            try
+            {
+                parse_post(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+                if (e.getMessage().equals("400"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    ctx.status(400);
+                } else if (e.getMessage().equals("401"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    ctx.status(401);
+                }
+                ctx.result(output_error.toString());
+            }
 
         })
         .delete("/session", (ctx) -> {
             //JsonObject output = new JsonObject();
-            parse_delete(ctx);
+            try
+            {
+                parse_delete(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+                output_error.addProperty("message", DataAccessException.ERROR_401);
+                ctx.status(401);
+                ctx.result(output_error.toString());
+            }
             //output.addProperty("not done", "Not implemented");
             //output.addProperty("message2", "Hello, JSON!");
 
             //ctx.result(output.toString());
         })
         .get("/game", (ctx) -> {
-            JsonObject output = new JsonObject();
-            parse_get(ctx);
-            output.addProperty("not done", "Not implemented");
-            output.addProperty("message2", "Hello, JSON!");
 
-            ctx.result(output.toString());
+            try
+            {
+                parse_get(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+                output_error.addProperty("message", DataAccessException.ERROR_401);
+                ctx.status(401);
+                ctx.result(output_error.toString());
+            }
+
         })
         .post("/game", (ctx) -> {
-            JsonObject output = new JsonObject();
-            parse_post(ctx);
-            output.addProperty("not done", "Not implemented");
-            output.addProperty("message2", "Hello, JSON!");
 
-            ctx.result(output.toString());
+            try
+            {
+                parse_post(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+                if (e.getMessage().equals("400"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    ctx.status(400);
+                } else if (e.getMessage().equals("401"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    ctx.status(401);
+                }
+                ctx.result(output_error.toString());
+            }
+
         })
         .put("/game", (ctx) -> {
-            JsonObject output = new JsonObject();
-            parse_put(ctx);
-            output.addProperty("not done", "Not implemented");
-            output.addProperty("message2", "Hello, JSON!");
-
-            ctx.result(output.toString());
+            try
+            {
+                parse_put(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+                if (e.getMessage().equals("400"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    ctx.status(400);
+                } else if (e.getMessage().equals("401"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    ctx.status(401);
+                } else if (e.getMessage().equals("403"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_403);
+                    ctx.status(403);
+                }
+                ctx.result(output_error.toString());
+            }
         })
         .delete("/db", (ctx) -> {
             //JsonObject output = new JsonObject();
             parse_delete(ctx);
+
             //output.addProperty("not done", "Not implemented");
             //output.addProperty("message2", "Hello, JSON!");
 
@@ -176,15 +275,18 @@ public class Server {
 
         ;
 
+
+
     }
 
-    private void parse_post(Context context)
+    private void parse_post(Context context) throws Exception
     {
 
 
         System.out.println("post");
         if (context.path().equals("/user"))
         {
+            // registers the new User
             System.out.println("user");
             var serializer = new Gson();
 
@@ -193,13 +295,26 @@ public class Server {
             // deserialize back to ChessGame
             input = serializer.fromJson(context.body(), User_Request_Register.class);
 
+            // Check inputs for errors
+            if (input.username() == null)
+            {
+                throw new DataAccessException("400");
+            }
+            if (input.password() == null)
+            {
+                throw new DataAccessException("400");
+            }
+            if (input.email() == null)
+            {
+                throw new DataAccessException("400");
+            }
+
             // Run Function
             User_Response_Register output = service.User_Register(input);
 
             if (output.authToken().equals("404"))
             {
-                context.status(400);
-                return;
+                throw new DataAccessException("403");
             }
 
             // serialize to JSON
@@ -220,6 +335,25 @@ public class Server {
             // deserialize back to ChessGame
             input = serializer.fromJson(context.body(), User_Request_Login.class);
 
+            System.out.println("post session json converted");
+
+            if (input.username() == null)
+            {
+                System.out.println("No Username!!!");
+
+                throw new DataAccessException("400");
+                //return;
+            }
+            if (input.password() == null)
+            {
+                System.out.println("No Password!!!");
+
+                throw new DataAccessException("400");
+                //return;
+            }
+
+
+
             System.out.println("Inputing " + input);
 
             input = new User_Request_Login(input.username(), input.password(), context.headerMap().get("Authorization"));
@@ -239,7 +373,7 @@ public class Server {
                 // Update output
                 context.result(json);
             } else {
-                context.status(400);
+                throw new DataAccessException("401");
 
             }
 
@@ -251,9 +385,7 @@ public class Server {
             String auth_input = context.headerMap().get("Authorization");
             if (!service.User_Authorized(auth_input))
             {
-                System.out.println("Unauthorized!!!!");
-                context.status(400);
-                return;
+                throw new DataAccessException("401");
             }
 
             System.out.println("game");
@@ -265,6 +397,12 @@ public class Server {
             // deserialize back to ChessGame
             input = serializer.fromJson(context.body(), Game_Request_Create.class);
 
+            if (input.gameName() == null)
+            {
+                throw new DataAccessException("400");
+            }
+
+
             // Run Function
             Game_Response_Create output = service.Game_Create(input);
 
@@ -273,20 +411,41 @@ public class Server {
 
             // Update output
             context.result(json);
+
+            // Errors
+
+            if (output.game_number() == -1)
+            {
+                JsonObject output_error = new JsonObject();
+                output_error.addProperty("error", "Bad Input");
+
+                context.result(output_error.toString());
+                context.status(400);
+            }
+
+            if (output.game_number() == -2)
+            {
+                JsonObject output_error = new JsonObject();
+                output_error.addProperty("error", "duplicate game name");
+
+                context.result(output_error.toString());
+                context.status(400);
+            }
+
+
         }
 
 
     }
 
-    private void parse_get(Context context)
+    private void parse_get(Context context) throws Exception
     {
         // Check to see if they are authorized
         String auth_input = context.headerMap().get("Authorization");
         if (!service.User_Authorized(auth_input))
         {
             System.out.println("Unauthorized!!!!");
-            context.status(400);
-            return;
+            throw new DataAccessException("401");
         }
 
 
@@ -313,11 +472,13 @@ public class Server {
 
             // Update output
             context.result(json);
+
+
         }
     }
 
 
-    private void parse_delete(Context context)
+    private void parse_delete(Context context) throws Exception
     {
         System.out.println("delete");
         if (context.path().equals("/session"))
@@ -327,9 +488,7 @@ public class Server {
             String auth_input = context.headerMap().get("Authorization");
             if (!service.User_Authorized(auth_input))
             {
-                System.out.println("Unauthorized!!!!");
-                context.status(400);
-                return;
+                throw new DataAccessException("401");
             }
 
 
@@ -370,15 +529,13 @@ public class Server {
         }
     }
 
-    private void parse_put(Context context)
+    private void parse_put(Context context) throws Exception
     {
         // Check to see if they are authorized
         String auth_input = context.headerMap().get("Authorization");
         if (!service.User_Authorized(auth_input))
         {
-            System.out.println("Unauthorized!!!!");
-            context.status(400);
-            return;
+            throw new DataAccessException("401");
         }
 
         System.out.println("put");
@@ -388,19 +545,33 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new Game_Request_Join("test user", 1);
+            var input = new Game_Request_Join("test user", "",1);
 
             // deserialize back to ChessGame
             input = serializer.fromJson(context.body(), Game_Request_Join.class);
 
-            // Run Function
-            Game_Response_Join output = service.Game_Join(input);
+            if (input.playerColor() == null)
+            {
+                throw new DataAccessException("400");
+            }
 
-            // serialize to JSON
-            var json = serializer.toJson(output);
+            // Add the AuthToken to the input
+            input = new Game_Request_Join(context.headerMap().get("Authorization"), input.playerColor(), input.gameID());
 
-            // Update output
-            context.result(json);
+            try
+            {
+                // Run Function
+                Game_Response_Join output = service.Game_Join(input);
+
+                // serialize to JSON
+                var json = serializer.toJson(output);
+
+                // Update output
+                context.result(json);
+            } catch (DataAccessException e)
+            {
+                throw new DataAccessException(e.getMessage());
+            }
         }
     }
 

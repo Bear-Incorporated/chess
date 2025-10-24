@@ -31,4 +31,9 @@ public class AuthDAO
     public void Auth_delete_all() {
         Auth_List.clear();
     }
+
+    public String Auth_get_userName_via_authToken(String authToken)
+    {
+        return "Not created yet";
+    }
 }

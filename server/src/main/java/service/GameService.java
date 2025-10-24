@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import model.*;
@@ -17,9 +18,32 @@ public class GameService
      * @return
      */
     public Game_Response_Create create(Game_Request_Create data) {
-        Game_Response_Create output = new Game_Response_Create();
 
-        throw new RuntimeException("Not implemented");
+        // Bad Input
+        if (data == null)
+        {
+            // Return error
+            return new Game_Response_Create(-1);
+        }
+        if (data.gameName() == null)
+        {
+            // Return error
+            return new Game_Response_Create(-1);
+        }
+
+        // Check to see if name already used
+        if (data_list.Game_found_via_gameName(data.gameName()))
+        {
+            // Return error
+            return new Game_Response_Create(-2);
+        }
+
+        int game_id = data_list.Game_add_gameName(data.gameName());
+
+        Game_Response_Create output = new Game_Response_Create(game_id);
+
+        return output;
+
     }
 
     /**
@@ -28,8 +52,27 @@ public class GameService
      * @param
      * @return
      */
-    public Game_Response_Join join(Game_Request_Join data) {
-        throw new RuntimeException("Not implemented");
+    public Game_Response_Join join(Game_Request_Join data) throws Exception
+    {
+        int join_gameID = data.gameID();
+        String join_color = data.playerColor();
+
+        // If the game doesn't exist, give error
+        if (!data_list.Game_found_via_gameID(join_gameID))
+        {
+            throw new DataAccessException("400");
+        }
+
+        GameData join_game = data_list.Game_get_via_gameID(join_gameID);
+
+
+
+
+
+        // throw new DataAccessException("400");
+        // throw new DataAccessException("403");
+        // throw new RuntimeException("Not implemented");
+        return new Game_Response_Join();
     }
 
     /**
@@ -39,7 +82,7 @@ public class GameService
      * @return
      */
     public Game_Response_List list(Game_Request_List data) {
-        throw new RuntimeException("Not implemented");
+        return new Game_Response_List(data_list.Game_list());
     }
 
 

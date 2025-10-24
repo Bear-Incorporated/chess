@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
 import model.*;
 
 import chess.ChessPiece;
@@ -46,9 +47,20 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Game_Response_Join Game_Join(Game_Request_Join data) {
+    public Game_Response_Join Game_Join(Game_Request_Join data) throws Exception
+    {
         System.out.println("game_join");
-        return service_game.join(data);
+
+        // Need to fix so it will correctly connect name and userID
+        // Game_Request_Join data_with_name = new Game_Request_Join(data, data.playerColor(), data.gameID());
+
+
+        try {
+            return service_game.join(data);
+        } catch (DataAccessException e)
+        {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     /**

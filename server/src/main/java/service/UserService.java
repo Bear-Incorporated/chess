@@ -21,6 +21,19 @@ public class UserService
         System.out.println("email: " + data.email());
         System.out.println("password: " + data.password());
 
+        if (data.username() == null)
+        {
+            return new User_Response_Register("404", "");
+        }
+        if (data.password() == null)
+        {
+            return new User_Response_Register("404", "");
+        }
+        if (data.email() == null)
+        {
+            return new User_Response_Register("404", data.username());
+        }
+
         String output_auth = user_list.User_add(new UserData(data.username(), data.password(), data.email()));
 
         System.out.println("auth: " + output_auth);

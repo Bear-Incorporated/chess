@@ -22,10 +22,52 @@ public class GameDAO
     public void Game_add(GameData added) {
         Game_List.add(new GameData(gameID_current, added.whiteUsername(), added.blackUsername(), added.gameName(), added.game()));
         gameID_current ++;
+
+    }
+
+    public int Game_add_gameName(String added) {
+        GameData game_adding = new GameData(gameID_current, null, null, added, null);
+        Game_add(game_adding);
+        return game_adding.gameID();
     }
 
     public ArrayList<GameData> Game_list() {
         return Game_List;
+    }
+
+    public boolean Game_found_via_gameName(String finding) {
+        for (int i = 0; i < Game_List.size(); i++)
+        {
+            if (Game_List.get(i).gameName().equals(finding))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean Game_found_via_gameID(int finding) {
+        for (int i = 0; i < Game_List.size(); i++)
+        {
+            if (Game_List.get(i).gameID() == finding)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public GameData Game_get_via_gameID(int finding) {
+        for (int i = 0; i < Game_List.size(); i++)
+        {
+            if (Game_List.get(i).gameID() == finding)
+            {
+                return new GameData(Game_List.get(i).gameID(), Game_List.get(i).whiteUsername(), Game_List.get(i).blackUsername(), Game_List.get(i).gameName(), Game_List.get(i).game());
+            }
+        }
+        return null;
     }
 
     public void Game_delete(GameData removed) {

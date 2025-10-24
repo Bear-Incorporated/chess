@@ -25,18 +25,7 @@ public class UserDAO
     }
 
     public String User_add(UserData added) {
-        if (added.username() == null)
-        {
-            return "404";
-        }
-        if (added.password() == null)
-        {
-            return "404";
-        }
-        if (added.email() == null)
-        {
-            return "404";
-        }
+
 
         // Check to see if name already used
         for (int i = 0; i < User_List.size(); i++)
@@ -135,5 +124,7 @@ public class UserDAO
         }
         return false;
     }
+
+
 
 }
