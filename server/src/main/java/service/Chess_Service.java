@@ -20,7 +20,8 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Clear_Response Clear(Clear_Request data) {
+    public Clear_Response Clear(Clear_Request data) throws DataAccessException
+    {
         System.out.println("clear");
         service_game.clear(data);
         service_user.clear(data);

@@ -52,6 +52,7 @@ public class UserService
         // Check to see if name already used
         if (user_list.User_found_via_username(added.username()))
         {
+
             return new User_Response_Register("404", "404");
         }
 
@@ -84,7 +85,8 @@ public class UserService
         return auth_list.Auth_get_userName_via_authToken(data);
     }
 
-    public Clear_Response clear(Clear_Request data) {
+    public Clear_Response clear(Clear_Request data) throws DataAccessException
+    {
         user_list.User_delete_all();
         auth_list.Auth_delete_all();
         return new Clear_Response();
