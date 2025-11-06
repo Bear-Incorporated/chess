@@ -51,7 +51,7 @@ public class AuthDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to create table", ex);
+            throw new DataAccessException("500");
         }
     }
 
@@ -79,7 +79,7 @@ public class AuthDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to delete table", ex);
+            throw new DataAccessException("500");
         }
 
         try
@@ -115,7 +115,7 @@ public class AuthDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -147,7 +147,7 @@ public class AuthDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find user", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -179,7 +179,7 @@ public class AuthDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find user", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -202,7 +202,7 @@ public class AuthDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("500");
         }
     }
 
@@ -216,7 +216,7 @@ public class AuthDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to delete user", ex);
+            throw new DataAccessException("500");
         }
     }
 

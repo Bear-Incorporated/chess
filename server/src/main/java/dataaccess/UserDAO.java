@@ -3,6 +3,7 @@ package dataaccess;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 import model.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -53,7 +54,7 @@ public class UserDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to create table", ex);
+            throw new DataAccessException("500");
         }
     }
 
@@ -80,7 +81,7 @@ public class UserDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to delete all", ex);
+            throw new DataAccessException("500");
         }
 
         try
@@ -97,13 +98,15 @@ public class UserDAO
     public void User_add(UserData added) throws DataAccessException {
         System.out.println("User_add" + added.username().toString());
 
-        var statement = "INSERT INTO UserSQL (username, password, email) VALUES ( \"" + added.username() + "\" , \"" + added.password() + "\" , \"" + added.email() + "\" );";
+        String hashedPassword = BCrypt.hashpw(added.password(), BCrypt.gensalt());
+
+        var statement = "INSERT INTO UserSQL (username, password, email) VALUES ( \"" + added.username() + "\" , \"" + hashedPassword + "\" , \"" + added.email() + "\" );";
         System.out.println(statement);
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("500");
         }
     }
 
@@ -130,7 +133,8 @@ public class UserDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find user", ex);
+            System.out.println("Catching Error in User_found_via_username");
+            throw new DataAccessException("500");
         }
 
 
@@ -150,13 +154,13 @@ public class UserDAO
             while (rs.next()) {
                 System.out.println("User_login_credentials 4");
                 var username_found = rs.getString("username");
-                var password_found = rs.getString("password");
+                var hashedPassword = rs.getString("password");
                 var email_found = rs.getString("email");
-                System.out.printf("User Found! username: %s, password: %s, email: %s%n", username_found, password_found, email_found);
+                System.out.printf("User Found! username: %s, password: %s, email: %s%n", username_found, hashedPassword, email_found);
                 System.out.println("Password Have: " + logging_in.password());
-                if (password_found != null)
+                if (hashedPassword != null)
                 {
-                    if (password_found.equals(logging_in.password()))
+                    if (BCrypt.checkpw(logging_in.password(), hashedPassword))
                     {
                         System.out.println("Password Correct!");
                         return true;
@@ -165,7 +169,7 @@ public class UserDAO
             }
             System.out.println("User_login_credentials 5");
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("500");
         }
 
 

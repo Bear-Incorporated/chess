@@ -5,6 +5,8 @@ import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.*;
 
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -50,9 +52,16 @@ public class UserService
             return new User_Response_Register("404", "404");
         }
         // Check to see if name already used
-        if (user_list.User_found_via_username(added.username()))
-        {
+        Boolean user_found = false;
 
+        try {
+            user_found = user_list.User_found_via_username(added.username());
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
+        if (user_found)
+        {
             return new User_Response_Register("404", "404");
         }
 
@@ -76,7 +85,11 @@ public class UserService
      */
     public User_Response_Logout logout(User_Request_Logout data) throws DataAccessException
     {
-        auth_list.Auth_delete_via_authToken(data.authToken());
+        try {
+            auth_list.Auth_delete_via_authToken(data.authToken());
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return new User_Response_Logout();
     }
 
@@ -89,13 +102,28 @@ public class UserService
 
     public Clear_Response clear(Clear_Request data) throws DataAccessException
     {
-        user_list.User_delete_all();
-        auth_list.Auth_delete_all();
+
+        try {
+            user_list.User_delete_all();
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+        try {
+            auth_list.Auth_delete_all();
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
         return new Clear_Response();
+
     }
 
     public Boolean authorized(String data) throws DataAccessException {
-        return auth_list.authorized_via_authToken(data);
+        try {
+            return auth_list.authorized_via_authToken(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
     }
 
 
@@ -156,7 +184,7 @@ public class UserService
 
         // Login the new user
 
-        String authToken =  loginer.username() + loginer.password() + randInt();
+        String authToken =  loginer.username() + randInt();
         System.out.println("New Auth Token " + authToken + " for " + loginer.username());
         auth_list.Auth_add(new AuthData(authToken, loginer.username()));
 

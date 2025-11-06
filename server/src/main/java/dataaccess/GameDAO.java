@@ -49,7 +49,7 @@ public class GameDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to create table", ex);
+            throw new DataAccessException("500");
         }
     }
 
@@ -78,7 +78,7 @@ public class GameDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("500");
         }
 
         return Game_get_gameID_via_gameName(name_adding);
@@ -109,7 +109,7 @@ public class GameDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find game", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -140,7 +140,7 @@ public class GameDAO
                 Game_List_output.add(new GameData_Short(gameID_found, whiteUsername_found, blackUsername_found, gameName_found));
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find game", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -171,7 +171,7 @@ public class GameDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find game", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -202,7 +202,7 @@ public class GameDAO
 
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find game", ex);
+            throw new DataAccessException("500");
         }
 
 
@@ -238,7 +238,7 @@ public class GameDAO
 
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to find game", ex);
+            throw new DataAccessException("500");
         }
 
         return null;
@@ -258,7 +258,7 @@ public class GameDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to delete game", ex);
+            throw new DataAccessException("500");
         }
     }
 
@@ -269,11 +269,15 @@ public class GameDAO
 
         var statement = "DROP TABLE IF EXISTS GameSQL;";
         System.out.println(statement);
-        try (var conn = DatabaseManager.getConnection();
-             var preparedStatement = conn.prepareStatement(statement)) {
-            preparedStatement.executeUpdate();
+        try (var conn = DatabaseManager.getConnection())
+        {
+            try (var preparedStatement = conn.prepareStatement(statement))
+            {
+                preparedStatement.executeUpdate();
+            }
+
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to delete all", ex);
+            throw new DataAccessException("500");
         }
 
         try
@@ -321,7 +325,7 @@ public class GameDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("500", ex);
         }
     }
 

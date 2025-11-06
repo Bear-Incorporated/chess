@@ -23,7 +23,13 @@ public class Chess_Service
     public Clear_Response Clear(Clear_Request data) throws DataAccessException
     {
         System.out.println("clear");
-        service_game.clear(data);
+
+        try {
+            service_game.clear(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
         service_user.clear(data);
         return new Clear_Response();
 
@@ -38,7 +44,13 @@ public class Chess_Service
     public Game_Response_Create Game_Create(Game_Request_Create data) throws DataAccessException
     {
         System.out.println("game_create");
-        return service_game.create(data);
+
+
+        try {
+            return service_game.create(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     /**
@@ -78,7 +90,12 @@ public class Chess_Service
     public Game_Response_List Game_List(Game_Request_List data) throws DataAccessException
     {
         System.out.println("game_list");
-        return service_game.list(data);
+
+        try {
+            return service_game.list(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     /**
@@ -90,7 +107,12 @@ public class Chess_Service
     public User_Response_Register User_Register(User_Request_Register data) throws DataAccessException
     {
         System.out.println("user_register");
-        return service_user.register(data);
+
+        try {
+            return service_user.register(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     /**
@@ -102,7 +124,13 @@ public class Chess_Service
     public User_Response_Login User_Login(User_Request_Login data) throws DataAccessException
     {
         System.out.println("user_login");
-        return service_user.login(data);
+
+
+        try {
+            return service_user.login(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
 
     }
 
@@ -115,7 +143,13 @@ public class Chess_Service
     public User_Response_Logout User_Logout(User_Request_Logout data) throws DataAccessException
     {
         System.out.println("user_logout");
-        return service_user.logout(data);
+
+
+        try {
+            return service_user.logout(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
     /**
@@ -126,7 +160,13 @@ public class Chess_Service
      */
     public boolean User_Authorized(String data) throws DataAccessException {
         System.out.println("user_authorize");
-        return service_user.authorized(data);
+
+
+        try {
+            return service_user.authorized(data);
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
 

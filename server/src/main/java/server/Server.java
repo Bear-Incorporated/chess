@@ -87,7 +87,8 @@ public class Server {
             }
             catch (DataAccessException e)
             {
-                System.out.println("I'm catching the issue");
+                System.out.println("I'm catching the issue in .post /user");
+                System.out.println(e.getMessage());
                 System.out.println(e.toString());
                 JsonObject output_error = new JsonObject();
                 if (e.getMessage().equals("400"))
@@ -98,6 +99,14 @@ public class Server {
                 {
                     output_error.addProperty("message", DataAccessException.ERROR_403);
                     ctx.status(403);
+                } else if (e.getMessage().equals("500"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
                 }
                 ctx.result(output_error.toString());
             }
@@ -112,7 +121,7 @@ public class Server {
             }
             catch (DataAccessException e)
             {
-                System.out.println("I'm catching the issue");
+                System.out.println("I'm catching the issue in post /session");
                 System.out.println(e.toString());
                 JsonObject output_error = new JsonObject();
                 if (e.getMessage().equals("400"))
@@ -123,6 +132,14 @@ public class Server {
                 {
                     output_error.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
+                }  else if (e.getMessage().equals("500"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
                 }
                 ctx.result(output_error.toString());
             }
@@ -136,11 +153,27 @@ public class Server {
             }
             catch (DataAccessException e)
             {
-                System.out.println("I'm catching the issue");
+                System.out.println("I'm catching the issue in .delete/session");
                 System.out.println(e.toString());
                 JsonObject output_error = new JsonObject();
-                output_error.addProperty("message", DataAccessException.ERROR_401);
-                ctx.status(401);
+
+                if (e.getMessage().equals("401"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    ctx.status(401);
+                }  else if (e.getMessage().equals("500"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                }
+
+
+
+
                 ctx.result(output_error.toString());
             }
             //output.addProperty("not done", "Not implemented");
@@ -156,11 +189,28 @@ public class Server {
             }
             catch (DataAccessException e)
             {
-                System.out.println("I'm catching the issue");
+                System.out.println("I'm catching the issue in .get/game");
                 System.out.println(e.toString());
                 JsonObject output_error = new JsonObject();
-                output_error.addProperty("message", DataAccessException.ERROR_401);
-                ctx.status(401);
+
+
+
+
+
+                if (e.getMessage().equals("401"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    ctx.status(401);
+                }  else if (e.getMessage().equals("500"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                }
+
                 ctx.result(output_error.toString());
             }
 
@@ -173,7 +223,7 @@ public class Server {
             }
             catch (DataAccessException e)
             {
-                System.out.println("I'm catching the issue");
+                System.out.println("I'm catching the issue in ,post/game");
                 System.out.println(e.toString());
                 JsonObject output_error = new JsonObject();
                 if (e.getMessage().equals("400"))
@@ -184,6 +234,14 @@ public class Server {
                 {
                     output_error.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
+                }  else if (e.getMessage().equals("500"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
                 }
                 ctx.result(output_error.toString());
             }
@@ -196,7 +254,7 @@ public class Server {
             }
             catch (DataAccessException e)
             {
-                System.out.println("I'm catching the issue");
+                System.out.println("I'm catching the issue in .put/game");
                 System.out.println(e.toString());
                 JsonObject output_error = new JsonObject();
                 if (e.getMessage().equals("400"))
@@ -211,13 +269,26 @@ public class Server {
                 {
                     output_error.addProperty("message", DataAccessException.ERROR_403);
                     ctx.status(403);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
                 }
                 ctx.result(output_error.toString());
             }
         })
         .delete("/db", (ctx) -> {
             //JsonObject output = new JsonObject();
-            parse_delete(ctx);
+
+
+            try {
+                parse_delete(ctx);
+            } catch (DataAccessException e) {
+                JsonObject output_error = new JsonObject();
+                output_error.addProperty("message", DataAccessException.ERROR_500);
+                ctx.status(500);
+                ctx.result(output_error.toString());
+            }
 
             //output.addProperty("not done", "Not implemented");
             //output.addProperty("message2", "Hello, JSON!");
@@ -525,7 +596,12 @@ public class Server {
             input = serializer.fromJson(context.body(), Clear_Request.class);
 
             // Run Function
-            Clear_Response output = service.Clear(input);
+            Clear_Response output;
+            try {
+                output = service.Clear(input);
+            } catch (DataAccessException ex) {
+                throw new DataAccessException("500");
+            }
 
             // serialize to JSON
             var json = serializer.toJson(output);

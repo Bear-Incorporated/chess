@@ -7,6 +7,9 @@ import dataaccess.GameDAO;
 import dataaccess.UserDAO;
 import model.*;
 
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class GameService
 {
 
@@ -40,7 +43,13 @@ public class GameService
             return new Game_Response_Create(-2);
         }
 
-        int game_id = data_list.Game_add_gameName(data.gameName());
+        int game_id = -2;
+        try {
+            game_id = data_list.Game_add_gameName(data.gameName());
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
 
         Game_Response_Create output = new Game_Response_Create(game_id);
 
@@ -126,13 +135,25 @@ public class GameService
      */
     public Game_Response_List list(Game_Request_List data) throws DataAccessException
     {
-        return data_list.Game_list();
+
+
+        try {
+            return data_list.Game_list();
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
     }
 
 
     public Clear_Response clear(Clear_Request data) throws DataAccessException
     {
-        data_list.Game_delete_all();
+        try {
+            data_list.Game_delete_all();
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
+
         return new Clear_Response();
     }
 }
