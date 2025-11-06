@@ -74,14 +74,16 @@ public class UserService
      * @param
      * @return
      */
-    public User_Response_Logout logout(User_Request_Logout data) {
+    public User_Response_Logout logout(User_Request_Logout data) throws DataAccessException
+    {
         auth_list.Auth_delete_via_authToken(data.authToken());
         return new User_Response_Logout();
     }
 
 
 
-    public String get_userName_via_authToken(String data) {
+    public String get_userName_via_authToken(String data) throws DataAccessException
+    {
         return auth_list.Auth_get_userName_via_authToken(data);
     }
 
@@ -92,8 +94,8 @@ public class UserService
         return new Clear_Response();
     }
 
-    public Boolean authorized(String data) {
-        return auth_list.authorized(data);
+    public Boolean authorized(String data) throws DataAccessException {
+        return auth_list.authorized_via_authToken(data);
     }
 
 

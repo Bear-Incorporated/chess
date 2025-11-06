@@ -110,7 +110,8 @@ public class Chess_Service
      * @param
      * @return
      */
-    public User_Response_Logout User_Logout(User_Request_Logout data) {
+    public User_Response_Logout User_Logout(User_Request_Logout data) throws DataAccessException
+    {
         System.out.println("user_logout");
         return service_user.logout(data);
     }
@@ -121,7 +122,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public boolean User_Authorized(String data) {
+    public boolean User_Authorized(String data) throws DataAccessException {
         System.out.println("user_authorize");
         return service_user.authorized(data);
     }

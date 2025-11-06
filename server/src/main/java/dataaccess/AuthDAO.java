@@ -8,12 +8,58 @@ import model.GameData;
 import model.UserData;
 import model.User_Request_Logout;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class AuthDAO
 {
     private final ArrayList<AuthData> Auth_List;
+
+
+
+    /*
+     * Start the database to begin with
+     */
+    static {
+        try
+        {
+            DatabaseManager.createDatabase();
+        } catch (DataAccessException e)
+        {
+            throw new RuntimeException(e);
+        }
+        try
+        {
+            createTable_AuthSQL();
+        } catch (DataAccessException e)
+        {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+
+
+
+    static public void createTable_AuthSQL() throws DataAccessException {
+        System.out.println("createTable_AuthSQL");
+        var statement = "CREATE TABLE IF NOT EXISTS AuthSQL (authToken VARCHAR(255) DEFAULT NULL, username VARCHAR(255) DEFAULT NULL);";
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to create table", ex);
+        }
+    }
+
+
+
+
+
+
 
     public AuthDAO() {
         Auth_List = new ArrayList<>();
@@ -22,101 +68,156 @@ public class AuthDAO
 
 
 
-    public ArrayList<AuthData> Auth_list() {
-        System.out.println("In Auth_list");
-        return Auth_List;
-    }
 
-    public void Auth_delete(AuthData removed) {
-        System.out.println("In AuthData");
-        Auth_List.remove(removed);
-    }
 
-    public void Auth_delete_all() {
+    public void Auth_delete_all() throws DataAccessException {
         System.out.println("In Auth_delete_all");
-        Auth_List.clear();
+
+        var statement = "DROP TABLE IF EXISTS AuthSQL;";
+        System.out.println(statement);
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to delete table", ex);
+        }
+
+        try
+        {
+            createTable_AuthSQL();
+        } catch (DataAccessException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
 
 
-    public String Auth_get_userName_via_authToken(String authToken)
+    public String Auth_get_userName_via_authToken(String authToken) throws DataAccessException
     {
         System.out.println("In Auth_get_userName_via_authToken");
-        System.out.println("Auth_List has " + Auth_List.size() + " entries");
-        System.out.println("Full Auth_List " + Auth_List);
-        for (int i = 0; i < Auth_List.size(); i++)
-        {
-            System.out.println("Checking i = " + i);
-            System.out.println("authToken in = " + authToken);
-            System.out.println("authToken " + i + " = " + Auth_List.get(i).authToken());
-            if (Auth_List.get(i).authToken().equals(authToken))
-            {
-                return Auth_List.get(i).username();
+
+        var statement = "SELECT * FROM AuthSQL;";
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            var rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                var authToken_found = rs.getString("authToken");
+                var username_found = rs.getString("username");
+                System.out.printf("User Found! AuthToken: %s, username: %s%n", authToken_found, username_found);
+                if (authToken_found != null)
+                {
+                    if (authToken_found.equals(authToken))
+                    {
+                        System.out.println("User Found!");
+                        return username_found;
+                    }
+                }
             }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to add user", ex);
         }
+
+
         return "";
+
     }
 
-    public void Auth_delete_via_authToken(String removed)
+
+
+    public Boolean authorized_via_authToken(String data) throws DataAccessException
+    {
+        System.out.println("In authorized_via_authToken");
+
+        var statement = "SELECT * FROM AuthSQL;";
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            var rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                var authToken_found = rs.getString("authToken");
+                var username_found = rs.getString("username");
+                System.out.printf("User Found! AuthToken: %s, username: %s%n", authToken_found, username_found);
+                if (authToken_found != null)
+                {
+                    if (authToken_found.equals(data))
+                    {
+                        System.out.println("User Authorized!");
+                        return true;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to find user", ex);
+        }
+
+
+
+        return false;
+    }
+
+    public Boolean authorized_via_username(String new_name) throws DataAccessException
+    {
+        System.out.println("In authorized_via_username");
+
+
+
+        var statement = "SELECT * FROM AuthSQL;";
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            var rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                var authToken_found = rs.getString("authToken");
+                var username_found = rs.getString("username");
+                System.out.printf("User Found! AuthToken: %s, username: %s%n", authToken_found, username_found);
+                if (username_found != null)
+                {
+                    if (username_found.equals(new_name))
+                    {
+                        System.out.println("User Authorized!");
+                        return true;
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to find user", ex);
+        }
+
+
+
+        return false;
+
+
+    }
+
+
+
+    public void Auth_add(AuthData added) throws DataAccessException
+    {
+        System.out.println("In Auth_add adding " + added.toString());
+
+
+        var statement = "INSERT INTO AuthSQL (authToken, username) VALUES ( \"" + added.authToken() + "\" , \"" + added.username() + "\" );";
+        System.out.println(statement);
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to add user", ex);
+        }
+    }
+
+
+    public void Auth_delete_via_authToken(String removed) throws DataAccessException
     {
         System.out.println("In Auth_delete_via_authToken");
-        for (int i = 0; i < Auth_List.size(); i++)
-        {
-            if (Auth_List.get(i).authToken().equals(removed))
-            {
-                Auth_List.remove(Auth_List.get(i));
-                return;
-            }
+        var statement = "DELETE FROM AuthSQL WHERE authToken=\"" + removed + "\";";
+        System.out.println(statement);
+        try (var conn = DatabaseManager.getConnection();
+             var preparedStatement = conn.prepareStatement(statement)) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataAccessException("failed to delete user", ex);
         }
     }
 
-
-    public Boolean authorized(String data) {
-        System.out.println("In authorized");
-        for (int i = 0; i < Auth_List.size(); i++)
-        {
-            if (Auth_List.get(i).authToken().equals(data))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Boolean authorized_via_username(String new_name) {
-        System.out.println("In authorized_via_username");
-        System.out.println("List has " + Auth_List.size() + "entries");
-        System.out.println("Full Auth_List " + Auth_List);
-        for (int i = 0; i < Auth_List.size(); i++)
-        {
-            if (Auth_List.get(i).username().equals(new_name))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public String Auth_get_authToken_via_username(String new_name) {
-        System.out.println("In Auth_get_authToken_via_username");
-        System.out.println("List has " + Auth_List.size() + "entries");
-        System.out.println("Full Auth_List " + Auth_List);
-        for (int i = 0; i < Auth_List.size(); i++)
-        {
-            if (Auth_List.get(i).username().equals(new_name))
-            {
-                return Auth_List.get(i).authToken();
-            }
-        }
-        return "";
-    }
-
-    public void Auth_add(AuthData added) {
-        System.out.println("In Auth_add adding " + added.toString());
-        Auth_List.add(added);
-        System.out.println("Auth_List " + Auth_List.toString());
-        System.out.println("Auth_List is " + Auth_List.size() + " long");
-
-
-    }
 }

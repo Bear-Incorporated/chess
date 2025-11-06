@@ -18,24 +18,10 @@ import java.sql.*;
 public class UserDAO
 {
 
-    private ArrayList<UserData> User_List;
 
-
-
-
-
-
-
-
-
-
-    private static String databaseName;
-    private static String dbUsername;
-    private static String dbPassword;
-    private static String connectionUrl;
 
     /*
-     * Load the database information for the db.properties file.
+     * Start the database to begin with
      */
     static {
         try
@@ -79,7 +65,6 @@ public class UserDAO
 
 
     public UserDAO() {
-        User_List = new ArrayList<>();
         System.out.println("UserDAO");
     }
 
@@ -145,7 +130,7 @@ public class UserDAO
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException("failed to add user", ex);
+            throw new DataAccessException("failed to find user", ex);
         }
 
 
