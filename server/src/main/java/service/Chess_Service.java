@@ -35,7 +35,8 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Game_Response_Create Game_Create(Game_Request_Create data) {
+    public Game_Response_Create Game_Create(Game_Request_Create data) throws DataAccessException
+    {
         System.out.println("game_create");
         return service_game.create(data);
     }
@@ -74,7 +75,8 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Game_Response_List Game_List(Game_Request_List data) {
+    public Game_Response_List Game_List(Game_Request_List data) throws DataAccessException
+    {
         System.out.println("game_list");
         return service_game.list(data);
     }

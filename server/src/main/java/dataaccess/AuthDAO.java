@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class AuthDAO
 {
-    private final ArrayList<AuthData> Auth_List;
+
 
 
 
@@ -62,7 +62,7 @@ public class AuthDAO
 
 
     public AuthDAO() {
-        Auth_List = new ArrayList<>();
+
     }
 
 

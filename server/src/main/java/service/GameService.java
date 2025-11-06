@@ -18,7 +18,8 @@ public class GameService
      * @param
      * @return
      */
-    public Game_Response_Create create(Game_Request_Create data) {
+    public Game_Response_Create create(Game_Request_Create data) throws DataAccessException
+    {
 
         // Bad Input
         if (data == null)
@@ -123,12 +124,14 @@ public class GameService
      * @param
      * @return
      */
-    public Game_Response_List list(Game_Request_List data) {
+    public Game_Response_List list(Game_Request_List data) throws DataAccessException
+    {
         return data_list.Game_list();
     }
 
 
-    public Clear_Response clear(Clear_Request data) {
+    public Clear_Response clear(Clear_Request data) throws DataAccessException
+    {
         data_list.Game_delete_all();
         return new Clear_Response();
     }
