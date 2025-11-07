@@ -146,13 +146,13 @@ public class Chess_Service
      * @param
      * @return
      */
-    public User_Response_Logout User_Logout(User_Request_Logout data) throws DataAccessException
+    public void User_Logout(User_Request_Logout data) throws DataAccessException
     {
         System.out.println("user_logout");
 
 
         try {
-            return service_user.logout(data);
+            service_user.logout(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }

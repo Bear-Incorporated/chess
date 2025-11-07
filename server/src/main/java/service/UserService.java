@@ -80,14 +80,14 @@ public class UserService
      * @param
      * @return
      */
-    public User_Response_Logout logout(User_Request_Logout data) throws DataAccessException
+    public void logout(User_Request_Logout data) throws DataAccessException
     {
         try {
             auth_list.Auth_delete_via_authToken(data.authToken());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
-        return new User_Response_Logout();
+        return;
     }
 
 

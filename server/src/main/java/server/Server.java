@@ -576,13 +576,9 @@ public class Server {
 
 
             // Run Function
-            User_Response_Logout output = service.User_Logout(input);
+            service.User_Logout(input);
 
-            // serialize to JSON
-            var json = serializer.toJson(output);
 
-            // Update output
-            context.result(json);
         } else if (context.path().equals("/db"))
         {
             System.out.println("db");
