@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import kotlin.ContextFunctionTypeParams;
 import model.*;
 import service.Chess_Service;
-import service.ClearService;
 import service.GameService;
 import service.UserService;
 
@@ -590,24 +589,16 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new Clear_Request();
 
-            // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), Clear_Request.class);
 
-            // Run Function
-            Clear_Response output;
+
             try {
-                output = service.Clear(input);
+                service.Clear();
             } catch (DataAccessException ex) {
                 throw new DataAccessException("500");
             }
 
-            // serialize to JSON
-            var json = serializer.toJson(output);
 
-            // Update output
-            context.result(json);
         }
     }
 

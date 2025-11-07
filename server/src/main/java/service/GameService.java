@@ -145,7 +145,7 @@ public class GameService
     }
 
 
-    public Clear_Response clear(Clear_Request data) throws DataAccessException
+    public void clear() throws DataAccessException
     {
         try {
             data_list.Game_delete_all();
@@ -154,6 +154,6 @@ public class GameService
         }
 
 
-        return new Clear_Response();
+        return;
     }
 }

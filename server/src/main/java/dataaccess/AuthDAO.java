@@ -1,16 +1,8 @@
 package dataaccess;
 
-import chess.ChessPiece;
-import com.google.gson.Gson;
-import io.javalin.http.Context;
 import model.AuthData;
-import model.GameData;
-import model.UserData;
-import model.User_Request_Logout;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
 
 public class AuthDAO
 {
@@ -125,7 +117,15 @@ public class AuthDAO
 
 
 
-    public Boolean authorized_via_authToken(String data) throws DataAccessException
+
+    /**
+     * Determines if the user is Authorized given an AuthToken
+     *
+     * @param data   AuthToken
+     *
+     */
+
+    public Boolean authorizedViaAuthToken(String data) throws DataAccessException
     {
         System.out.println("In authorized_via_authToken");
 

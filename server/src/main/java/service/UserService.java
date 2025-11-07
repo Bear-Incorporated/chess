@@ -5,9 +5,6 @@ import dataaccess.DataAccessException;
 import dataaccess.UserDAO;
 import model.*;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class UserService
@@ -100,7 +97,7 @@ public class UserService
         return auth_list.Auth_get_userName_via_authToken(data);
     }
 
-    public Clear_Response clear(Clear_Request data) throws DataAccessException
+    public void clear() throws DataAccessException
     {
 
         try {
@@ -113,13 +110,13 @@ public class UserService
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
-        return new Clear_Response();
+        return;
 
     }
 
     public Boolean authorized(String data) throws DataAccessException {
         try {
-            return auth_list.authorized_via_authToken(data);
+            return auth_list.authorizedViaAuthToken(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }

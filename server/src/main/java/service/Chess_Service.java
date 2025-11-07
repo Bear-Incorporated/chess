@@ -20,18 +20,24 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Clear_Response Clear(Clear_Request data) throws DataAccessException
+    public void Clear() throws DataAccessException
     {
         System.out.println("clear");
 
         try {
-            service_game.clear(data);
+            service_game.clear();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
 
-        service_user.clear(data);
-        return new Clear_Response();
+
+        try {
+            service_user.clear();
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
+        }
+
+
 
     }
 
