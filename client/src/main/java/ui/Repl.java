@@ -22,7 +22,7 @@ public class Repl {
     }
 
     public void run() {
-        System.out.println(LOGO + " Welcome to the pet store. Sign in to start.");
+        System.out.println(LOGO + " Welcome to chess! Sign in to start.");
         System.out.print(help());
 
         Scanner scanner = new Scanner(System.in);
@@ -147,10 +147,31 @@ public class Repl {
     public String help() {
         if (state == State.SIGNEDOUT) {
             return """
-                    - signIn <yourname>
-                    - quit
+                    Options:
+                    \"help\" or \"h\" - Displays text informing the user what actions they can take.
+                    \"quit\" or \"q\" - Exits the program.
+                    \"login <USERNAME> <PASSWORD>\" or \"l <USERNAME> <PASSWORD>\" - Logs in.
+                    \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
                     """;
         }
+        else if (state == State.SIGNEDIN) {
+            return """
+                    Options:
+                    \"help\" or \"h\" - Displays text informing the user what actions they can take.
+                    \"logout\" or \"o\" - Logs you out.
+                    \"create <NAME>\" or \"c <NAME>\" - creates a new game.
+                    \"list\" or \"l\" - Lists all the game.
+                    \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
+                    \"view <ID>\" or \"v <ID>\" - View specified game.
+                    """;
+        }
+        else if (state == State.INGAME) {
+            return """
+                    Options:
+                    \"move <LOCAL_START> <LOCAL_END>\" or \"<LOCAL_START> <LOCAL_END>\" - Moves a piece.
+                    """;
+        }
+
         return """
                 - list
                 - adopt <pet id>
