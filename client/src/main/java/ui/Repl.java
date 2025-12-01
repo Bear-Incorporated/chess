@@ -61,7 +61,7 @@ public class Repl {
         return switch (cmd) {
             // case "signin" -> signIn(params);
             // case "rescue" -> rescuePet(params);
-            // case "list" -> listPets();
+            case "list" -> listGames();
             // case "signout" -> signOut();
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
@@ -90,16 +90,16 @@ public class Repl {
 //        }
 //    }
 
-//    public String listPets() {
-//        assertSignedIn();
-//        PetList pets = server.listPets();
-//        var result = new StringBuilder();
-//        var gson = new Gson();
-//        for (Pet pet : pets) {
-//            result.append(gson.toJson(pet)).append('\n');
-//        }
-//        return result.toString();
-//    }
+    public String listGames() {
+        // assertSignedIn();
+        PetList pets = server.listPets();
+        var result = new StringBuilder();
+        var gson = new Gson();
+        for (Pet pet : pets) {
+            result.append(gson.toJson(pet)).append('\n');
+        }
+        return result.toString();
+    }
 
 //    public String adoptPet(String... params) {
 //        assertSignedIn();
