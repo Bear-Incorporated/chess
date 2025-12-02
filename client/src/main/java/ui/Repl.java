@@ -1,9 +1,6 @@
 package ui;
 
 import dataaccess.DataAccessException;
-import model.Game_Request_List;
-import model.Game_Response_List;
-import service.Chess_Service;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -16,13 +13,15 @@ public class Repl {
     // private final ServerFacade server;
     // private final WebSocketFacade ws;
     private State state = State.SIGNEDOUT;
+    private Client client = new Client();
 
-    private Chess_Service service = new Chess_Service();
+    // private Chess_Service service = new Chess_Service();
 
 
     public Repl() {
         // server = new ServerFacade(serverUrl);
         // ws = new WebSocketFacade(serverUrl, this);
+        client = new Client();
     }
 
     public Repl(String serverUrl) {
@@ -104,11 +103,12 @@ public class Repl {
     {
         // assertSignedIn();
 
-
+        System.out.print(client.toString());
         // Run Function
-        Game_Response_List output = service.Game_List(new Game_Request_List());
+        //Game_Response_List output = service.Game_List(new Game_Request_List());
 
-        return output.toString();
+        // return output.toString();
+        return "NOT IMPLEMENTED YET";
     }
 
 //    public String adoptPet(String... params) {
