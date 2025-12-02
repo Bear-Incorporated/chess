@@ -1,4 +1,4 @@
-package ui;
+package websocket;
 
 
 import com.google.gson.Gson;
@@ -11,14 +11,14 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class Client
+public class HttpTalker
 {
     // Create an HttpClient for making requests
     // This should be long-lived and shared, so a static final field is good here
     private static final HttpClient httpClient = HttpClient.newHttpClient();
 
     public static void main(String[] args) throws Exception {
-        new Client().get("localhost", 8080, "/name");
+        new HttpTalker().get("localhost", 8080, "/name");
     }
 
     private void get(String host, int port, String path) throws Exception {
