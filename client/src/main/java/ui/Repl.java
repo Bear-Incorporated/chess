@@ -1,15 +1,24 @@
 package ui;
 
+import dataaccess.DataAccessException;
+import model.Game_Request_List;
+import model.Game_Response_List;
+import service.Chess_Service;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
 import static ui.EscapeSequences.*;
+
 
 public class Repl {
     private String visitorName = null;
     // private final ServerFacade server;
     // private final WebSocketFacade ws;
     private State state = State.SIGNEDOUT;
+
+    private Chess_Service service = new Chess_Service();
+
 
     public Repl() {
         // server = new ServerFacade(serverUrl);
@@ -53,7 +62,8 @@ public class Repl {
     }
 
 
-    public String eval(String input) {
+    public String eval(String input) throws DataAccessException
+    {
 
         String[] tokens = input.toLowerCase().split(" ");
         String cmd = (tokens.length > 0) ? tokens[0] : "help";
@@ -90,15 +100,15 @@ public class Repl {
 //        }
 //    }
 
-    public String listGames() {
+    public String listGames() throws DataAccessException
+    {
         // assertSignedIn();
-        PetList pets = server.listPets();
-        var result = new StringBuilder();
-        var gson = new Gson();
-        for (Pet pet : pets) {
-            result.append(gson.toJson(pet)).append('\n');
-        }
-        return result.toString();
+
+
+        // Run Function
+        Game_Response_List output = service.Game_List(new Game_Request_List());
+
+        return output.toString();
     }
 
 //    public String adoptPet(String... params) {
