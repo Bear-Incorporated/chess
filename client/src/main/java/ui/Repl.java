@@ -1,6 +1,6 @@
 package ui;
 
-import dataaccess.DataAccessException;
+import websocket.HttpTalker;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -13,7 +13,7 @@ public class Repl {
     // private final ServerFacade server;
     // private final WebSocketFacade ws;
     private State state = State.SIGNEDOUT;
-    private Client client = new Client();
+    private HttpTalker client = new HttpTalker();
 
     // private Chess_Service service = new Chess_Service();
 
@@ -21,7 +21,7 @@ public class Repl {
     public Repl() {
         // server = new ServerFacade(serverUrl);
         // ws = new WebSocketFacade(serverUrl, this);
-        client = new Client();
+        client = new HttpTalker();
     }
 
     public Repl(String serverUrl) {
@@ -61,7 +61,7 @@ public class Repl {
     }
 
 
-    public String eval(String input) throws DataAccessException
+    public String eval(String input) throws Exception
     {
 
         String[] tokens = input.toLowerCase().split(" ");
@@ -99,11 +99,11 @@ public class Repl {
 //        }
 //    }
 
-    public String listGames() throws DataAccessException
+    public String listGames() throws Exception
     {
         // assertSignedIn();
-
-        System.out.print(client.toString());
+        client.get("localhost", 8080, "/game");
+        System.out.print(client.toString() + "\n");
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 

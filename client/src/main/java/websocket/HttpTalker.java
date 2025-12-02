@@ -21,10 +21,10 @@ public class HttpTalker
         new HttpTalker().get("localhost", 8080, "/name");
     }
 
-    private void get(String host, int port, String path) throws Exception {
-        System.out.print("Made new Client!!!");
+    public void get(String host, int port, String path) throws Exception {
+        System.out.print("Made new Client!!!\n");
         String urlString = String.format(Locale.getDefault(), "http://%s:%d%s", host, port, path);
-        System.out.print(urlString);
+        System.out.print(urlString + "\n");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlString))
@@ -32,11 +32,11 @@ public class HttpTalker
                 .GET()
                 .build();
 
-        System.out.print(request);
+        System.out.print(request + "\n");
 
         HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.print(httpResponse);
+        System.out.print(httpResponse + "\n");
 
         if (httpResponse.statusCode() >= 200 && httpResponse.statusCode() < 300) {
             System.out.println(httpResponse.body());
@@ -45,13 +45,13 @@ public class HttpTalker
         }
     }
 
-    private static HttpResponse<String> sendRequest(String url, String method, String body)
-    {
-        var request = HttpRequest.newBuilder(URI.create(url))
-                .method(method, requestBodyPublisher(body))
-                .build();
-        return httpClient.send(request, BodyHandlers.ofString());
-    }
+//    private static HttpResponse<String> sendRequest(String url, String method, String body)
+//    {
+//        var request = HttpRequest.newBuilder(URI.create(url))
+//                .method(method, requestBodyPublisher(body))
+//                .build();
+//        return httpClient.send(request, BodyHandlers.ofString());
+//    }
 
     private static HttpRequest.BodyPublisher requestBodyPublisher(String body) {
         if (body != null) {
