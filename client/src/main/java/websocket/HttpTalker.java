@@ -61,6 +61,47 @@ public class HttpTalker
         }
     }
 
+
+
+    public void postSession(String username, String password) throws URISyntaxException, IOException, InterruptedException
+    {
+        String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, "/game");
+
+        System.out.println(String.format(
+                """
+                  {
+                  "username": "%s",
+                  "password": "%s"
+                  }
+                  """, username, password));
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(urlString))
+                .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
+                .header("authorization", "abc123")
+                .POST(HttpRequest.BodyPublishers.ofString(String.format(
+                    """
+                      {
+                      "username": "%s",
+                      "password": "%s"
+                      }
+                      """, username, password), StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if(httpResponse.statusCode() == 200) {
+            HttpHeaders headers = httpResponse.headers();
+            Optional<String> lengthHeader = headers.firstValue("Content-Length");
+
+            System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
+            System.out.println(httpResponse.body());
+        } else {
+            System.out.println("Error: received status code " + httpResponse.statusCode());
+            System.out.println(httpResponse.body());
+        }
+    }
+
     public void post(String host, int port, String urlPath, String message) throws URISyntaxException, IOException, InterruptedException
     {
         String urlString = String.format("http://%s:%d%s", host, port, urlPath);
@@ -85,6 +126,8 @@ public class HttpTalker
             System.out.println(httpResponse.body());
         }
     }
+
+
 
 //    private static HttpResponse<String> sendRequest(String url, String method, String body)
 //    {

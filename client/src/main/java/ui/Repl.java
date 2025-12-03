@@ -70,12 +70,20 @@ public class Repl {
         String[] tokens = input.toLowerCase().split(" ");
         String cmd = (tokens.length > 0) ? tokens[0] : "help";
         String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
+        String input1 = (tokens.length > 1) ? tokens[1] : "";
+        System.out.print(input1 + "\n");
+        String input2 = (tokens.length > 2) ? tokens[2] : "";
+        System.out.print(input2 + "\n");
+        String input3 = (tokens.length > 3) ? tokens[3] : "";
+        System.out.print(input3 + "\n");
+
+
         return switch (cmd) {
             // case "signin" -> signIn(params);
             // case "rescue" -> rescuePet(params);
             case "list" -> listGames();
             case "l" -> listGames();
-            // case "signout" -> signOut();
+            case "login" -> login(input1, input2);
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -134,7 +142,21 @@ public class Repl {
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
         // return output.toString();
-        return "NOT IMPLEMENTED YET";
+        return "Done";
+    }
+
+    public String login(String username, String password) throws Exception
+    {
+        // assertSignedIn();
+        System.out.print("username = " + username + "\n");
+        System.out.print("password = " + password + "\n");
+        client.postSession(username, password);
+        System.out.print(client.toString() + "\n");
+        // Run Function
+        //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+        // return output.toString();
+        return "Done";
     }
 
 //    public String adoptPet(String... params) {
