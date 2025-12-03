@@ -15,6 +15,9 @@ public class Repl {
     private State state = State.SIGNEDOUT;
     private HttpTalker client = new HttpTalker();
 
+    private final String SERVER_HOST = "localhost";
+    private final int SERVER_PORT = 8080;
+
     // private Chess_Service service = new Chess_Service();
 
 
@@ -71,13 +74,35 @@ public class Repl {
             // case "signin" -> signIn(params);
             // case "rescue" -> rescuePet(params);
             case "list" -> listGames();
+            case "l" -> listGames();
             // case "signout" -> signOut();
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
+            case "q" -> "quit";
+            case "help" -> help();
+            case "h" -> help();
             default -> help();
         };
+
+
     }
+
+//
+//    """
+//    Options:
+//
+//    \"login <USERNAME> <PASSWORD>\"  - Logs in.
+//    \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
+//
+//    \"logout\" or \"o\" - Logs you out.
+//    \"create <NAME>\" or \"c <NAME>\" - creates a new game.
+//    \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
+//    \"view <ID>\" or \"v <ID>\" - View specified game.
+//    """;
+
+
+
 
 //    public String signIn(String... params) {
 //        if (params.length >= 1) {
@@ -99,10 +124,11 @@ public class Repl {
 //        }
 //    }
 
+
     public String listGames() throws Exception
     {
         // assertSignedIn();
-        client.get("localhost", 8080, "/game");
+        client.get("/game");
         System.out.print(client.toString() + "\n");
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
@@ -160,7 +186,7 @@ public class Repl {
                     Options:
                     \"help\" or \"h\" - Displays text informing the user what actions they can take.
                     \"quit\" or \"q\" - Exits the program.
-                    \"login <USERNAME> <PASSWORD>\" or \"l <USERNAME> <PASSWORD>\" - Logs in.
+                    \"login <USERNAME> <PASSWORD>\" - Logs in.
                     \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
                     """;
         }

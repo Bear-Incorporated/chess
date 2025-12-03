@@ -3,12 +3,17 @@ package websocket;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class HttpTalker
@@ -17,8 +22,18 @@ public class HttpTalker
     // This should be long-lived and shared, so a static final field is good here
     private static final HttpClient httpClient = HttpClient.newHttpClient();
 
+    private static final int TIMEOUT_MILLIS = 5000;
+
+    private static final String SERVER_HOST = "localhost";
+    private static final int SERVER_PORT = 8080;
+
     public static void main(String[] args) throws Exception {
-        new HttpTalker().get("localhost", 8080, "/name");
+        new HttpTalker().get(SERVER_HOST, SERVER_PORT, "/name");
+    }
+
+
+    public void get(String path) throws Exception {
+        get(SERVER_HOST, SERVER_PORT, path);
     }
 
     public void get(String host, int port, String path) throws Exception {
@@ -28,7 +43,8 @@ public class HttpTalker
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlString))
-                .timeout(java.time.Duration.ofMillis(5000))
+                .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
+                .header("authorization", "abc123")
                 .GET()
                 .build();
 
@@ -42,6 +58,31 @@ public class HttpTalker
             System.out.println(httpResponse.body());
         } else {
             System.out.println("Error: received status code " + httpResponse.statusCode());
+        }
+    }
+
+    public void post(String host, int port, String urlPath, String message) throws URISyntaxException, IOException, InterruptedException
+    {
+        String urlString = String.format("http://%s:%d%s", host, port, urlPath);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(urlString))
+                .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
+                .header("authorization", "abc123")
+                .POST(HttpRequest.BodyPublishers.ofString(message, StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if(httpResponse.statusCode() == 200) {
+            HttpHeaders headers = httpResponse.headers();
+            Optional<String> lengthHeader = headers.firstValue("Content-Length");
+
+            System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
+            System.out.println(httpResponse.body());
+        } else {
+            System.out.println("Error: received status code " + httpResponse.statusCode());
+            System.out.println(httpResponse.body());
         }
     }
 
