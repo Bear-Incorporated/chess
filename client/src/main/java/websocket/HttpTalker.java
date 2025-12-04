@@ -63,29 +63,17 @@ public class HttpTalker
 
 
 
-    public void postSession(String username, String password) throws URISyntaxException, IOException, InterruptedException
+    public String postSession(String body) throws URISyntaxException, IOException, InterruptedException
     {
         String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, "/session");
 
-        System.out.println(String.format(
-                """
-                  {
-                  "username": "%s",
-                  "password": "%s"
-                  }
-                  """, username, password));
+
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlString))
                 .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
                 .header("authorization", "abc123")
-                .POST(HttpRequest.BodyPublishers.ofString(String.format(
-                    """
-                      {
-                      "username": "%s",
-                      "password": "%s"
-                      }
-                      """, username, password), StandardCharsets.UTF_8))
+                .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                 .build();
 
         HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -96,37 +84,26 @@ public class HttpTalker
 
             System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
             System.out.println(httpResponse.body());
+
+            return httpResponse.body();
         } else {
             System.out.println("Error: received status code " + httpResponse.statusCode());
 
             System.out.println(httpResponse.body());
+            return "error";
         }
     }
 
-    public void postUser(String username, String password, String email) throws URISyntaxException, IOException, InterruptedException
+    public void postUser(String authToken, String body) throws URISyntaxException, IOException, InterruptedException
     {
         String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, "/user");
 
-        System.out.println(String.format(
-                """
-                  {
-                  "username": "%s",
-                  "password": "%s"
-                  }
-                  """, username, password));
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlString))
                 .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
-                .header("authorization", "abc123")
-                .POST(HttpRequest.BodyPublishers.ofString(String.format(
-                        """
-                          {
-                          "username": "%s",
-                          "password": "%s",r
-                          "email": "%s"
-                          }
-                          """, username, password, email), StandardCharsets.UTF_8))
+                .header("authorization", authToken)
+                .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                 .build();
 
         HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -137,6 +114,7 @@ public class HttpTalker
 
             System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
             System.out.println(httpResponse.body());
+
         } else {
             System.out.println("Error: received status code " + httpResponse.statusCode());
 
@@ -147,15 +125,16 @@ public class HttpTalker
 
 
 
-    public void post(String host, int port, String urlPath, String message) throws URISyntaxException, IOException, InterruptedException
+    public String post(String urlPath, String authToken, String body) throws URISyntaxException, IOException, InterruptedException
     {
-        String urlString = String.format("http://%s:%d%s", host, port, urlPath);
+        String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, urlPath);
+
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(urlString))
                 .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
-                .header("authorization", "abc123")
-                .POST(HttpRequest.BodyPublishers.ofString(message, StandardCharsets.UTF_8))
+                .header("authorization", authToken)
+                .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                 .build();
 
         HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -166,9 +145,13 @@ public class HttpTalker
 
             System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
             System.out.println(httpResponse.body());
+
+            return httpResponse.body();
         } else {
             System.out.println("Error: received status code " + httpResponse.statusCode());
+
             System.out.println(httpResponse.body());
+            return "error";
         }
     }
 

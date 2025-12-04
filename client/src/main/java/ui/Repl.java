@@ -15,6 +15,8 @@ public class Repl {
     private State state = State.SIGNEDOUT;
     private HttpTalker client = new HttpTalker();
 
+    private String authToken;
+
     private final String SERVER_HOST = "localhost";
     private final int SERVER_PORT = 8080;
 
@@ -25,6 +27,7 @@ public class Repl {
         // server = new ServerFacade(serverUrl);
         // ws = new WebSocketFacade(serverUrl, this);
         client = new HttpTalker();
+        authToken = "";
     }
 
     public Repl(String serverUrl) {
@@ -151,8 +154,32 @@ public class Repl {
         // assertSignedIn();
         System.out.print("username = " + username + "\n");
         System.out.print("password = " + password + "\n");
-        client.postSession(username, password);
-        System.out.print(client.toString() + "\n");
+        String body = String.format(
+                """
+                  {
+                  "username": "%s",
+                  "password": "%s"
+                  }
+                  """, username, password);
+        System.out.print("body = " + body + "\n");
+        String authTokenTemp = client.post("/session", authToken, body);
+        //System.out.print(client.toString() + "\n");
+
+        if (authTokenTemp.equals("error"))
+        {
+            System.out.print("there was an error logging you in");
+        }
+        else
+        {
+            String[] authTokenTempSplit = authTokenTemp.split("\"");
+            for (int i = 0; i < authTokenTempSplit.length; i++ )
+            {
+                System.out.print("number " + i + " is " + authTokenTempSplit[i] + ", ");
+            }
+            authToken = authTokenTempSplit[7];
+            System.out.print("\nLogged in " + authToken);
+        }
+
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
@@ -165,7 +192,16 @@ public class Repl {
         // assertSignedIn();
         System.out.print("username = " + username + "\n");
         System.out.print("password = " + password + "\n");
-        client.postUser(username, password, email);
+        String body = String.format(
+                """
+                  {
+                  "username": "%s",
+                  "password": "%s",
+                  "email": "%s"
+                  }
+                  """, username, password, email);
+        System.out.print(body + "\n");
+        client.post("/user", authToken, body);
         System.out.print(client.toString() + "\n");
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
