@@ -107,9 +107,7 @@ public class Repl {
 //    """
 //    Options:
 //
-//    \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
 //
-//    \"logout\" or \"o\" - Logs you out.
 //    \"create <NAME>\" or \"c <NAME>\" - creates a new game.
 //    \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
 //    \"view <ID>\" or \"v <ID>\" - View specified game.
@@ -142,13 +140,24 @@ public class Repl {
     public String listGames() throws Exception
     {
         // assertSignedIn();
-        client.get("/game");
+        String gameList = client.get("/game", authToken);
         System.out.print(client.toString() + "\n");
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
-        // return output.toString();
-        return "Done";
+        String[] gameListSplit = gameList.split("\"");
+        for (int i = 0; i < gameListSplit.length; i++ )
+        {
+            System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
+        }
+        System.out.print("\n");
+        for (int i = 1; i <= (gameListSplit.length - 2) / 6; i++ )
+        {
+            System.out.print("Game #" + i + " is " + gameListSplit[i * 6 + 1] + "\n");
+        }
+
+        // return gameList;
+        return "";
     }
 
     public String login(String username, String password) throws Exception
