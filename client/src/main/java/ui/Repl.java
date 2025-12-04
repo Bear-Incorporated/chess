@@ -84,6 +84,8 @@ public class Repl {
             case "list" -> listGames();
             case "l" -> listGames();
             case "login" -> login(input1, input2);
+            case "register" -> register(input1, input2, input3);
+            case "r" -> register(input1, input2, input3);
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -100,7 +102,6 @@ public class Repl {
 //    """
 //    Options:
 //
-//    \"login <USERNAME> <PASSWORD>\"  - Logs in.
 //    \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
 //
 //    \"logout\" or \"o\" - Logs you out.
@@ -151,6 +152,20 @@ public class Repl {
         System.out.print("username = " + username + "\n");
         System.out.print("password = " + password + "\n");
         client.postSession(username, password);
+        System.out.print(client.toString() + "\n");
+        // Run Function
+        //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+        // return output.toString();
+        return "Done";
+    }
+
+    public String register(String username, String password, String email) throws Exception
+    {
+        // assertSignedIn();
+        System.out.print("username = " + username + "\n");
+        System.out.print("password = " + password + "\n");
+        client.postUser(username, password, email);
         System.out.print(client.toString() + "\n");
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
