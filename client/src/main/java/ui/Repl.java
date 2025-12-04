@@ -89,6 +89,8 @@ public class Repl {
             case "login" -> login(input1, input2);
             case "register" -> register(input1, input2, input3);
             case "r" -> register(input1, input2, input3);
+            case "logout" -> logout();
+            case "o" -> logout();
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -177,6 +179,7 @@ public class Repl {
                 System.out.print("number " + i + " is " + authTokenTempSplit[i] + ", ");
             }
             authToken = authTokenTempSplit[7];
+            state = State.SIGNEDIN;
             System.out.print("\nLogged in " + authToken);
         }
 
@@ -203,6 +206,21 @@ public class Repl {
         System.out.print(body + "\n");
         client.post("/user", authToken, body);
         System.out.print(client.toString() + "\n");
+        // Run Function
+        //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+        // return output.toString();
+        return "Done";
+    }
+
+    public String logout() throws Exception
+    {
+        if (!isLoggedIn()) { return ""; }
+
+        client.delete("/session", authToken);
+        System.out.print("You are now logged out.\n");
+
+        state = State.SIGNEDOUT;
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
@@ -291,9 +309,13 @@ public class Repl {
                 """;
     }
 
-    private void assertSignedIn() {
+    private boolean isLoggedIn() {
         if (state == State.SIGNEDOUT) {
-
+            System.out.print("You need to be logged in to do that!");
+            return false;
+        } else
+        {
+            return true;
         }
     }
 }
