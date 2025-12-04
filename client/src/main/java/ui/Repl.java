@@ -91,6 +91,9 @@ public class Repl {
             case "r" -> register(input1, input2, input3);
             case "logout" -> logout();
             case "o" -> logout();
+            case "create" -> newGame(input1);
+            case "c" -> newGame(input1);
+
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -158,6 +161,27 @@ public class Repl {
 
         // return gameList;
         return "";
+    }
+
+    public String newGame(String gameName) throws Exception
+    {
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return ""; }
+
+        String body = String.format(
+                """
+                  {
+                  "gameName": "%s"
+                  }
+                  """, gameName);
+        System.out.print(body + "\n");
+        client.post("/game", authToken, body);
+        System.out.print(client.toString() + "\n");
+        // Run Function
+        //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+        // return output.toString();
+        return "Done";
     }
 
     public String login(String username, String password) throws Exception
