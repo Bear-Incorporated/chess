@@ -123,7 +123,7 @@ public class HttpTalker
                         """
                           {
                           "username": "%s",
-                          "password": "%s"
+                          "password": "%s",r
                           "email": "%s"
                           }
                           """, username, password, email), StandardCharsets.UTF_8))
