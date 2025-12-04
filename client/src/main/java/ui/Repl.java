@@ -93,6 +93,10 @@ public class Repl {
             case "o" -> logout();
             case "create" -> newGame(input1);
             case "c" -> newGame(input1);
+            case "new" -> newGame(input1);
+            case "n" -> newGame(input1);
+            case "join" -> joinGame(input1, input2);
+            case "j" -> joinGame(input1, input2);
 
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
@@ -111,8 +115,6 @@ public class Repl {
 //    Options:
 //
 //
-//    \"create <NAME>\" or \"c <NAME>\" - creates a new game.
-//    \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
 //    \"view <ID>\" or \"v <ID>\" - View specified game.
 //    """;
 
@@ -142,7 +144,9 @@ public class Repl {
 
     public String listGames() throws Exception
     {
-        // assertSignedIn();
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
+
         String gameList = client.get("/game", authToken);
         System.out.print(client.toString() + "\n");
         // Run Function
@@ -166,7 +170,7 @@ public class Repl {
     public String newGame(String gameName) throws Exception
     {
         // Returns an error if logged out
-        if (!isLoggedIn()) { return ""; }
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
 
         String body = String.format(
                 """
@@ -175,13 +179,16 @@ public class Repl {
                   }
                   """, gameName);
         System.out.print(body + "\n");
-        client.post("/game", authToken, body);
+        String error = client.post("/game", authToken, body);
         System.out.print(client.toString() + "\n");
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
-
+        if (error.equals("error 400"))
+        {
+            System.out.print("Pick a new Name.  That one already exists.\n");
+        }
         // return output.toString();
-        return "Done";
+        return "";
     }
 
     public String login(String username, String password) throws Exception
@@ -200,9 +207,9 @@ public class Repl {
         String authTokenTemp = client.post("/session", authToken, body);
         //System.out.print(client.toString() + "\n");
 
-        if (authTokenTemp.equals("error"))
+        if (authTokenTemp.startsWith("error"))
         {
-            System.out.print("there was an error logging you in");
+            System.out.print("There was an error logging you in");
         }
         else
         {
@@ -220,7 +227,7 @@ public class Repl {
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
         // return output.toString();
-        return "Done";
+        return "";
     }
 
     public String register(String username, String password, String email) throws Exception
@@ -246,9 +253,44 @@ public class Repl {
         return "Done";
     }
 
+    public String joinGame(String gameID, String playerColor) throws Exception
+    {
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
+
+        if (playerColor.equals("white") || playerColor.equals("w"))
+        {
+            playerColor = "WHITE";
+        }
+        else if (playerColor.equals("black") || playerColor.equals("b"))
+        {
+            playerColor = "BLACK";
+        } else
+        {
+            return playerColor + " is not a valid color.";
+        }
+
+        String body = String.format(
+                """
+                  {
+                  "playerColor": "%s",
+                  "gameID": "%s"
+                  }
+                  """, playerColor, gameID);
+        System.out.print(body + "\n");
+        client.put("/game", authToken, body);
+        System.out.print(client.toString() + "\n");
+        // Run Function
+        //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+        // return output.toString();
+        return "Done";
+    }
+
     public String logout() throws Exception
     {
-        if (!isLoggedIn()) { return ""; }
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
 
         client.delete("/session", authToken);
         System.out.print("You are now logged out.\n");
@@ -319,7 +361,7 @@ public class Repl {
                     Options:
                     \"help\" or \"h\" - Displays text informing the user what actions they can take.
                     \"logout\" or \"o\" - Logs you out.
-                    \"create <NAME>\" or \"c <NAME>\" - creates a new game.
+                    \"create <NAME>\" or \"c <NAME>\" or \"new <NAME>\" or \"n <NAME>\" - creates a new game.
                     \"list\" or \"l\" - Lists all the game.
                     \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
                     \"view <ID>\" or \"v <ID>\" - View specified game.
@@ -332,19 +374,12 @@ public class Repl {
                     """;
         }
 
-        return """
-                - list
-                - adopt <pet id>
-                - rescue <name> <CAT|DOG|FROG|FISH>
-                - adoptAll
-                - signOut
-                - quit
-                """;
+        return "";
     }
 
     private boolean isLoggedIn() {
         if (state == State.SIGNEDOUT) {
-            System.out.print("You need to be logged in to do that!");
+            // System.out.print("You need to be logged in to do that!");
             return false;
         } else
         {
