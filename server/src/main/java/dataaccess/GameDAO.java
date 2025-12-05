@@ -219,7 +219,28 @@ public class GameDAO
 
                 // Read and deserialize the chessGame JSON.
                 var json = rs.getString("chessGame");
-                ChessGame chessGame_found = new Gson().fromJson(json, ChessGame.class);
+
+                ChessGame chessGame_found;
+
+
+
+                if (json == null)
+                {
+                    chessGame_found = new ChessGame();
+                    System.out.println("Game is Null");
+                }
+                else
+                {
+                    System.out.println("Game found!\n");
+                    System.out.println("json = " + json + "\n");
+                    String jsonWithParenthesis = json.replace('\'', '"');
+                    System.out.println("fixed = " + jsonWithParenthesis + "\n");
+
+                    chessGame_found = new Gson().fromJson(jsonWithParenthesis, ChessGame.class);
+                    System.out.println("Game = " + chessGame_found + "\n");
+
+                }
+
 
                 System.out.printf("User Found! gameName: %s, gameID: %s%n", gameName_found, gameID_found);
 
@@ -295,7 +316,7 @@ public class GameDAO
         // Because this will only run when you add a player to it, I am giving the chessGame in the SQL a value at this point.
         // Serialize and store the friend JSON.
         var json = new Gson().toJson(new ChessGame());
-        String jsonWithoutParenthesis = json.toString().replace('"', '-');
+        String jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
         System.out.println(new ChessGame() + "\n");
         System.out.println(new ChessGame() + "\n");
