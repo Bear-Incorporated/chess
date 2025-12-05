@@ -12,9 +12,9 @@ public class ChessBoard {
 
     // Using a two-dimensional Array to represent the board
     // in RC order going from 0-7
-    ChessPiece[][] chess_board;
+    ChessPiece[][] chessBoard;
     public ChessBoard() {
-        chess_board = new ChessPiece[8][8];
+        chessBoard = new ChessPiece[8][8];
     }
 
     /**
@@ -24,7 +24,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        chess_board[position.getRow()-1][position.getColumn()-1] = piece;
+        chessBoard[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
     /**
@@ -34,7 +34,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(int row, int col, ChessPiece piece) {
-        chess_board[row-1][col-1] = piece;
+        chessBoard[row-1][col-1] = piece;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ChessBoard {
      *
      */
     public void piece_remove(ChessPosition position) {
-        chess_board[position.getRow()-1][position.getColumn()-1] = null;
+        chessBoard[position.getRow()-1][position.getColumn()-1] = null;
     }
 
     /**
@@ -54,7 +54,7 @@ public class ChessBoard {
      *
      */
     public void piece_remove(int row, int col) {
-        chess_board[row-1][col-1] = null;
+        chessBoard[row-1][col-1] = null;
     }
 
     /**
@@ -65,7 +65,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return chess_board[position.getRow()-1][position.getColumn()-1];
+        return chessBoard[position.getRow()-1][position.getColumn()-1];
     }
 
     /**
@@ -76,7 +76,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(int row, int col) {
-        return chess_board[row-1][col-1];
+        return chessBoard[row-1][col-1];
     }
 
 
@@ -85,7 +85,7 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        chess_board = new ChessPiece[8][8];
+        chessBoard = new ChessPiece[8][8];
         // chess_board[0][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
 
         addPiece(new ChessPosition(1, 1), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
@@ -125,15 +125,15 @@ public class ChessBoard {
         addPiece(new ChessPosition(8, 8), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
     }
 
-    public ChessBoard get_board() {
+    public ChessBoard getBoard() {
         ChessBoard board_copy = new ChessBoard();
         for(int r=0; r<8; r++)
         {
             for(int c=0; c<8; c++)
             {
-                if (chess_board[r][c] != null)
+                if (chessBoard[r][c] != null)
                 {
-                    board_copy.addPiece(new ChessPosition(r+1, c+1), new ChessPiece(chess_board[r][c].getTeamColor(), chess_board[r][c].getPieceType()));
+                    board_copy.addPiece(new ChessPosition(r+1, c+1), new ChessPiece(chessBoard[r][c].getTeamColor(), chessBoard[r][c].getPieceType()));
                 }
             }
         }
@@ -149,11 +149,11 @@ public class ChessBoard {
         if (!(o instanceof ChessBoard that)) {
             return false;
         }
-        return Arrays.deepEquals(chess_board, that.chess_board);
+        return Arrays.deepEquals(chessBoard, that.chessBoard);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(chess_board);
+        return Arrays.deepHashCode(chessBoard);
     }
 }

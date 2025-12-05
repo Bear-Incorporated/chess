@@ -13,15 +13,15 @@ import java.util.Set;
  */
 public class ChessPiece {
 
-    PieceType piece_type;
-    ChessGame.TeamColor piece_color;
-    Integer piece_moved;
+    PieceType pieceType;
+    ChessGame.TeamColor pieceColor;
+    Integer pieceMoved;
 
 
-    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
-        piece_type = type;
-        piece_color = pieceColor;
-        piece_moved = 0;
+    public ChessPiece(ChessGame.TeamColor pieceColorNew, ChessPiece.PieceType type) {
+        pieceType = type;
+        pieceColor = pieceColorNew;
+        pieceMoved = 0;
     }
 
     /**
@@ -40,14 +40,14 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        return piece_color;
+        return pieceColor;
     }
 
     /**
      * @return which type of chess piece this piece is
      */
     public PieceType getPieceType() {
-        return piece_type;
+        return pieceType;
     }
 
     /**
@@ -99,7 +99,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -121,7 +121,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -143,7 +143,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -165,7 +165,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -190,7 +190,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -212,7 +212,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -234,7 +234,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -256,7 +256,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -278,7 +278,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -300,7 +300,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -322,7 +322,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -344,7 +344,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -369,7 +369,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -391,7 +391,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -413,7 +413,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -435,7 +435,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -457,7 +457,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -479,7 +479,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -501,7 +501,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -523,7 +523,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -552,7 +552,7 @@ public class ChessPiece {
                 if (board.getPiece(temp_row,temp_col) == null)
                 {
                     // Nothing
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     // If not at edge of board
                     if (temp_row >= 2 && temp_row <= 7) {
@@ -581,7 +581,7 @@ public class ChessPiece {
                 if (board.getPiece(temp_row,temp_col) == null)
                 {
                     // Nothing
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     // If not at edge of board
                     if (temp_row >= 2 && temp_row <= 7) {
@@ -657,7 +657,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -679,7 +679,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -701,7 +701,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -723,7 +723,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -745,7 +745,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -767,7 +767,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -789,7 +789,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -811,7 +811,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -836,7 +836,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -858,7 +858,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -880,7 +880,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -902,7 +902,7 @@ public class ChessPiece {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     temp_row = temp_row + offset_row;
                     temp_col = temp_col + offset_col;
-                } else if (board.getPiece(temp_row,temp_col).piece_color != piece_color)
+                } else if (board.getPiece(temp_row,temp_col).pieceColor != piece_color)
                 {
                     return_moves.add(new ChessMove(new ChessPosition(piece_row, piece_col), new ChessPosition(temp_row, temp_col), null));
                     // Escape the loop
@@ -922,13 +922,13 @@ public class ChessPiece {
 
     public int get_piece_moved()
     {
-        return piece_moved;
+        return pieceMoved;
 
     }
 
     public void tick_piece_moved()
     {
-        piece_moved = piece_moved + 1;
+        pieceMoved = pieceMoved + 1;
         return;
     }
 
@@ -941,11 +941,11 @@ public class ChessPiece {
         if (!(o instanceof ChessPiece that)) {
             return false;
         }
-        return piece_type == that.piece_type && piece_color == that.piece_color;
+        return pieceType == that.pieceType && pieceColor == that.pieceColor;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(piece_type, piece_color);
+        return Objects.hash(pieceType, pieceColor);
     }
 }
