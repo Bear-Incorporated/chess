@@ -1,14 +1,9 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
-import dataaccess.UserDAO;
 import model.*;
-
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class GameService
 {
@@ -80,7 +75,7 @@ public class GameService
         System.out.println("Game does exist");
 
         // Find the game
-        GameData join_game = data_list.Game_get_via_gameID(join_gameID);
+        GameData join_game = data_list.getGameDataViaGameID(join_gameID);
         System.out.println("Game does exist still");
         System.out.println(join_game);
 
@@ -126,6 +121,36 @@ public class GameService
         // throw new RuntimeException("Not implemented");
         return new Game_Response_Join();
     }
+
+
+    /**
+     * View a game
+     *
+     * @param
+     * @return
+     */
+    public ChessGame view(int view_gameID) throws Exception
+    {
+
+        System.out.println("I am in GameService.java join!!");
+
+        // If the game doesn't exist, give error
+        if (!data_list.Game_found_via_gameID(view_gameID))
+        {
+            System.out.println("Game doesn't exist");
+            throw new DataAccessException("400");
+        }
+        System.out.println("Game does exist");
+
+        // Find the game
+        GameData view_game = data_list.getGameDataViaGameID(view_gameID);
+        System.out.println("Game does exist still");
+        System.out.println(view_game);
+
+
+        return view_game.chessGame();
+    }
+
 
     /**
      * List Games

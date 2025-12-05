@@ -2,12 +2,12 @@ package dataaccess;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
-import io.javalin.http.Context;
-import model.*;
+import model.GameData;
+import model.GameData_Short;
+import model.Game_Response_List;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class GameDAO
 {
@@ -63,13 +63,6 @@ public class GameDAO
     {
         System.out.println("Game_add_gameName " + name_adding);
 
-
-        // Serialize and store the game JSON.
-        // var json = new Gson().toJson(new ChessGame());
-
-
-
-        // var statement = "INSERT INTO GameSQL (gameName, chessGame) VALUES ( \"" + name_adding + "\", \"" + json + "\" );";
 
 
         var statement = "INSERT INTO GameSQL (gameName) VALUES ( \"" + name_adding + "\" );";
@@ -210,7 +203,7 @@ public class GameDAO
 
     }
 
-    public GameData Game_get_via_gameID(int finding) throws DataAccessException
+    public GameData getGameDataViaGameID(int finding) throws DataAccessException
     {
         System.out.println("In Game_get_via_gameID");
 
@@ -243,6 +236,8 @@ public class GameDAO
 
         return null;
     }
+
+
 
 
 
@@ -296,12 +291,14 @@ public class GameDAO
     {
         System.out.println("Game_add_keep_gameID " + added.gameName());
 
+
+        // Because this will only run when you add a player to it, I am giving the chessGame in the SQL a value at this point.
         // Serialize and store the friend JSON.
-        // var json = new Gson().toJson(added.chessGame());
+        var json = new Gson().toJson(new ChessGame());
 
-        // var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + json + "\" );");
+        var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + json + "\" );");
 
-        var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" );");
+        // var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" );");
 
 
 
@@ -314,8 +311,6 @@ public class GameDAO
             // if black Username is null, need to keep null
             statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , null , \"" + added.gameName() + "\" );");
         }
-
-
 
 
 
