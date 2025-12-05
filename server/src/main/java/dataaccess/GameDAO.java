@@ -289,12 +289,17 @@ public class GameDAO
 
     public void Game_add_keep_gameID(GameData added) throws DataAccessException
     {
-        System.out.println("Game_add_keep_gameID " + added.gameName());
+        System.out.println("Game_add_keep_gameID " + added.gameName() + "\n");
 
 
         // Because this will only run when you add a player to it, I am giving the chessGame in the SQL a value at this point.
         // Serialize and store the friend JSON.
         var json = new Gson().toJson(new ChessGame());
+
+        System.out.println(json + "\n");
+        System.out.println(json + "\n");
+        System.out.println(json + "\n");
+        System.out.println(json + "\n");
 
         var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + json + "\" );");
 
