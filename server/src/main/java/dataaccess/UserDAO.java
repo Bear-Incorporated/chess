@@ -1,19 +1,9 @@
 package dataaccess;
 
-import com.google.gson.Gson;
-import io.javalin.http.Context;
 import model.*;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Properties;
-
-
-import java.sql.*;
 
 
 public class UserDAO
@@ -34,7 +24,7 @@ public class UserDAO
         }
         try
         {
-            createTable_UserSQL();
+            createTableUserSQL();
         } catch (DataAccessException e)
         {
             throw new RuntimeException(e);
@@ -47,7 +37,7 @@ public class UserDAO
 
 
 
-    static public void createTable_UserSQL() throws DataAccessException {
+    static public void createTableUserSQL() throws DataAccessException {
         System.out.println("createTable_UserSQL");
         var statement = "CREATE TABLE IF NOT EXISTS UserSQL (username VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL);";
         try (var conn = DatabaseManager.getConnection();
@@ -72,7 +62,7 @@ public class UserDAO
 
 
 
-    public void User_delete_all() throws DataAccessException {
+    public void userDeleteAll() throws DataAccessException {
         System.out.println("User_delete_all");
 
         var statement = "DROP TABLE IF EXISTS UserSQL;";
@@ -86,7 +76,7 @@ public class UserDAO
 
         try
         {
-            createTable_UserSQL();
+            createTableUserSQL();
         } catch (DataAccessException e)
         {
             throw new RuntimeException(e);
@@ -95,7 +85,7 @@ public class UserDAO
 
 
 
-    public void User_add(UserData added) throws DataAccessException {
+    public void userAdd(UserData added) throws DataAccessException {
         System.out.println("User_add" + added.username().toString());
 
         String hashedPassword = BCrypt.hashpw(added.password(), BCrypt.gensalt());
@@ -110,7 +100,7 @@ public class UserDAO
         }
     }
 
-    public boolean User_found_via_username(String username) throws DataAccessException{
+    public boolean userFoundViaUsername(String username) throws DataAccessException{
         String output;
 
         System.out.println("User_found_via_username");
@@ -141,9 +131,9 @@ public class UserDAO
         return false;
     }
 
-    public boolean User_login_credentials(UserData logging_in) throws DataAccessException {
+    public boolean userLoginCredentials(UserData loggingIn) throws DataAccessException {
 
-        System.out.println("User_login_credentials " + logging_in.username());
+        System.out.println("User_login_credentials " + loggingIn.username());
         var statement = "SELECT * FROM UserSQL;";
 
         System.out.println("User_login_credentials 2 " + statement);
@@ -157,10 +147,10 @@ public class UserDAO
                 var hashedPassword = rs.getString("password");
                 var email_found = rs.getString("email");
                 System.out.printf("User Found! username: %s, password: %s, email: %s%n", username_found, hashedPassword, email_found);
-                System.out.println("Password Have: " + logging_in.password());
+                System.out.println("Password Have: " + loggingIn.password());
                 if (hashedPassword != null)
                 {
-                    if (BCrypt.checkpw(logging_in.password(), hashedPassword))
+                    if (BCrypt.checkpw(loggingIn.password(), hashedPassword))
                     {
                         System.out.println("Password Correct!");
                         return true;

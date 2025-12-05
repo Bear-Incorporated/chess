@@ -52,7 +52,7 @@ public class UserService
         Boolean user_found = false;
 
         try {
-            user_found = user_list.User_found_via_username(added.username());
+            user_found = user_list.userFoundViaUsername(added.username());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -63,7 +63,7 @@ public class UserService
         }
 
         // Add to user list
-        user_list.User_add(new UserData(added.username(), added.password(), added.email()));
+        user_list.userAdd(new UserData(added.username(), added.password(), added.email()));
 
         User_Response_Login output_login = login(new User_Request_Login(added.username(), added.password()));
 
@@ -83,7 +83,7 @@ public class UserService
     public void logout(User_Request_Logout data) throws DataAccessException
     {
         try {
-            auth_list.Auth_delete_via_authToken(data.authToken());
+            auth_list.authDeleteViaAuthToken(data.authToken());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -94,19 +94,19 @@ public class UserService
 
     public String get_userName_via_authToken(String data) throws DataAccessException
     {
-        return auth_list.Auth_get_userName_via_authToken(data);
+        return auth_list.authGetUserNameViaAuthToken(data);
     }
 
     public void clear() throws DataAccessException
     {
 
         try {
-            user_list.User_delete_all();
+            user_list.userDeleteAll();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
         try {
-            auth_list.Auth_delete_all();
+            auth_list.authDeleteAll();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -162,7 +162,7 @@ public class UserService
         System.out.println("Looking for " + loginer);
 
         // Check to see if using wrong username and password
-        if (!user_list.User_login_credentials(new UserData(loginer.username(), loginer.password(), loginer.username())))
+        if (!user_list.userLoginCredentials(new UserData(loginer.username(), loginer.password(), loginer.username())))
         {
             throw new DataAccessException("401");
         }
@@ -171,7 +171,7 @@ public class UserService
 
         // If they already are logged in, logout and log back in
         // Apparently don't do that, because we want to be easily accessible
-        if (auth_list.authorized_via_username(loginer.username()))
+        if (auth_list.authorizedViaUsername(loginer.username()))
         {
             // auth_list.Auth_delete_via_authToken(auth_list.Auth_get_authToken_via_username(loginer.username()));
 
@@ -183,7 +183,7 @@ public class UserService
 
         String authToken =  loginer.username() + randInt();
         System.out.println("New Auth Token " + authToken + " for " + loginer.username());
-        auth_list.Auth_add(new AuthData(authToken, loginer.username()));
+        auth_list.authAdd(new AuthData(authToken, loginer.username()));
 
         return authToken;
 

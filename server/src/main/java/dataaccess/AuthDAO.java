@@ -23,7 +23,7 @@ public class AuthDAO
         }
         try
         {
-            createTable_AuthSQL();
+            createTableAuthSQL();
         } catch (DataAccessException e)
         {
             throw new RuntimeException(e);
@@ -36,7 +36,7 @@ public class AuthDAO
 
 
 
-    static public void createTable_AuthSQL() throws DataAccessException {
+    static public void createTableAuthSQL() throws DataAccessException {
         System.out.println("createTable_AuthSQL");
         var statement = "CREATE TABLE IF NOT EXISTS AuthSQL (authToken VARCHAR(255) DEFAULT NULL, username VARCHAR(255) DEFAULT NULL);";
         try (var conn = DatabaseManager.getConnection();
@@ -62,7 +62,7 @@ public class AuthDAO
 
 
 
-    public void Auth_delete_all() throws DataAccessException {
+    public void authDeleteAll() throws DataAccessException {
         System.out.println("In Auth_delete_all");
 
         var statement = "DROP TABLE IF EXISTS AuthSQL;";
@@ -76,7 +76,7 @@ public class AuthDAO
 
         try
         {
-            createTable_AuthSQL();
+            createTableAuthSQL();
         } catch (DataAccessException e)
         {
             throw new RuntimeException(e);
@@ -85,7 +85,7 @@ public class AuthDAO
 
 
 
-    public String Auth_get_userName_via_authToken(String authToken) throws DataAccessException
+    public String authGetUserNameViaAuthToken(String authToken) throws DataAccessException
     {
         System.out.println("In Auth_get_userName_via_authToken");
 
@@ -155,7 +155,7 @@ public class AuthDAO
         return false;
     }
 
-    public Boolean authorized_via_username(String new_name) throws DataAccessException
+    public Boolean authorizedViaUsername(String new_name) throws DataAccessException
     {
         System.out.println("In authorized_via_username");
 
@@ -191,7 +191,7 @@ public class AuthDAO
 
 
 
-    public void Auth_add(AuthData added) throws DataAccessException
+    public void authAdd(AuthData added) throws DataAccessException
     {
         System.out.println("In Auth_add adding " + added.toString());
 
@@ -207,7 +207,7 @@ public class AuthDAO
     }
 
 
-    public void Auth_delete_via_authToken(String removed) throws DataAccessException
+    public void authDeleteViaAuthToken(String removed) throws DataAccessException
     {
         System.out.println("In Auth_delete_via_authToken");
         var statement = "DELETE FROM AuthSQL WHERE authToken=\"" + removed + "\";";

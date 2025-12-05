@@ -32,7 +32,7 @@ public class GameService
         }
 
         // Check to see if name already used
-        if (data_list.Game_found_via_gameName(data.gameName()))
+        if (data_list.gameFoundViaGameName(data.gameName()))
         {
             // Return error
             return new Game_Response_Create(-2);
@@ -40,7 +40,7 @@ public class GameService
 
         int game_id = -2;
         try {
-            game_id = data_list.Game_add_gameName(data.gameName());
+            game_id = data_list.gameAddGameName(data.gameName());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -67,7 +67,7 @@ public class GameService
         System.out.println("I am in GameService.java join!!");
 
         // If the game doesn't exist, give error
-        if (!data_list.Game_found_via_gameID(join_gameID))
+        if (!data_list.gameFoundViaGameID(join_gameID))
         {
             System.out.println("Game doesn't exist");
             throw new DataAccessException("400");
@@ -91,8 +91,8 @@ public class GameService
         {
             if (join_game.blackUsername() == null)
             {
-                data_list.Game_delete_via_gameID(join_gameID);
-                data_list.Game_add_keep_gameID(new GameData(join_gameID, join_whiteUsername, join_userName, join_gameName, join_chessgame));
+                data_list.gameDeleteViaGameID(join_gameID);
+                data_list.gameAddKeepGameID(new GameData(join_gameID, join_whiteUsername, join_userName, join_gameName, join_chessgame));
             }
             else
             {
@@ -102,8 +102,8 @@ public class GameService
         {
             if (join_game.whiteUsername() == null)
             {
-                data_list.Game_delete_via_gameID(join_gameID);
-                data_list.Game_add_keep_gameID(new GameData(join_gameID, join_userName, join_blackUsername, join_gameName, join_chessgame));
+                data_list.gameDeleteViaGameID(join_gameID);
+                data_list.gameAddKeepGameID(new GameData(join_gameID, join_userName, join_blackUsername, join_gameName, join_chessgame));
             }
             else
             {
@@ -135,7 +135,7 @@ public class GameService
         System.out.println("I am in GameService.java view!!");
 
         // If the game doesn't exist, give error
-        if (!data_list.Game_found_via_gameID(gameIDViewing))
+        if (!data_list.gameFoundViaGameID(gameIDViewing))
         {
             System.out.println("Game doesn't exist");
             throw new DataAccessException("400");
@@ -163,7 +163,7 @@ public class GameService
 
 
         try {
-            return data_list.Game_list();
+            return data_list.gameList();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -173,7 +173,7 @@ public class GameService
     public void clear() throws DataAccessException
     {
         try {
-            data_list.Game_delete_all();
+            data_list.gameDeleteAll();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }

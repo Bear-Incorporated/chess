@@ -27,7 +27,7 @@ public class GameDAO
         }
         try
         {
-            createTable_GameSQL();
+            createTableGameSQL();
         } catch (DataAccessException e)
         {
             throw new RuntimeException(e);
@@ -40,7 +40,7 @@ public class GameDAO
 
 
 
-    static public void createTable_GameSQL() throws DataAccessException {
+    static public void createTableGameSQL() throws DataAccessException {
         System.out.println("createTable_GameSQL");
 
 
@@ -59,7 +59,7 @@ public class GameDAO
     }
 
 
-    public int Game_add_gameName(String name_adding) throws DataAccessException
+    public int gameAddGameName(String name_adding) throws DataAccessException
     {
         System.out.println("Game_add_gameName " + name_adding);
 
@@ -74,13 +74,13 @@ public class GameDAO
             throw new DataAccessException("500");
         }
 
-        return Game_get_gameID_via_gameName(name_adding);
+        return gameGetGameIDViaGameName(name_adding);
 
 
 
     }
 
-    public int Game_get_gameID_via_gameName(String gameName) throws DataAccessException
+    public int gameGetGameIDViaGameName(String gameName) throws DataAccessException
     {
         System.out.println("In Game_get_gameID_via_gameName");
 
@@ -110,7 +110,7 @@ public class GameDAO
     }
 
 
-    public Game_Response_List Game_list() throws DataAccessException
+    public Game_Response_List gameList() throws DataAccessException
     {
         System.out.println("In Game_list");
 
@@ -142,7 +142,7 @@ public class GameDAO
 
 
 
-    public boolean Game_found_via_gameName(String finding) throws DataAccessException
+    public boolean gameFoundViaGameName(String finding) throws DataAccessException
     {
         System.out.println("In Game_found_via_gameName");
 
@@ -174,7 +174,7 @@ public class GameDAO
     }
 
 
-    public boolean Game_found_via_gameID(int finding) throws DataAccessException
+    public boolean gameFoundViaGameID(int finding) throws DataAccessException
     {
         System.out.println("In Game_found_via_gameName");
 
@@ -265,7 +265,7 @@ public class GameDAO
 
 
 
-    public void Game_delete_via_gameID(int finding) throws DataAccessException
+    public void gameDeleteViaGameID(int finding) throws DataAccessException
     {
         System.out.println("In Game_delete_via_gameID");
         var statement = "DELETE FROM GameSQL WHERE gameID=\"" + finding + "\";";
@@ -279,7 +279,7 @@ public class GameDAO
     }
 
 
-    public void Game_delete_all() throws DataAccessException
+    public void gameDeleteAll() throws DataAccessException
     {
         System.out.println("Game_delete_all");
 
@@ -298,7 +298,7 @@ public class GameDAO
 
         try
         {
-            createTable_GameSQL();
+            createTableGameSQL();
         } catch (DataAccessException e)
         {
             throw new RuntimeException(e);
@@ -308,7 +308,7 @@ public class GameDAO
 
 
 
-    public void Game_add_keep_gameID(GameData added) throws DataAccessException
+    public void gameAddKeepGameID(GameData added) throws DataAccessException
     {
         System.out.println("Game_add_keep_gameID " + added.gameName() + "\n");
 
