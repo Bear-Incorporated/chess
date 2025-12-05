@@ -129,13 +129,13 @@ public class GameService
      * @param
      * @return
      */
-    public ChessGame view(int view_gameID) throws Exception
+    public ChessGame view(int gameIDViewing) throws Exception
     {
 
-        System.out.println("I am in GameService.java join!!");
+        System.out.println("I am in GameService.java view!!");
 
         // If the game doesn't exist, give error
-        if (!data_list.Game_found_via_gameID(view_gameID))
+        if (!data_list.Game_found_via_gameID(gameIDViewing))
         {
             System.out.println("Game doesn't exist");
             throw new DataAccessException("400");
@@ -143,7 +143,7 @@ public class GameService
         System.out.println("Game does exist");
 
         // Find the game
-        GameData view_game = data_list.getGameDataViaGameID(view_gameID);
+        GameData view_game = data_list.getGameDataViaGameID(gameIDViewing);
         System.out.println("Game does exist still");
         System.out.println(view_game);
 

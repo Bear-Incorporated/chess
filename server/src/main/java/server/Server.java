@@ -1,22 +1,15 @@
 package server;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import dataaccess.DataAccessException;
-import dataaccess.GameDAO;
-import dataaccess.UserDAO;
-import io.javalin.*;
+import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
-
-
-import com.google.gson.JsonObject;
-import kotlin.ContextFunctionTypeParams;
 import model.*;
 import service.Chess_Service;
-import service.GameService;
-import service.UserService;
 
-import java.net.http.HttpHeaders;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -294,6 +287,44 @@ public class Server {
 
             //ctx.result(output.toString());
         })
+        .get("/chess", (ctx) -> {
+
+            try
+            {
+                parse_get(ctx);
+            }
+            catch (DataAccessException e)
+            {
+                System.out.println("I'm catching the issue in .get/chess");
+                System.out.println(e.toString());
+                JsonObject output_error = new JsonObject();
+
+
+
+                if (e.getMessage().equals("401"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    ctx.status(401);
+                }
+                else if (e.getMessage().equals("400"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    ctx.status(400);
+                }
+                else if (e.getMessage().equals("500"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                } else if (e.getMessage().equals("Error: failed to get connection"))
+                {
+                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    ctx.status(500);
+                }
+
+                ctx.result(output_error.toString());
+            }
+
+        })
 
 
 
@@ -549,6 +580,35 @@ public class Server {
             // Update output
             context.result(json);
 
+
+        }
+        else if (context.path().equals("/chess"))
+        {
+            System.out.println("chess");
+
+            var serializer = new Gson();
+
+            var input = new GameRequestView(0);
+
+            // deserialize back to ChessGame
+            input = serializer.fromJson(context.body(), GameRequestView.class);
+
+
+            try {
+                // Run Function
+                ChessGame output = service.gameView(input);
+
+                // serialize to JSON
+                var json = serializer.toJson(output);
+
+                // Update output
+                context.result(json);
+
+            }
+            catch (DataAccessException e)
+            {
+                throw new DataAccessException(e.getMessage());
+            }
 
         }
     }

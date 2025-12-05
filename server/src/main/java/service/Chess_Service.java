@@ -1,11 +1,9 @@
 package service;
 
 
+import chess.ChessGame;
 import dataaccess.DataAccessException;
 import model.*;
-
-import chess.ChessPiece;
-import chess.ChessPosition;
 
 public class Chess_Service
 {
@@ -83,6 +81,27 @@ public class Chess_Service
             return Game_Response_Join_temp;
         } catch (DataAccessException e)
         {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+    /**
+     * View a game in progress
+     *
+     * @param
+     * @return
+     */
+    public ChessGame gameView(GameRequestView gameIDViewing) throws Exception
+    {
+        System.out.println("gameView");
+        if (gameIDViewing == null)
+        {
+            throw new DataAccessException("400");
+        }
+
+        try {
+            return service_game.view(gameIDViewing.gameID());
+        } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
     }
