@@ -295,13 +295,19 @@ public class GameDAO
         // Because this will only run when you add a player to it, I am giving the chessGame in the SQL a value at this point.
         // Serialize and store the friend JSON.
         var json = new Gson().toJson(new ChessGame());
+        String jsonWithoutParenthesis = json.toString().replace('"', '-');
+
+        System.out.println(new ChessGame() + "\n");
+        System.out.println(new ChessGame() + "\n");
+        System.out.println(new ChessGame() + "\n");
 
         System.out.println(json + "\n");
         System.out.println(json + "\n");
         System.out.println(json + "\n");
         System.out.println(json + "\n");
 
-        var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + json + "\" );");
+
+        var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         // var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" );");
 
