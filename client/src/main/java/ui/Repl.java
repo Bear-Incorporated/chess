@@ -158,13 +158,65 @@ public class Repl {
             System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
         }
         System.out.print("\n");
-        for (int i = 1; i <= (gameListSplit.length - 2) / 6; i++ )
+        int gameIDTemp = 1;
+
+        String gameListOutput = "\nGame List\n---------\n";
+
+        for (int i = 0; i < gameListSplit.length; i++ )
         {
-            System.out.print("Game #" + i + " is " + gameListSplit[i * 6 + 1] + "\n");
+            if (gameListSplit[i].equals("gameID"))
+            {
+                gameListOutput = gameListOutput.concat("Game #" + gameIDTemp++ + " is ");
+
+                String gameName = "";
+                String whiteUsername = "";
+                String blackUsername = "";
+
+
+                for (int j = i + 1; j < gameListSplit.length; j++ )
+                {
+                    System.out.print(" i=" + i + " j=" + j + ",");
+
+                    if (gameListSplit[j].equals("gameID"))
+                    {
+                        break;
+                    }
+                    else if (gameListSplit[j].equals("gameName"))
+                    {
+                        gameName = gameListSplit[j + 2];
+                        System.out.print(" gameName=" + gameName + ",");
+                    }
+                    else if (gameListSplit[j].equals("blackUsername"))
+                    {
+                        blackUsername = gameListSplit[j + 2];
+                        System.out.print(" blackUsername=" + blackUsername + ",");
+                    }
+                    else if (gameListSplit[j].equals("whiteUsername"))
+                    {
+                        whiteUsername = gameListSplit[j + 2];
+                        System.out.print(" whiteUsername=" + whiteUsername + ",");
+                    }
+
+
+                }
+
+                // Only print the ones found.
+                gameListOutput = gameListOutput.concat(gameName);
+                if (!whiteUsername.isEmpty())
+                {
+                    gameListOutput = gameListOutput.concat("     WhitePlayerName: " + whiteUsername);
+                }
+                if (!blackUsername.isEmpty())
+                {
+                    gameListOutput = gameListOutput.concat("     BlackPlayerName: " + blackUsername);
+                }
+                gameListOutput = gameListOutput.concat("\n");
+            }
+
         }
 
         // return gameList;
-        return "";
+        return gameListOutput;
     }
 
     public String newGame(String gameName) throws Exception
@@ -209,7 +261,7 @@ public class Repl {
 
         if (authTokenTemp.startsWith("error"))
         {
-            System.out.print("There was an error logging you in");
+            return "There was an error logging you in";
         }
         else
         {
@@ -293,14 +345,16 @@ public class Repl {
         if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
 
         client.delete("/session", authToken);
-        System.out.print("You are now logged out.\n");
 
         state = State.SIGNEDOUT;
+
+        return "You are now logged out.";
+
         // Run Function
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
         // return output.toString();
-        return "Done";
+
     }
 
 //    public String adoptPet(String... params) {
