@@ -287,11 +287,11 @@ public class Server {
 
             //ctx.result(output.toString());
         })
-        .get("/chess", (ctx) -> {
+        .post("/chess", (ctx) -> {
 
             try
             {
-                parse_get(ctx);
+                parse_post(ctx);
             }
             catch (DataAccessException e)
             {
@@ -541,6 +541,35 @@ public class Server {
 
 
         }
+        else if (context.path().equals("/chess"))
+        {
+            System.out.println("chess");
+
+            var serializer = new Gson();
+
+            var input = new GameRequestView(0);
+
+            // deserialize back to ChessGame
+            input = serializer.fromJson(context.body(), GameRequestView.class);
+
+
+            try {
+                // Run Function
+                ChessGame output = service.gameView(input);
+
+                // serialize to JSON
+                var json = serializer.toJson(output);
+
+                // Update output
+                context.result(json);
+
+            }
+            catch (DataAccessException e)
+            {
+                throw new DataAccessException(e.getMessage());
+            }
+
+        }
 
 
     }
@@ -582,35 +611,7 @@ public class Server {
 
 
         }
-        else if (context.path().equals("/chess"))
-        {
-            System.out.println("chess");
 
-            var serializer = new Gson();
-
-            var input = new GameRequestView(0);
-
-            // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), GameRequestView.class);
-
-
-            try {
-                // Run Function
-                ChessGame output = service.gameView(input);
-
-                // serialize to JSON
-                var json = serializer.toJson(output);
-
-                // Update output
-                context.result(json);
-
-            }
-            catch (DataAccessException e)
-            {
-                throw new DataAccessException(e.getMessage());
-            }
-
-        }
     }
 
 
