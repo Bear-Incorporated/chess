@@ -141,7 +141,7 @@ public class Server {
             //JsonObject output = new JsonObject();
             try
             {
-                parse_delete(ctx);
+                parseDelete(ctx);
             }
             catch (DataAccessException e)
             {
@@ -177,7 +177,7 @@ public class Server {
 
             try
             {
-                parse_get(ctx);
+                parseGet(ctx);
             }
             catch (DataAccessException e)
             {
@@ -242,7 +242,7 @@ public class Server {
         .put("/game", (ctx) -> {
             try
             {
-                parse_put(ctx);
+                parsePut(ctx);
             }
             catch (DataAccessException e)
             {
@@ -274,7 +274,7 @@ public class Server {
 
 
             try {
-                parse_delete(ctx);
+                parseDelete(ctx);
             } catch (DataAccessException e) {
                 JsonObject output_error = new JsonObject();
                 output_error.addProperty("message", DataAccessException.ERROR_500);
@@ -390,10 +390,10 @@ public class Server {
             System.out.println("user");
             var serializer = new Gson();
 
-            var input = new User_Request_Register("", "", "");
+            var input = new userRequestRegister("", "", "");
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), User_Request_Register.class);
+            input = serializer.fromJson(context.body(), userRequestRegister.class);
 
             // Check inputs for errors
             if (input.username() == null)
@@ -412,7 +412,7 @@ public class Server {
             try
             {
                 // Run Function
-                User_Response_Register output = service.User_Register(input);
+                userResponseRegister output = service.User_Register(input);
 
                 if (output.authToken().equals("404"))
                 {
@@ -437,10 +437,10 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new User_Request_Login("","");
+            var input = new userRequestLogin("","");
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), User_Request_Login.class);
+            input = serializer.fromJson(context.body(), userRequestLogin.class);
 
             System.out.println("post session json converted");
 
@@ -464,11 +464,11 @@ public class Server {
             {
                 System.out.println("Inputing " + input);
 
-                input = new User_Request_Login(input.username(), input.password());
+                input = new userRequestLogin(input.username(), input.password());
                 System.out.println("Inputing " + input);
 
                 // Run Function
-                User_Response_Login output = service.User_Login(input);
+                userResponseLogin output = service.User_Login(input);
 
                 System.out.println(context.headerMap());
 
@@ -499,10 +499,10 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new Game_Request_Create("");
+            var input = new gameRequestCreate("");
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), Game_Request_Create.class);
+            input = serializer.fromJson(context.body(), gameRequestCreate.class);
 
             if (input.gameName() == null)
             {
@@ -511,7 +511,7 @@ public class Server {
 
 
             // Run Function
-            Game_Response_Create output = service.Game_Create(input);
+            gameResponseCreate output = service.Game_Create(input);
 
             // serialize to JSON
             var json = serializer.toJson(output);
@@ -574,7 +574,7 @@ public class Server {
 
     }
 
-    private void parse_get(Context context) throws Exception
+    private void parseGet(Context context) throws Exception
     {
         // Check to see if they are authorized
         String auth_input = context.headerMap().get("Authorization");
@@ -595,13 +595,13 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new Game_Request_List();
+            var input = new gameRequestList();
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), Game_Request_List.class);
+            input = serializer.fromJson(context.body(), gameRequestList.class);
 
             // Run Function
-            Game_Response_List output = service.Game_List(input);
+            gameResponseList output = service.Game_List(input);
 
             // serialize to JSON
             var json = serializer.toJson(output);
@@ -615,7 +615,7 @@ public class Server {
     }
 
 
-    private void parse_delete(Context context) throws Exception
+    private void parseDelete(Context context) throws Exception
     {
         System.out.println("delete");
         if (context.path().equals("/session"))
@@ -633,7 +633,7 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new User_Request_Logout(context.headerMap().get("Authorization"));
+            var input = new userRequestLogout(context.headerMap().get("Authorization"));
 
 
             // Run Function
@@ -659,7 +659,7 @@ public class Server {
         }
     }
 
-    private void parse_put(Context context) throws Exception
+    private void parsePut(Context context) throws Exception
     {
         // Check to see if they are authorized
         String auth_input = context.headerMap().get("Authorization");
@@ -675,10 +675,10 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new Game_Request_Join("test user", "",1);
+            var input = new gameRequestJoin("test user", "",1);
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), Game_Request_Join.class);
+            input = serializer.fromJson(context.body(), gameRequestJoin.class);
 
             if (input.playerColor() == null)
             {
@@ -686,12 +686,12 @@ public class Server {
             }
 
             // Add the AuthToken to the input
-            input = new Game_Request_Join(context.headerMap().get("Authorization"), input.playerColor(), input.gameID());
+            input = new gameRequestJoin(context.headerMap().get("Authorization"), input.playerColor(), input.gameID());
 
             try
             {
                 // Run Function
-                Game_Response_Join output = service.Game_Join(input);
+                gameResponseJoin output = service.Game_Join(input);
 
                 // serialize to JSON
                 var json = serializer.toJson(output);
@@ -705,7 +705,7 @@ public class Server {
         }
     }
 
-    private void parsed_old(Context context)
+    private void parsedOld(Context context)
     {
         System.out.println("post");
         if (context.path().equals("/user"))
@@ -721,7 +721,7 @@ public class Server {
 
             var serializer = new Gson();
 
-            var game = new User_Request_Register("test user", "psw", "test email");
+            var game = new userRequestRegister("test user", "psw", "test email");
             System.out.println(game);
 
             // serialize to JSON
@@ -730,7 +730,7 @@ public class Server {
 
 
             // deserialize back to ChessGame
-            game = serializer.fromJson(context.body(), User_Request_Register.class);
+            game = serializer.fromJson(context.body(), userRequestRegister.class);
             System.out.println(game);
 
         }

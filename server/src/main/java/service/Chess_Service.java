@@ -45,7 +45,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Game_Response_Create Game_Create(Game_Request_Create data) throws DataAccessException
+    public gameResponseCreate Game_Create(gameRequestCreate data) throws DataAccessException
     {
         System.out.println("game_create");
 
@@ -63,7 +63,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Game_Response_Join Game_Join(Game_Request_Join data) throws Exception
+    public gameResponseJoin Game_Join(gameRequestJoin data) throws Exception
     {
         System.out.println("game_join");
 
@@ -71,14 +71,14 @@ public class Chess_Service
         String auth_token = data.username(); // actually AuthToken at this point
         System.out.println("auth token: " + auth_token);
         String username = service_user.get_userName_via_authToken(auth_token);
-        Game_Request_Join data_with_name = new Game_Request_Join(username, data.playerColor(), data.gameID());
+        gameRequestJoin data_with_name = new gameRequestJoin(username, data.playerColor(), data.gameID());
         System.out.println("username: " + username);
 
         try {
             System.out.println("trying game_join");
             System.out.println(data_with_name);
-            Game_Response_Join Game_Response_Join_temp = service_game.join(data_with_name);
-            return Game_Response_Join_temp;
+            gameResponseJoin gameResponseJoinTemp = service_game.join(data_with_name);
+            return gameResponseJoinTemp;
         } catch (DataAccessException e)
         {
             throw new DataAccessException(e.getMessage());
@@ -112,7 +112,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public Game_Response_List Game_List(Game_Request_List data) throws DataAccessException
+    public gameResponseList Game_List(gameRequestList data) throws DataAccessException
     {
         System.out.println("game_list");
 
@@ -129,7 +129,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public User_Response_Register User_Register(User_Request_Register data) throws DataAccessException
+    public userResponseRegister User_Register(userRequestRegister data) throws DataAccessException
     {
         System.out.println("user_register");
 
@@ -146,7 +146,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public User_Response_Login User_Login(User_Request_Login data) throws DataAccessException
+    public userResponseLogin User_Login(userRequestLogin data) throws DataAccessException
     {
         System.out.println("user_login");
 
@@ -165,7 +165,7 @@ public class Chess_Service
      * @param
      * @return
      */
-    public void User_Logout(User_Request_Logout data) throws DataAccessException
+    public void User_Logout(userRequestLogout data) throws DataAccessException
     {
         System.out.println("user_logout");
 

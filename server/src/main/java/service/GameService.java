@@ -16,26 +16,26 @@ public class GameService
      * @param
      * @return
      */
-    public Game_Response_Create create(Game_Request_Create data) throws DataAccessException
+    public gameResponseCreate create(gameRequestCreate data) throws DataAccessException
     {
 
         // Bad Input
         if (data == null)
         {
             // Return error
-            return new Game_Response_Create(-1);
+            return new gameResponseCreate(-1);
         }
         if (data.gameName() == null)
         {
             // Return error
-            return new Game_Response_Create(-1);
+            return new gameResponseCreate(-1);
         }
 
         // Check to see if name already used
         if (data_list.gameFoundViaGameName(data.gameName()))
         {
             // Return error
-            return new Game_Response_Create(-2);
+            return new gameResponseCreate(-2);
         }
 
         int game_id = -2;
@@ -46,7 +46,7 @@ public class GameService
         }
 
 
-        Game_Response_Create output = new Game_Response_Create(game_id);
+        gameResponseCreate output = new gameResponseCreate(game_id);
 
         return output;
 
@@ -58,7 +58,7 @@ public class GameService
      * @param
      * @return
      */
-    public Game_Response_Join join(Game_Request_Join data) throws Exception
+    public gameResponseJoin join(gameRequestJoin data) throws Exception
     {
         String join_userName = data.username();
         int join_gameID = data.gameID();
@@ -119,7 +119,7 @@ public class GameService
         // throw new DataAccessException("400");
         // throw new DataAccessException("403");
         // throw new RuntimeException("Not implemented");
-        return new Game_Response_Join();
+        return new gameResponseJoin();
     }
 
 
@@ -158,7 +158,7 @@ public class GameService
      * @param
      * @return
      */
-    public Game_Response_List list(Game_Request_List data) throws DataAccessException
+    public gameResponseList list(gameRequestList data) throws DataAccessException
     {
 
 

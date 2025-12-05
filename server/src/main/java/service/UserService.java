@@ -29,7 +29,7 @@ public class UserService
      * @param
      * @return
      */
-    public User_Response_Register register(User_Request_Register added) throws DataAccessException
+    public userResponseRegister register(userRequestRegister added) throws DataAccessException
     {
         System.out.println("in the function");
         System.out.println("username: " + added.username());
@@ -38,15 +38,15 @@ public class UserService
 
         if (added.username() == null)
         {
-            return new User_Response_Register("404", "404");
+            return new userResponseRegister("404", "404");
         }
         if (added.password() == null)
         {
-            return new User_Response_Register("404", "404");
+            return new userResponseRegister("404", "404");
         }
         if (added.email() == null)
         {
-            return new User_Response_Register("404", "404");
+            return new userResponseRegister("404", "404");
         }
         // Check to see if name already used
         Boolean user_found = false;
@@ -59,15 +59,15 @@ public class UserService
 
         if (user_found)
         {
-            return new User_Response_Register("404", "404");
+            return new userResponseRegister("404", "404");
         }
 
         // Add to user list
         user_list.userAdd(new UserData(added.username(), added.password(), added.email()));
 
-        User_Response_Login output_login = login(new User_Request_Login(added.username(), added.password()));
+        userResponseLogin output_login = login(new userRequestLogin(added.username(), added.password()));
 
-        return new User_Response_Register(added.username(), output_login.authToken());
+        return new userResponseRegister(added.username(), output_login.authToken());
 
 
     }
@@ -80,7 +80,7 @@ public class UserService
      * @param
      * @return
      */
-    public void logout(User_Request_Logout data) throws DataAccessException
+    public void logout(userRequestLogout data) throws DataAccessException
     {
         try {
             auth_list.authDeleteViaAuthToken(data.authToken());
@@ -141,7 +141,7 @@ public class UserService
      * @param
      * @return
      */
-    public User_Response_Login login(User_Request_Login data) throws DataAccessException
+    public userResponseLogin login(userRequestLogin data) throws DataAccessException
     {
         System.out.println("Checking user_list.User_find_name ");
         String output_auth = User_login(data);
@@ -151,10 +151,10 @@ public class UserService
         {
             throw new DataAccessException("401");
         }
-        return new User_Response_Login(data.username(), output_auth);
+        return new userResponseLogin(data.username(), output_auth);
     }
 
-    public String User_login(User_Request_Login loginer) throws DataAccessException
+    public String User_login(userRequestLogin loginer) throws DataAccessException
     {
         System.out.println("Looking for Name!" + loginer.username());
         String name = loginer.username();
