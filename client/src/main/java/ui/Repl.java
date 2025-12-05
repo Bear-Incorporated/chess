@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessPiece;
 import websocket.HttpTalker;
 
 import java.util.Arrays;
@@ -97,7 +98,9 @@ public class Repl {
             case "n" -> newGame(input1);
             case "join" -> joinGame(input1, input2);
             case "j" -> joinGame(input1, input2);
-
+            case "observe" -> viewGame(input1);
+            case "view" -> viewGame(input1);
+            case "v" -> viewGame(input1);
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -130,98 +133,93 @@ public class Repl {
 //        }
 //    }
 
-//    public String rescuePet(String... params) {
-//        assertSignedIn();
-//        if (params.length >= 2) {
-//            String name = params[0];
-//            PetType type = PetType.valueOf(params[1].toUpperCase());
-//            var pet = new Pet(0, name, type);
-//            pet = server.addPet(pet);
-//            return String.format("You rescued %s. Assigned ID: %d", pet.name(), pet.id());
-//        }
-//    }
 
-
-    public String listGames() throws Exception
+    public String listGames()
     {
         // Returns an error if logged out
         if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
 
-        String gameList = client.get("/game", authToken);
-        System.out.print(client.toString() + "\n");
-        // Run Function
-        //Game_Response_List output = service.Game_List(new Game_Request_List());
-
-        String[] gameListSplit = gameList.split("\"");
-        for (int i = 0; i < gameListSplit.length; i++ )
+        try
         {
-            System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
-        }
-        System.out.print("\n");
-        int gameIDTemp = 1;
+            String gameList = client.get("/game", authToken);
+            System.out.print(client.toString() + "\n");
+            // Run Function
+            //Game_Response_List output = service.Game_List(new Game_Request_List());
 
-        String gameListOutput = "\nGame List\n---------\n";
-
-        for (int i = 0; i < gameListSplit.length; i++ )
-        {
-            if (gameListSplit[i].equals("gameID"))
+            String[] gameListSplit = gameList.split("\"");
+            for (int i = 0; i < gameListSplit.length; i++ )
             {
-                gameListOutput = gameListOutput.concat("Game #" + gameIDTemp++ + " is ");
+                System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
+            }
+            System.out.print("\n");
 
-                String gameName = "";
-                String whiteUsername = "";
-                String blackUsername = "";
+            String gameListOutput = "\nGame List\n---------\n";
 
-
-                for (int j = i + 1; j < gameListSplit.length; j++ )
+            for (int i = 0; i < gameListSplit.length; i++ )
+            {
+                if (gameListSplit[i].equals("gameID"))
                 {
-                    System.out.print(" i=" + i + " j=" + j + ",");
+                    gameListOutput = gameListOutput.concat("Game #" + gameListSplit[i+1].split(":")[1] + " is ");
 
-                    if (gameListSplit[j].equals("gameID"))
-                    {
-                        break;
-                    } else if (gameListSplit[j].equals("}]}"))
-                    {
-                        break;
-                    } else if (gameListSplit[j].equals("gameName"))
-                    {
-                        gameName = gameListSplit[j + 2];
-                        System.out.print(" gameName=" + gameName + ",");
-                    }
-                    else if (gameListSplit[j].equals("blackUsername"))
-                    {
-                        blackUsername = gameListSplit[j + 2];
-                        System.out.print(" blackUsername=" + blackUsername + ",");
-                    }
-                    else if (gameListSplit[j].equals("whiteUsername"))
-                    {
-                        whiteUsername = gameListSplit[j + 2];
-                        System.out.print(" whiteUsername=" + whiteUsername + ",");
-                    }
+                    String gameName = "";
+                    String whiteUsername = "";
+                    String blackUsername = "";
 
 
+                    for (int j = i + 1; j < gameListSplit.length; j++ )
+                    {
+                        System.out.print(" i=" + i + " j=" + j + ",");
+
+                        if (gameListSplit[j].equals("gameID"))
+                        {
+                            break;
+                        } else if (gameListSplit[j].equals("}]}"))
+                        {
+                            break;
+                        } else if (gameListSplit[j].equals("gameName"))
+                        {
+                            gameName = gameListSplit[j + 2];
+                            System.out.print(" gameName=" + gameName + ",");
+                        }
+                        else if (gameListSplit[j].equals("blackUsername"))
+                        {
+                            blackUsername = gameListSplit[j + 2];
+                            System.out.print(" blackUsername=" + blackUsername + ",");
+                        }
+                        else if (gameListSplit[j].equals("whiteUsername"))
+                        {
+                            whiteUsername = gameListSplit[j + 2];
+                            System.out.print(" whiteUsername=" + whiteUsername + ",");
+                        }
+
+
+                    }
+
+                    // Only print the ones found.
+                    gameListOutput = gameListOutput.concat(gameName);
+                    if (!whiteUsername.isEmpty())
+                    {
+                        gameListOutput = gameListOutput.concat("     WhitePlayerName: " + whiteUsername);
+                    }
+                    if (!blackUsername.isEmpty())
+                    {
+                        gameListOutput = gameListOutput.concat("     BlackPlayerName: " + blackUsername);
+                    }
+                    gameListOutput = gameListOutput.concat("\n");
                 }
 
-                // Only print the ones found.
-                gameListOutput = gameListOutput.concat(gameName);
-                if (!whiteUsername.isEmpty())
-                {
-                    gameListOutput = gameListOutput.concat("     WhitePlayerName: " + whiteUsername);
-                }
-                if (!blackUsername.isEmpty())
-                {
-                    gameListOutput = gameListOutput.concat("     BlackPlayerName: " + blackUsername);
-                }
-                gameListOutput = gameListOutput.concat("\n");
             }
 
-        }
+            // return gameList;
+            return gameListOutput;
 
-        // return gameList;
-        return gameListOutput;
+        } catch (Exception e) {
+
+            return "There was an error logging you in";
+        }
     }
 
-    public String newGame(String gameName) throws Exception
+    public String newGame(String gameName)
     {
         // Returns an error if logged out
         if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
@@ -233,19 +231,26 @@ public class Repl {
                   }
                   """, gameName);
         System.out.print(body + "\n");
-        String error = client.post("/game", authToken, body);
-        System.out.print(client.toString() + "\n");
-        // Run Function
-        //Game_Response_List output = service.Game_List(new Game_Request_List());
-        if (error.equals("error 400"))
+        try
         {
-            return "Pick a new Name.  That one already exists.\n";
+            client.post("/game", authToken, body);
+            System.out.print(client.toString() + "\n");
+            // Run Function
+            //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+            // return output.toString();
+            return gameName + " created";
+
+        } catch (Exception e) {
+            if (e.getMessage().equals("400"))
+            {
+                return "Pick a new Name.  That one already exists.";
+            }
+            return "Error";
         }
-        // return output.toString();
-        return gameName + " created";
     }
 
-    public String login(String username, String password) throws Exception
+    public String login(String username, String password)
     {
         // assertSignedIn();
         System.out.print("username = " + username + "\n");
@@ -258,15 +263,11 @@ public class Repl {
                   }
                   """, username, password);
         System.out.print("body = " + body + "\n");
-        String authTokenTemp = client.post("/session", authToken, body);
-        //System.out.print(client.toString() + "\n");
+        try
+        {
+            String authTokenTemp = client.post("/session", authToken, body);
+            //System.out.print(client.toString() + "\n");
 
-        if (authTokenTemp.startsWith("error"))
-        {
-            return "There was an error logging you in";
-        }
-        else
-        {
             String[] authTokenTempSplit = authTokenTemp.split("\"");
             for (int i = 0; i < authTokenTempSplit.length; i++ )
             {
@@ -275,18 +276,22 @@ public class Repl {
             authToken = authTokenTempSplit[7];
             state = State.SIGNEDIN;
             System.out.print("\nLogged in " + authToken);
+
+
+            // Run Function
+            //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+            // return output.toString();
+            return "You are now logged in";
+
+        } catch (Exception e) {
+
+            return "There was an error logging you in";
         }
-
-        // Run Function
-        //Game_Response_List output = service.Game_List(new Game_Request_List());
-
-        // return output.toString();
-        return "You are now logged in";
     }
 
-    public String register(String username, String password, String email) throws Exception
+    public String register(String username, String password, String email)
     {
-        // assertSignedIn();
         System.out.print("username = " + username + "\n");
         System.out.print("password = " + password + "\n");
         String body = String.format(
@@ -298,21 +303,27 @@ public class Repl {
                   }
                   """, username, password, email);
         System.out.print(body + "\n");
-        String results = client.post("/user", authToken, body);
-        System.out.print(results + "\n");
-        System.out.print(results + "\n");
-        System.out.print(results + "\n");
-        if (results.equals("error 403"))
+        try
         {
-            return "That User Already Exists!";
+            String results = client.post("/user", authToken, body);
+            System.out.print(results + "\n");
+
+
+            login(username, password);
+
+            return "You are now registered and logged in";
+
+
+        } catch (Exception e) {
+            if (e.getMessage().equals("403"))
+            {
+                return "That User Already Exists!";
+            }
+            return "Error";
         }
-
-        login(username, password);
-
-        return "You are now registered and logged in";
     }
 
-    public String joinGame(String gameID, String playerColor) throws Exception
+    public String joinGame(String gameID, String playerColor)
     {
         // Returns an error if logged out
         if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
@@ -329,21 +340,26 @@ public class Repl {
             return playerColor + " is not a valid color.";
         }
 
-        String body = String.format(
-                """
-                  {
-                  "playerColor": "%s",
-                  "gameID": "%s"
-                  }
-                  """, playerColor, gameID);
-        System.out.print(body + "\n");
-        client.put("/game", authToken, body);
-        System.out.print(client.toString() + "\n");
-        // Run Function
-        //Game_Response_List output = service.Game_List(new Game_Request_List());
+        try {
+            String body = String.format(
+                    """
+                      {
+                      "playerColor": "%s",
+                      "gameID": "%s"
+                      }
+                      """, playerColor, gameID);
+            System.out.print(body + "\n");
+            client.put("/game", authToken, body);
+            System.out.print(client.toString() + "\n");
+            // Run Function
+            //Game_Response_List output = service.Game_List(new Game_Request_List());
 
-        // return output.toString();
-        return "Done";
+            // return output.toString();
+            return "Done";
+
+        } catch (Exception e) {
+            return "Error";
+        }
     }
 
     public String logout() throws Exception
@@ -363,6 +379,78 @@ public class Repl {
         // return output.toString();
 
     }
+
+
+    private String viewGame(String gameID)
+    {
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
+
+        if (gameID.isBlank()) { return gameID + " is not a valid Game ID"; }
+
+        System.out.print("gameID = " + gameID + "\n");
+        String body = String.format(
+                """
+                  {
+                  "gameID": "%s"
+                  }
+                  """, gameID);
+        System.out.print(body + "\n");
+        try {
+            String chessList = client.post("/chess", authToken, body);
+
+            System.out.print(chessList + "\n");
+
+            if (chessList == null){
+                return "That game hasn't started yet.  Add players.";
+            }
+
+
+            System.out.print(client.toString() + "\n");
+            // Run Function
+            //Game_Response_List output = service.Game_List(new Game_Request_List());
+
+            String[] gameListSplit = chessList.split("\"");
+            for (int i = 0; i < gameListSplit.length; i++ )
+            {
+                System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
+            }
+            System.out.print("\n");
+
+
+            String viewGameOutput = "\nGame #" + gameID + "\n---------\n";
+            viewGameOutput = viewGameOutput.concat("Active Player is " + gameListSplit[3]);
+
+            String[][] chess_board = new String[8][8];
+            int r = 0;
+            int c = 0;
+
+            for (int i = 8; i < gameListSplit.length; i++ )
+            {
+                if (gameListSplit[i].equals("pieceType"))
+                {
+
+                    String pieceType = gameListSplit[i+2];
+                    String pieceColor = gameListSplit[i+6];
+
+                    // Move to the next row
+                    viewGameOutput = viewGameOutput.concat("\n");
+                }
+
+            }
+
+            // return gameList;
+            return viewGameOutput;
+
+        } catch (Exception e) {
+            return "Error";
+        }
+
+
+
+
+    }
+
 
 //    public String adoptPet(String... params) {
 //        assertSignedIn();

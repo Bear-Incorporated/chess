@@ -2,10 +2,9 @@ package websocket;
 
 
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
 
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
@@ -34,7 +33,7 @@ public class HttpTalker
 
 
 
-    public String get(String urlPath, String authToken) throws URISyntaxException, IOException, InterruptedException
+    public String get(String urlPath, String authToken) throws Exception
     {
         String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, urlPath);
 
@@ -60,11 +59,12 @@ public class HttpTalker
             System.out.println("Error: received status code " + httpResponse.statusCode());
 
             System.out.println(httpResponse.body());
-            return "error";
+
+            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
         }
     }
 
-    public String put(String urlPath, String authToken, String body) throws URISyntaxException, IOException, InterruptedException
+    public String put(String urlPath, String authToken, String body) throws Exception
     {
         String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, urlPath);
 
@@ -90,10 +90,11 @@ public class HttpTalker
             System.out.println("Error: received status code " + httpResponse.statusCode());
 
             System.out.println(httpResponse.body());
-            return "error " + httpResponse.statusCode();
+
+            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
         }
     }
-    public String post(String urlPath, String authToken, String body) throws URISyntaxException, IOException, InterruptedException
+    public String post(String urlPath, String authToken, String body) throws Exception
     {
         String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, urlPath);
 
@@ -119,11 +120,12 @@ public class HttpTalker
             System.out.println("Error: received status code " + httpResponse.statusCode());
 
             System.out.println(httpResponse.body());
-            return "error " + httpResponse.statusCode();
+
+            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
         }
     }
 
-    public void delete(String urlPath, String authToken) throws URISyntaxException, IOException, InterruptedException
+    public void delete(String urlPath, String authToken) throws Exception
     {
         String urlString = String.format("http://%s:%d%s", SERVER_HOST, SERVER_PORT, urlPath);
 
@@ -149,6 +151,8 @@ public class HttpTalker
             System.out.println("Error: received status code " + httpResponse.statusCode());
 
             System.out.println(httpResponse.body());
+
+            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
 
         }
     }
