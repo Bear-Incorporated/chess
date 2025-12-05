@@ -237,10 +237,10 @@ public class Repl {
         //Game_Response_List output = service.Game_List(new Game_Request_List());
         if (error.equals("error 400"))
         {
-            System.out.print("Pick a new Name.  That one already exists.\n");
+            return "Pick a new Name.  That one already exists.\n";
         }
         // return output.toString();
-        return "";
+        return gameName + " created";
     }
 
     public String login(String username, String password) throws Exception
@@ -279,7 +279,7 @@ public class Repl {
         //Game_Response_List output = service.Game_List(new Game_Request_List());
 
         // return output.toString();
-        return "";
+        return "You are now logged in";
     }
 
     public String register(String username, String password, String email) throws Exception
@@ -296,13 +296,18 @@ public class Repl {
                   }
                   """, username, password, email);
         System.out.print(body + "\n");
-        client.post("/user", authToken, body);
-        System.out.print(client.toString() + "\n");
-        // Run Function
-        //Game_Response_List output = service.Game_List(new Game_Request_List());
+        String results = client.post("/user", authToken, body);
+        System.out.print(results + "\n");
+        System.out.print(results + "\n");
+        System.out.print(results + "\n");
+        if (results.equals("error 403"))
+        {
+            return "That User Already Exists!";
+        }
 
-        // return output.toString();
-        return "Done";
+        login(username, password);
+
+        return "You are now registered and logged in";
     }
 
     public String joinGame(String gameID, String playerColor) throws Exception
