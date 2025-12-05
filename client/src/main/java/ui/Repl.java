@@ -180,8 +180,10 @@ public class Repl {
                     if (gameListSplit[j].equals("gameID"))
                     {
                         break;
-                    }
-                    else if (gameListSplit[j].equals("gameName"))
+                    } else if (gameListSplit[j].equals("}]}"))
+                    {
+                        break;
+                    } else if (gameListSplit[j].equals("gameName"))
                     {
                         gameName = gameListSplit[j + 2];
                         System.out.print(" gameName=" + gameName + ",");
