@@ -505,24 +505,80 @@ public class Repl {
 
 
 
-
+            Boolean squareColorWhite = true;
 
             System.out.print("Printing Board Now \n");
             if (activePlayer.equals("BLACK"))
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_BOLD + SET_BG_COLOR_LIGHT_GREY + EMPTY);
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003 h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a    " + RESET + "\n");
                 for (int row = 0; row < 8; row++ )
                 {
+                    // Move to the next row
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + " ");
                     for (int col = 0; col < 8; col++ )
                     {
                         System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chess_board[row][col] + "\n");
 
+                        // Move to the next col
+
+                        // Set Backgroud Color
+                        if (squareColorWhite)
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                        }
+                        else
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_DARK_GREEN);
+                        }
+
+                        if (chess_board[row][col].equals(""))
+                        {
+                            printBoardOutput = printBoardOutput.concat(EMPTY);
+                        } else if (chess_board[row][col].equals("WHITE ROOK"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(WHITE_ROOK);
+                        } else if (chess_board[row][col].equals("WHITE KNIGHT"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(WHITE_KNIGHT);
+                        } else if (chess_board[row][col].equals("WHITE BISHOP"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(WHITE_BISHOP);
+                        } else if (chess_board[row][col].equals("WHITE QUEEN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(WHITE_QUEEN);
+                        } else if (chess_board[row][col].equals("WHITE KING"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(WHITE_KING);
+                        } else if (chess_board[row][col].equals("WHITE PAWN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(WHITE_PAWN);
+                        }  else if (chess_board[row][col].equals("BLACK ROOK"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(BLACK_ROOK);
+                        } else if (chess_board[row][col].equals("BLACK KNIGHT"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(BLACK_KNIGHT);
+                        } else if (chess_board[row][col].equals("BLACK BISHOP"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(BLACK_BISHOP);
+                        } else if (chess_board[row][col].equals("BLACK QUEEN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(BLACK_QUEEN);
+                        } else if (chess_board[row][col].equals("BLACK KING"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(BLACK_KING);
+                        } else if (chess_board[row][col].equals("BLACK PAWN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(BLACK_PAWN);
+                        }
 
 
-                        // Move to the next row
-                        printBoardOutput = printBoardOutput.concat("\n");
+                        squareColorWhite = !squareColorWhite;
                     }
+                    squareColorWhite = !squareColorWhite;
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + " " + RESET + "\n");
                 }
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + EMPTY + " h  g  f  e  d  c  b  a " + EMPTY + RESET + "\n");
             }
 
 
