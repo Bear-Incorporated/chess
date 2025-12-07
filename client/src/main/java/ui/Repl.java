@@ -1,6 +1,5 @@
 package ui;
 
-import chess.ChessPiece;
 import websocket.HttpTalker;
 
 import java.util.Arrays;
@@ -419,7 +418,7 @@ public class Repl {
 
 
             String viewGameOutput = "\nGame #" + gameID + "\n---------\n";
-            viewGameOutput = viewGameOutput.concat("Active Player is " + gameListSplit[3]);
+            viewGameOutput = viewGameOutput.concat("Active Player is " + gameListSplit[3] + "\n");
 
             String[][] chess_board = new String[8][8];
             int r = 0;
@@ -433,16 +432,105 @@ public class Repl {
                     String pieceType = gameListSplit[i+2];
                     String pieceColor = gameListSplit[i+6];
 
-                    // Move to the next row
-                    viewGameOutput = viewGameOutput.concat("\n");
-                }
+                    chess_board[r][c] = pieceColor + " " + pieceType;
 
+                    // Move to the next row
+                    c++;
+                    if (c>7)
+                    {
+                        r++;
+                        c=0;
+                    }
+                }
+                if (gameListSplit[i].contains("null"))
+                {
+                    System.out.print("\n null found! \n");
+                    String[] gameListSplitNull = gameListSplit[i].split(",");
+                    for (int j = 0; j < gameListSplitNull.length; j++ )
+                    {
+                        System.out.print("number " + j + " is " + gameListSplitNull[j] + ", ");
+
+
+                        if (gameListSplitNull[j].contains("null"))
+                        {
+
+                            chess_board[r][c] = "";
+                            System.out.print(" Empty Place Found!");
+
+                            // Move to the next row
+                            c++;
+                            if (c>7)
+                            {
+                                r++;
+                                c=0;
+                            }
+                        }
+                        System.out.print(" good ");
+
+                    }
+
+                    System.out.print(" last null ");
+
+                }
+                System.out.print(" Did Number " + i);
             }
+
+            System.out.print(" out of for \n");
+
+            // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
+            viewGameOutput = viewGameOutput.concat(printBoard(chess_board, "BLACK"));
 
             // return gameList;
             return viewGameOutput;
 
         } catch (Exception e) {
+            System.out.print("\n" + e + "\n");
+            return "Error";
+        }
+
+
+
+
+    }
+
+
+    private String printBoard(String[][] chess_board, String activePlayer)
+    {
+
+        try {
+
+
+
+            String printBoardOutput = "";
+
+
+
+
+
+            System.out.print("Printing Board Now \n");
+            if (activePlayer.equals("BLACK"))
+            {
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_BOLD + SET_BG_COLOR_LIGHT_GREY + EMPTY);
+                for (int row = 0; row < 8; row++ )
+                {
+                    for (int col = 0; col < 8; col++ )
+                    {
+                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chess_board[row][col] + "\n");
+
+
+
+                        // Move to the next row
+                        printBoardOutput = printBoardOutput.concat("\n");
+                    }
+                }
+            }
+
+
+            // return gameList;
+            return printBoardOutput;
+
+        } catch (Exception e) {
+            System.out.print("\n" + e + "\n");
             return "Error";
         }
 
