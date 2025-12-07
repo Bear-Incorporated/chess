@@ -510,11 +510,11 @@ public class Repl {
             System.out.print("Printing Board Now \n");
             if (activePlayer.equals("BLACK"))
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003 h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a    " + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
                 for (int row = 0; row < 8; row++ )
                 {
                     // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + " ");
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + "\u2003");
                     for (int col = 0; col < 8; col++ )
                     {
                         System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chess_board[row][col] + "\n");
@@ -528,7 +528,7 @@ public class Repl {
                         }
                         else
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_DARK_GREEN);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                         }
 
                         if (chess_board[row][col].equals(""))
@@ -536,49 +536,49 @@ public class Repl {
                             printBoardOutput = printBoardOutput.concat(EMPTY);
                         } else if (chess_board[row][col].equals("WHITE ROOK"))
                         {
-                            printBoardOutput = printBoardOutput.concat(WHITE_ROOK);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_ROOK);
                         } else if (chess_board[row][col].equals("WHITE KNIGHT"))
                         {
-                            printBoardOutput = printBoardOutput.concat(WHITE_KNIGHT);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KNIGHT);
                         } else if (chess_board[row][col].equals("WHITE BISHOP"))
                         {
-                            printBoardOutput = printBoardOutput.concat(WHITE_BISHOP);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_BISHOP);
                         } else if (chess_board[row][col].equals("WHITE QUEEN"))
                         {
-                            printBoardOutput = printBoardOutput.concat(WHITE_QUEEN);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_QUEEN);
                         } else if (chess_board[row][col].equals("WHITE KING"))
                         {
-                            printBoardOutput = printBoardOutput.concat(WHITE_KING);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KING);
                         } else if (chess_board[row][col].equals("WHITE PAWN"))
                         {
-                            printBoardOutput = printBoardOutput.concat(WHITE_PAWN);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_PAWN);
                         }  else if (chess_board[row][col].equals("BLACK ROOK"))
                         {
-                            printBoardOutput = printBoardOutput.concat(BLACK_ROOK);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_ROOK);
                         } else if (chess_board[row][col].equals("BLACK KNIGHT"))
                         {
-                            printBoardOutput = printBoardOutput.concat(BLACK_KNIGHT);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KNIGHT);
                         } else if (chess_board[row][col].equals("BLACK BISHOP"))
                         {
-                            printBoardOutput = printBoardOutput.concat(BLACK_BISHOP);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_BISHOP);
                         } else if (chess_board[row][col].equals("BLACK QUEEN"))
                         {
-                            printBoardOutput = printBoardOutput.concat(BLACK_QUEEN);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_QUEEN);
                         } else if (chess_board[row][col].equals("BLACK KING"))
                         {
-                            printBoardOutput = printBoardOutput.concat(BLACK_KING);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KING);
                         } else if (chess_board[row][col].equals("BLACK PAWN"))
                         {
-                            printBoardOutput = printBoardOutput.concat(BLACK_PAWN);
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_PAWN);
                         }
 
 
                         squareColorWhite = !squareColorWhite;
                     }
                     squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + " " + RESET + "\n");
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row + 1) + " " + RESET + "\n");
                 }
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + EMPTY + " h  g  f  e  d  c  b  a " + EMPTY + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
             }
 
 
