@@ -29,7 +29,7 @@ public class Repl implements NotificationHandler  {
     public Repl() throws ResponseException
     {
         // server = new ServerFacade(serverUrl);
-        ws = new WebSocketFacade("http://localhost:8080", this);
+        ws = new WebSocketFacade("http://" + SERVER_HOST + ":" + SERVER_PORT, this);
         client = new HttpTalker();
         authToken = "";
     }
