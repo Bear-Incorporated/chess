@@ -9,6 +9,7 @@ import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
 import model.*;
 import service.Chess_Service;
+import server.websocket.WebSocketHandler;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,6 +18,14 @@ import java.util.Map;
 public class Server {
 
     private final Javalin javalin;
+    private ArrayList<String> names = new ArrayList<>();
+
+
+    private Chess_Service service = new Chess_Service();
+
+
+
+    private final WebSocketHandler webSocketHandler;
 
 
     public int run(int desiredPort) {
@@ -29,6 +38,7 @@ public class Server {
     }
     public Server() {
 
+        webSocketHandler = new WebSocketHandler();
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
 
@@ -325,55 +335,11 @@ public class Server {
             }
 
         })
-
-
-
-
-//                .post("/user",
-//                        (ctx) -> {
-//                            JsonObject output = new JsonObject();
-//                            output.addProperty("not done", "Not implemented");
-//                            output.addProperty("message2", "Hello, JSON!");
-//
-//                            ctx.result(output.toString());
-//
-//                        })
-//                .post("/session",
-//                        (ctx) -> {
-//                            JsonObject output = new JsonObject();
-//                            output.addProperty("not done", "Not implemented");
-//
-//                            ctx.result(output.toString());
-//
-//                        })
-//                .delete("/session",
-//                        (ctx) -> {
-//                            JsonObject output = new JsonObject();
-//                            output.addProperty("not done", "Not implemented");
-//
-//                            ctx.result(output.toString());
-//
-//                        })
-//                .get("/game", this::listNames)
-//                .post("/game", this::addGame)
-//                .put("/game",
-//                        (ctx) -> {
-//                            JsonObject output = new JsonObject();
-//                            output.addProperty("not done", "Not implemented");
-//
-//                            ctx.result(output.toString());
-//
-//                        })
-//                .delete("/db",
-//                        (ctx) -> {
-//                            JsonObject output = new JsonObject();
-//                            output.addProperty("not done", "Not implemented");
-//
-//                            ctx.result(output.toString());
-//
-//                        })
-
-        ;
+        .ws("/ws", ws -> {
+            ws.onConnect(webSocketHandler);
+            ws.onMessage(webSocketHandler);
+            ws.onClose(webSocketHandler);
+        });
 
 
 
@@ -763,12 +729,6 @@ public class Server {
         names.remove(context.pathParam("name"));
         listNames(context);
     }
-
-    private ArrayList<String> names = new ArrayList<>();
-
-
-    private Chess_Service service = new Chess_Service();
-
 
 
 
