@@ -19,11 +19,20 @@ public class ServerMessage {
     }
 
     public ServerMessage(ServerMessageType type) {
+        System.out.print("ServerMessage 1 type\n");
         this.serverMessageType = type;
     }
 
     public ServerMessage(ServerMessageType type, String message) {
+        System.out.print("ServerMessage 2 types\n");
+        System.out.print("Type = " + type + "\n");
+        System.out.print("Message = " + message + "\n");
         this.serverMessageType = type;
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return this.message;
     }
 
     public ServerMessageType getServerMessageType() {

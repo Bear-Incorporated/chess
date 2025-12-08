@@ -19,6 +19,7 @@ public class Repl implements NotificationHandler  {
     private HttpTalker client = new HttpTalker();
 
     private String authToken;
+    private String usernameLoggedInAs;
 
     private final String SERVER_HOST = "localhost";
     private final int SERVER_PORT = 8080;
@@ -32,6 +33,7 @@ public class Repl implements NotificationHandler  {
         ws = new WebSocketFacade("http://" + SERVER_HOST + ":" + SERVER_PORT, this);
         client = new HttpTalker();
         authToken = "";
+        usernameLoggedInAs = "";
     }
 
 //    public Repl(String serverUrl) {
@@ -106,6 +108,8 @@ public class Repl implements NotificationHandler  {
             case "o" -> viewGame(input1);
             case "view" -> viewGame(input1);
             case "v" -> viewGame(input1);
+            case "play" -> playGame(input1);
+            case "p" -> playGame(input1);
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -118,18 +122,18 @@ public class Repl implements NotificationHandler  {
 
     }
 
+
 //
 //    """
 //    Options:
 //
 //
-//    "play <ID>" or "p <ID>" - Play the game as your color
+//
 //                    """;
 //        }
 //    else if (state == State.INGAME) {
 //        return """
-//                Options:
-//                "help" or "h" - Displays text informing the user what actions you can take.
+//
 //                "move <LOCAL_START> <LOCAL_END>" or "<LOCAL_START> <LOCAL_END>" - Moves a piece.
 //                "redraw" or "r" - Redraws the chess board
 //                "leave" - Leave the chess game
@@ -148,6 +152,27 @@ public class Repl implements NotificationHandler  {
 //            return String.format("You signed in as %s.", visitorName);
 //        }
 //    }
+
+
+    private String playGame(String gameID)
+    {
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
+
+        // Checks to see if game exists
+        if (gameID.isBlank()) { return gameID + " is not a valid Game ID"; }
+
+        state = State.INGAME;
+        try {
+            ws.connect(authToken, Integer.parseInt(gameID));
+            return String.format("You signed in as %s.", usernameLoggedInAs);
+        }
+        catch (Exception e)
+        {
+            return "ERROR: Cannot play game";
+        }
+
+    }
 
 
     public String listGames()
@@ -268,6 +293,7 @@ public class Repl implements NotificationHandler  {
 
     public String login(String username, String password)
     {
+
         // assertSignedIn();
         System.out.print("username = " + username + "\n");
         System.out.print("password = " + password + "\n");
@@ -290,6 +316,7 @@ public class Repl implements NotificationHandler  {
                 System.out.print("number " + i + " is " + authTokenTempSplit[i] + ", ");
             }
             authToken = authTokenTempSplit[7];
+            usernameLoggedInAs = username;
             state = State.SIGNEDIN;
             System.out.print("\nLogged in " + authToken);
 
@@ -298,7 +325,7 @@ public class Repl implements NotificationHandler  {
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
             // return output.toString();
-            return "You are now logged in";
+            return "You are now logged in " + username;
 
         } catch (Exception e) {
 
@@ -778,6 +805,29 @@ public class Repl implements NotificationHandler  {
     @Override
     public void notify(ServerMessage notification)
     {
+        System.out.print("Notifying that something happened!");
+
+        switch (notification.getServerMessageType()) {
+            case NOTIFICATION -> displayNotificiation(notification.getMessage());
+            case ERROR -> displayError(notification.getMessage());
+            // case LOAD_GAME -> printBoard(chess_board, activePlayer);
+            // case LOAD_GAME -> printBoard(notification.getGame());
+
+        }
+
+
+
 
     }
+
+
+    void displayNotificiation(String message)
+    {
+        System.out.print(message);
+    }
+    void displayError(String message)
+    {
+        System.out.print("error: " + message);
+    }
+
 }

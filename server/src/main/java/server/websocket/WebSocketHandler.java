@@ -53,31 +53,39 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     }
 
     private void connect(Session session, String username, UserGameCommand command) throws IOException {
+        System.out.print("Connecting user " + username + "\n");
+
         connections.add(session);
         var message = String.format("%s is in the shop", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message);
-        connections.broadcast(session, notification);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(null, notification);
     }
 
     private void makeMove(Session session, String username, UserGameCommand command) throws IOException {
-        connections.add(session);
+        System.out.print("Moving user " + username + "\n");
+
+
         var message = String.format("%s is in the shop", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message);
-        connections.broadcast(session, notification);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(null, notification);
     }
 
     private void leaveGame(Session session, String username, UserGameCommand command) throws IOException {
+        System.out.print("Leaving user " + username + "\n");
+
         var message = String.format("%s left the shop", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message);
-        connections.broadcast(session, notification);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(null, notification);
         connections.remove(session);
     }
 
     private void resign(Session session, String username, UserGameCommand command) throws IOException {
-        connections.add(session);
+        System.out.print("Resigning user " + username + "\n");
+
+
         var message = String.format("%s is in the shop", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message);
-        connections.broadcast(session, notification);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(null, notification);
     }
 
 //    private void enter(String visitorName, Session session) throws IOException {
