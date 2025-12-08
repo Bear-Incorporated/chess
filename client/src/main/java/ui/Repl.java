@@ -90,7 +90,8 @@ public class Repl {
             case "register" -> register(input1, input2, input3);
             case "r" -> register(input1, input2, input3);
             case "logout" -> logout();
-            case "o" -> logout();
+            case "lo" -> logout();
+            case "out" -> logout();
             case "create" -> newGame(input1);
             case "c" -> newGame(input1);
             case "new" -> newGame(input1);
@@ -98,6 +99,7 @@ public class Repl {
             case "join" -> joinGame(input1, input2);
             case "j" -> joinGame(input1, input2);
             case "observe" -> viewGame(input1);
+            case "o" -> viewGame(input1);
             case "view" -> viewGame(input1);
             case "v" -> viewGame(input1);
             // case "adopt" -> adoptPet(params);
@@ -477,8 +479,8 @@ public class Repl {
 
             System.out.print(" out of for \n");
 
-            // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
-            viewGameOutput = viewGameOutput.concat(printBoard(chess_board, "BLACK"));
+            viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
+            // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, "BLACK"));
 
             // return gameList;
             return viewGameOutput;
@@ -580,6 +582,78 @@ public class Repl {
                 }
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
             }
+            else if (activePlayer.equals("WHITE"))
+            {
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+                for (int row = 7; row >= 0; row-- )
+                {
+                    // Move to the next row
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + "\u2003");
+                    for (int col = 7; col >= 0; col-- )
+                    {
+                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chess_board[row][col] + "\n");
+
+                        // Move to the next col
+
+                        // Set Backgroud Color
+                        if (squareColorWhite)
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                        }
+                        else
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                        }
+
+                        if (chess_board[row][col].equals(""))
+                        {
+                            printBoardOutput = printBoardOutput.concat(EMPTY);
+                        } else if (chess_board[row][col].equals("WHITE ROOK"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_ROOK);
+                        } else if (chess_board[row][col].equals("WHITE KNIGHT"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KNIGHT);
+                        } else if (chess_board[row][col].equals("WHITE BISHOP"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_BISHOP);
+                        } else if (chess_board[row][col].equals("WHITE QUEEN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_QUEEN);
+                        } else if (chess_board[row][col].equals("WHITE KING"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KING);
+                        } else if (chess_board[row][col].equals("WHITE PAWN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_PAWN);
+                        }  else if (chess_board[row][col].equals("BLACK ROOK"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_ROOK);
+                        } else if (chess_board[row][col].equals("BLACK KNIGHT"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KNIGHT);
+                        } else if (chess_board[row][col].equals("BLACK BISHOP"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_BISHOP);
+                        } else if (chess_board[row][col].equals("BLACK QUEEN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_QUEEN);
+                        } else if (chess_board[row][col].equals("BLACK KING"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KING);
+                        } else if (chess_board[row][col].equals("BLACK PAWN"))
+                        {
+                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_PAWN);
+                        }
+
+
+                        squareColorWhite = !squareColorWhite;
+                    }
+                    squareColorWhite = !squareColorWhite;
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row + 1) + " " + RESET + "\n");
+                }
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+            }
 
 
             // return gameList;
@@ -653,11 +727,11 @@ public class Repl {
             return """
                     Options:
                     \"help\" or \"h\" - Displays text informing the user what actions they can take.
-                    \"logout\" or \"o\" - Logs you out.
+                    \"logout\" or \"lo\" or \"out\" - Logs you out.
                     \"create <NAME>\" or \"c <NAME>\" or \"new <NAME>\" or \"n <NAME>\" - creates a new game.
                     \"list\" or \"l\" - Lists all the game.
                     \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
-                    \"view <ID>\" or \"v <ID>\" - View specified game.
+                    \"view <ID>\" or \"v <ID>\" or \"observe <ID>\" or \"o <ID>\" - View specified game.
                     """;
         }
         else if (state == State.INGAME) {
