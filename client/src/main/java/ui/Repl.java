@@ -119,7 +119,18 @@ public class Repl {
 //    Options:
 //
 //
-//    \"view <ID>\" or \"v <ID>\" - View specified game.
+//    "play <ID>" or "p <ID>" - Play the game as your color
+//                    """;
+//        }
+//    else if (state == State.INGAME) {
+//        return """
+//                Options:
+//                "help" or "h" - Displays text informing the user what actions you can take.
+//                "move <LOCAL_START> <LOCAL_END>" or "<LOCAL_START> <LOCAL_END>" - Moves a piece.
+//                "redraw" or "r" - Redraws the chess board
+//                "leave" - Leave the chess game
+//                "resign" - Resign the chess game
+//                "legal <LOCAL_START>" - Shows legal moves
 //    """;
 
 
@@ -479,8 +490,8 @@ public class Repl {
 
             System.out.print(" out of for \n");
 
-            viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
-            // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, "BLACK"));
+            // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
+            viewGameOutput = viewGameOutput.concat(printBoard(chess_board, "WHITE"));
 
             // return gameList;
             return viewGameOutput;
@@ -717,7 +728,7 @@ public class Repl {
         if (state == State.SIGNEDOUT) {
             return """
                     Options:
-                    \"help\" or \"h\" - Displays text informing the user what actions they can take.
+                    \"help\" or \"h\" - Displays text informing the user what actions you can take.
                     \"quit\" or \"q\" - Exits the program.
                     \"login <USERNAME> <PASSWORD>\" - Logs in.
                     \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
@@ -726,18 +737,24 @@ public class Repl {
         else if (state == State.SIGNEDIN) {
             return """
                     Options:
-                    \"help\" or \"h\" - Displays text informing the user what actions they can take.
+                    \"help\" or \"h\" - Displays text informing the user what actions you can take.
                     \"logout\" or \"lo\" or \"out\" - Logs you out.
                     \"create <NAME>\" or \"c <NAME>\" or \"new <NAME>\" or \"n <NAME>\" - creates a new game.
                     \"list\" or \"l\" - Lists all the game.
                     \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
                     \"view <ID>\" or \"v <ID>\" or \"observe <ID>\" or \"o <ID>\" - View specified game.
+                    "play <ID>" or "p <ID>" - Play the game as your color
                     """;
         }
         else if (state == State.INGAME) {
             return """
                     Options:
-                    \"move <LOCAL_START> <LOCAL_END>\" or \"<LOCAL_START> <LOCAL_END>\" - Moves a piece.
+                    "help" or "h" - Displays text informing the user what actions you can take.
+                    "move <LOCAL_START> <LOCAL_END>" or "<LOCAL_START> <LOCAL_END>" - Moves a piece.
+                    "redraw" or "r" - Redraws the chess board
+                    "leave" - Leave the chess game
+                    "resign" - Resign the chess game
+                    "legal <LOCAL_START>" - Shows legal moves
                     """;
         }
 
