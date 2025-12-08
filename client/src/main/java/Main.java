@@ -7,8 +7,13 @@ public class Main {
         System.out.println("♕ 240 Chess Client: " + piece);
 
 
+        try {
+            new Repl().run();
 
-        new Repl().run();
+        } catch (Throwable ex) {
+            System.out.printf("Unable to start server: %s%n", ex.getMessage());
+        }
+
         //new Repl(serverUrl).run();
     }
 
