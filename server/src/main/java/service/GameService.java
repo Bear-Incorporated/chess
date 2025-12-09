@@ -178,7 +178,6 @@ public class GameService
 
         ChessGame chessGameOver = gameOverData.chessGame();
         chessGameOver.gameOver();
-        // if
 
 
         dataList.gameDeleteViaGameID(gameOverID);

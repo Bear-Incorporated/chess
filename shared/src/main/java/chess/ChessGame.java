@@ -46,7 +46,8 @@ public class ChessGame {
      */
     public enum TeamColor {
         WHITE,
-        BLACK
+        BLACK,
+        NONE
     }
 
     /**
@@ -278,11 +279,12 @@ public class ChessGame {
         System.out.println("In ChessGame.makeMove()");
 
         // If game is over, return null
-        if (playerActive == null)
+        if (playerActive == null || playerActive == TeamColor.NONE)
         {
             System.out.println("Game is already over.");
             throw new InvalidMoveException("Game is already over.");
         }
+
 
 
         ChessPosition positionStart = move.getStartPosition();
@@ -584,7 +586,7 @@ public class ChessGame {
      */
     public void gameOver()
     {
-        playerActive = null;
+        playerActive = TeamColor.NONE;
     }
 
     @Override
