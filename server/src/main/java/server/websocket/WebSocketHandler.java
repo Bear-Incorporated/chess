@@ -69,10 +69,10 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         try
         {
             GameService gameTemp = new GameService();
-            ChessBoard board;
-            board = gameTemp.view(command.getGameID()).getBoard();
-            message = String.format("Starting your game %s.", username);
-            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message, board);
+            ChessGame game;
+            game = gameTemp.view(command.getGameID());
+            System.out.print(String.format("Starting your game %s.", username));
+            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
 
         }
         catch (Exception ex)

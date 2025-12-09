@@ -832,7 +832,7 @@ public class Repl implements NotificationHandler  {
         switch (notification.getServerMessageType()) {
             case NOTIFICATION -> displayNotificiation(notification.getMessage());
             case ERROR -> displayError(notification.getMessage());
-            case LOAD_GAME -> System.out.print(printBoard(notification.getBoard(), "WHITE"));
+            case LOAD_GAME -> System.out.print(printBoard(notification.getGame().getBoard(), "WHITE"));
             // case LOAD_GAME -> printBoard(notification.getGame());
 
         }
