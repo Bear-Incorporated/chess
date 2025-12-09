@@ -1,10 +1,13 @@
 package server.websocket;
 
+import chess.ChessBoard;
+import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import io.javalin.websocket.*;
 import org.eclipse.jetty.websocket.api.Session;
+import service.GameService;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
@@ -57,15 +60,32 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         System.out.print("Connecting user " + username + "\n");
 
         connections.add(ctx);
-        var message = String.format("Starting you game %s.", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message);
-        // connections.broadcast(null, notification);
-        connections.narrowcast(ctx, notification, true);
+
+        var message = String.format("%s has joined the game", username);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(ctx, notification);
+
+
+        try
+        {
+            GameService gameTemp = new GameService();
+            ChessBoard board;
+            board = gameTemp.view(command.getGameID()).getBoard();
+            message = String.format("Starting your game %s.", username);
+            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message, board);
+
+        }
+        catch (Exception ex)
+        {
+            message = String.format("error : %s", ex);
+            notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+        }
+
+        connections.narrowcast(ctx, notification);
     }
 
     private void makeMove(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Moving user " + username + "\n");
-
 
         var message = String.format("%s is in the shop", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
@@ -75,7 +95,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     private void leaveGame(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Leaving user " + username + "\n");
 
-        var message = String.format("%s left the shop", username);
+        var message = String.format("%s left the game", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
         connections.remove(ctx);
