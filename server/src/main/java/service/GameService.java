@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import model.*;
@@ -215,6 +216,44 @@ public class GameService
 
 
         return view_game.chessGame();
+    }
+
+
+
+    /**
+     * Move a piece in a game
+     *
+     * @param
+     * @return
+     */
+    public ChessGame move(int gameIDMoving, ChessMove chessMove) throws Exception
+    {
+
+        System.out.println("I am in GameService.java move!!");
+
+        // If the game doesn't exist, give error
+        if (!dataList.gameFoundViaGameID(gameIDMoving))
+        {
+            System.out.println("Game doesn't exist");
+            throw new DataAccessException("400");
+        }
+        System.out.println("Game does exist");
+
+        // Find the game
+        GameData gameMovingData = dataList.getGameDataViaGameID(gameIDMoving);
+        ChessGame gameMoving = gameMovingData.chessGame();
+        System.out.println("Game does exist still");
+        System.out.println(gameMoving);
+
+        gameMoving.makeMove(chessMove);
+
+
+        dataList.gameDeleteViaGameID(gameIDMoving);
+        System.out.println("Moved Game re-adding: " + gameIDMoving + gameMovingData.whiteUsername() + gameMovingData.blackUsername() + gameMovingData.gameName() + gameMoving);
+        dataList.gameAddKeepGameID(new GameData(gameIDMoving, gameMovingData.whiteUsername(), gameMovingData.blackUsername(), gameMovingData.gameName(), gameMoving));
+
+
+        return gameMoving;
     }
 
 

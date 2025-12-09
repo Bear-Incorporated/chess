@@ -142,8 +142,9 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
 
             ChessGame game;
-            game = serviceGame.view(command.getGameID());
-            game.makeMove(command.getMove());
+            game = serviceGame.move(command.getGameID(), command.getMove());
+
+
             System.out.print(String.format("Starting your move %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
 

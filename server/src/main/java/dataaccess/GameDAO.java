@@ -315,7 +315,7 @@ public class GameDAO
 
         // Because this will only run when you add a player to it, I am giving the chessGame in the SQL a value at this point.
         // Serialize and store the friend JSON.
-        var json = new Gson().toJson(new ChessGame());
+        var json = new Gson().toJson(added.chessGame());
         String jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
         System.out.println(new ChessGame() + "\n");
@@ -337,11 +337,23 @@ public class GameDAO
         if (added.whiteUsername() == null)
         {
             // if white Username is null, need to keep null
-            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , null , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" );");
+
+            // Add game new game to it at this point
+            json = new Gson().toJson(new ChessGame());
+            jsonWithoutParenthesis = json.toString().replace('"', '\'');
+
+            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , null , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+
         } else if (added.blackUsername() == null)
         {
             // if black Username is null, need to keep null
-            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , null , \"" + added.gameName() + "\" );");
+
+            // Add game new game to it at this point
+            json = new Gson().toJson(new ChessGame());
+            jsonWithoutParenthesis = json.toString().replace('"', '\'');
+
+            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , null , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+
         }
 
 
