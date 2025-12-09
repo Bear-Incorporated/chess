@@ -124,8 +124,56 @@ public class GameService
         return new gameResponseJoin();
     }
 
+
+    public void unjoin(int unjoinGameID, String unjoinUserName) throws Exception
+    {
+
+        System.out.println("I am in GameService.java unjoin!!");
+
+        // If the game doesn't exist, give error
+        if (!dataList.gameFoundViaGameID(unjoinGameID))
+        {
+            System.out.println("Game doesn't exist");
+            throw new DataAccessException("400");
+        }
+        System.out.println("Game does exist");
+
+        // Find the game
+        GameData unjoinGame = dataList.getGameDataViaGameID(unjoinGameID);
+        System.out.println("Game does exist still");
+        System.out.println(unjoinGame);
+
+
+
+        String unjoinWhiteUsername = unjoinGame.whiteUsername();
+        String unjoinBlackUsername = unjoinGame.blackUsername();
+        String unjoinGameName = unjoinGame.gameName();
+        ChessGame unjoinChessgame = unjoinGame.chessGame();
+
+        if (unjoinUserName.equals(unjoinWhiteUsername))
+        {
+            unjoinWhiteUsername = null;
+        } else if (unjoinUserName.equals(unjoinBlackUsername))
+        {
+            unjoinBlackUsername = null;
+        } else {
+            throw new DataAccessException("400");
+        }
+
+        dataList.gameDeleteViaGameID(unjoinGameID);
+        dataList.gameAddKeepGameID(new GameData(unjoinGameID, unjoinWhiteUsername, unjoinUserName, unjoinGameName, unjoinChessgame));
+
+
+
+        // throw new DataAccessException("400");
+        // throw new DataAccessException("403");
+        // throw new RuntimeException("Not implemented");
+        return;
+    }
+
+
     /**
-     * Join a game
+     * Get the shortened GameData
      *
      * @param
      * @return

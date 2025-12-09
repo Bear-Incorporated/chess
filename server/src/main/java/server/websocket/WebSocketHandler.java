@@ -103,13 +103,13 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             System.out.print(String.format("Starting your game %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
 
-            connections.add(ctx, new SessionInfo(username));
+            connections.add(ctx, new SessionInfo(username, command.getGameID()));
 
             connections.narrowcast(ctx, notification);
 
             message = String.format("%s has joined the game", username);
             notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            connections.broadcast(ctx, notification);
+            connections.broadcastViaGameID(ctx, notification, command.getGameID());
 
 
         }
@@ -146,13 +146,13 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             System.out.print("Moving user 2 " + usernameConnected + "\n");
             System.out.print("Moving user 3 " + serviceUser.getUserNameViaAuthToken(command.getAuthToken()) + "\n");
 
-            System.out.print("Moving user 4 " + connections.checkUserName(ctx, new SessionInfo(username)) + "\n");
+            // System.out.print("Moving user 4 " + connections.checkUserName(ctx, new SessionInfo(username)) + "\n");
 
 
 
 
 
-            if (!connections.checkUserName(ctx, new SessionInfo(username)))
+            if (!connections.checkUserName(ctx, new SessionInfo(username, command.getGameID())))
             {
                 message = String.format("error : You are %s, not %s", usernameConnected, username);
                 notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
@@ -219,11 +219,11 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             System.out.print(String.format("Starting your move %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
 
-            connections.broadcast(null, notification);
+            connections.broadcastViaGameID(null, notification, command.getGameID());
 
             message = String.format("%s has made a move", username);
             notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            connections.broadcast(ctx, notification);
+            connections.broadcastViaGameID(ctx, notification, command.getGameID());
 
 
         }
@@ -248,8 +248,18 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         usernameConnected = "";
         var message = String.format("%s left the game", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(null, notification);
+        connections.broadcastViaGameID(ctx, notification, command.getGameID());
         connections.remove(ctx);
+
+        try
+        {
+            serviceGame.unjoin(command.getGameID(), username);
+
+        }
+        catch (Exception ex)
+        {
+            System.out.print(String.format("error : %s", ex));
+        }
     }
 
     private void resign(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
@@ -299,7 +309,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
             var message = String.format("%s is a quitter", username);
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            connections.broadcast(null, notification);
+            connections.broadcastViaGameID(null, notification, command.getGameID());
         }
         catch (Exception ex)
         {

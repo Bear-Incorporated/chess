@@ -1,5 +1,5 @@
 package model;
 
-public record SessionInfo(String username)
+public record SessionInfo(String username, int gameID)
 {
 }
