@@ -255,22 +255,59 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     private void resign(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Resigning user " + username + "\n");
 
+        try {
+
+            // Check if they are a player
+            gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
+            if (gameData.whiteUsername().equals(username))
+            {
+                System.out.print(String.format("%s is the white player in the game.", username));
+
+            }
+            else if (gameData.blackUsername().equals(username))
+            {
+                System.out.print(String.format("%s is the black player in the game.", username));
+            }
+            else
+            {
+                var message = String.format("error : %s is not a part of that game.", username);
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+                return;
+            }
+
+            // Check if the game is already over.
+            ChessGame gameTemp = serviceGame.view(command.getGameID());
+            if (gameTemp.getTeamTurn() == ChessGame.TeamColor.NONE)
+            {
+                var message = String.format("error : Game is already over %s.  Go home.", username);
+                var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+                return;
+            }
+
+            try
+            {
+                serviceGame.gameOver(command.getGameID());
+
+            }
+            catch (Exception ex)
+            {
+                System.out.print(String.format("error : %s", ex));
+            }
 
 
-        try
-        {
-            serviceGame.gameOver(command.getGameID());
-
+            var message = String.format("%s is a quitter", username);
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(null, notification);
         }
         catch (Exception ex)
         {
-            System.out.print(String.format("error : %s", ex));
+            var message = String.format("error : Exception ", ex);
+            var notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+            connections.narrowcast(ctx, notification);
         }
 
-
-        var message = String.format("%s is a quitter", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(null, notification);
     }
 //    private void saveSession(int gameId, WsMessageContext ctx)
 //    {
