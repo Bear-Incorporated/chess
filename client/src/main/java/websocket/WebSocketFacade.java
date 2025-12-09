@@ -15,7 +15,7 @@ import java.net.URI;
 //need to extend Endpoint for websocket to work properly
 public class WebSocketFacade extends Endpoint {
 
-    Session session;
+    jakarta.websocket.Session session;
     NotificationHandler notificationHandler;
 
     public WebSocketFacade(String url, NotificationHandler notificationHandler) throws ResponseException {
@@ -38,32 +38,33 @@ public class WebSocketFacade extends Endpoint {
 
                     try
                     {
-                        if (message.contains("ServerMessage{serverMessageType=NOTIFICATION"))
-                        {
-                            String[] messageSplit  = message.split("\'");
-                            notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, messageSplit[1]);
-                            System.out.print(messageSplit[1] + "\n");
-                        } else if (message.contains("ServerMessage{serverMessageType=ERROR"))
-                        {
-                            String[] messageSplit  = message.split("\'");
-                            notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, messageSplit[1]);
-                            System.out.print(messageSplit[1] + "\n");
-                        } else if (message.contains("ServerMessage{serverMessageType=LOAD_GAME"))
-                        {
-                            String[] messageSplit  = message.split("\'");
-                            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, messageSplit[1]);
-                            System.out.print(messageSplit[1] + "\n");
-                        }
+//                        if (message.contains("ServerMessage{serverMessageType=NOTIFICATION"))
+//                        {
+//                            String[] messageSplit  = message.split("\'");
+//                            notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, messageSplit[1]);
+//                            System.out.print(messageSplit[1] + "\n");
+//                        } else if (message.contains("ServerMessage{serverMessageType=ERROR"))
+//                        {
+//                            String[] messageSplit  = message.split("\'");
+//                            notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, messageSplit[1]);
+//                            System.out.print(messageSplit[1] + "\n");
+//                        } else if (message.contains("ServerMessage{serverMessageType=LOAD_GAME"))
+//                        {
+//                            String[] messageSplit  = message.split("\'");
+//                            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, messageSplit[1]);
+//                            System.out.print(messageSplit[1] + "\n");
+//                        }
 
-                        // notification = new Gson().fromJson(message, ServerMessage.class);
-                        // JSONObject jsonObj = new JSONObject(message.toString());
-                        //JsonObject tempJson = new JsonObject().getAsJsonObject(message);
-                        // JsonObject tempJson = JsonParser.parseString(message).getAsJsonObject();
+//                         notification = new Gson().fromJson(message, ServerMessage.class);
+//                         JSONObject jsonObj = new JSONObject(message.toString());
+//                        JsonObject tempJson = new JsonObject().getAsJsonObject(message);
+                        System.out.print("Part 0" + message + "\n");
+                        JsonObject tempJson = JsonParser.parseString(message).getAsJsonObject();
 
-                        // System.out.print("Part 1" + tempJson + "\n");
-                        // notification = new Gson().fromJson(tempJson, ServerMessage.class);
-                        // System.out.print("Part 2\n");
-                        // notification = new Gson().fromJson(message, ServerMessage.class);
+                        System.out.print("Part 1" + tempJson + "\n");
+                        notification = new Gson().fromJson(tempJson, ServerMessage.class);
+                        System.out.print("Part 2\n");
+                        notification = new Gson().fromJson(message, ServerMessage.class);
 
                     }
                     catch (Exception ex)
@@ -75,6 +76,7 @@ public class WebSocketFacade extends Endpoint {
                     System.out.print("The notification is ");
                     System.out.print(notification);
                     System.out.print("\n");
+                    System.out.print("Message Type = " + notification.getServerMessageType() + ", Message = " + notification.getMessage());
 
                     notificationHandler.notify(notification);
                 }

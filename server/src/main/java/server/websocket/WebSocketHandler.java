@@ -8,6 +8,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
+
 import java.io.IOException;
 
 public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsCloseHandler {
@@ -31,13 +32,13 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             AuthDAO authTemp = new AuthDAO();
             String username;
             username = authTemp.authGetUserNameViaAuthToken(command.getAuthToken());
-
+            // saveSession(gameId, session);
 
             switch (command.getCommandType()) {
-                case CONNECT -> connect(session, username, command);
-                case MAKE_MOVE -> makeMove(session, username, command);
-                case LEAVE -> leaveGame(session, username, command);
-                case RESIGN -> resign(session, username, command);
+                case CONNECT -> connect(ctx, username, command);
+                case MAKE_MOVE -> makeMove(ctx, username, command);
+                case LEAVE -> leaveGame(ctx, username, command);
+                case RESIGN -> resign(ctx, username, command);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -52,16 +53,17 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         System.out.println("Websocket closed");
     }
 
-    private void connect(Session session, String username, UserGameCommand command) throws IOException {
+    private void connect(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Connecting user " + username + "\n");
 
-        connections.add(session);
+        connections.add(ctx);
         var message = String.format("Starting you game %s.", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(null, notification);
+        var notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message);
+        // connections.broadcast(null, notification);
+        connections.narrowcast(ctx, notification, true);
     }
 
-    private void makeMove(Session session, String username, UserGameCommand command) throws IOException {
+    private void makeMove(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Moving user " + username + "\n");
 
 
@@ -70,16 +72,16 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         connections.broadcast(null, notification);
     }
 
-    private void leaveGame(Session session, String username, UserGameCommand command) throws IOException {
+    private void leaveGame(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Leaving user " + username + "\n");
 
         var message = String.format("%s left the shop", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
-        connections.remove(session);
+        connections.remove(ctx);
     }
 
-    private void resign(Session session, String username, UserGameCommand command) throws IOException {
+    private void resign(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Resigning user " + username + "\n");
 
 
@@ -87,6 +89,12 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
     }
+    private void saveSession(int gameId, WsMessageContext ctx)
+    {
+        connections.add(ctx);
+
+    }
+
 
 //    private void enter(String visitorName, Session session) throws IOException {
 //        connections.add(session);
