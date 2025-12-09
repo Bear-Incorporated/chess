@@ -30,7 +30,17 @@ public class ConnectionManager {
     public void broadcast(WsMessageContext excludeSession, ServerMessage notification) throws IOException {
         System.out.print("Broadcasting\n");
 
-
+        if (excludeSession == null)
+        {
+            String msg = notification.toString();
+            for (WsMessageContext c : connections.values()) {
+                System.out.print("Broadcasting " + c + "\n");
+                if (c.session.isOpen()) {
+                    c.send(new Gson().toJson(notification));
+                }
+            }
+            return;
+        }
 
         String msg = notification.toString();
         for (WsMessageContext c : connections.values()) {

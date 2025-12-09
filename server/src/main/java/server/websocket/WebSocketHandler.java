@@ -147,13 +147,11 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             System.out.print(String.format("Starting your move %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
 
-            connections.narrowcast(ctx, notification);
+            connections.broadcast(null, notification);
 
             message = String.format("%s has made a move", username);
-            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message, game);
+            notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcast(ctx, notification);
-
-
 
 
         }

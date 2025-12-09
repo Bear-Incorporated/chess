@@ -277,7 +277,7 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         // If game is over, return null
         if (playerActive == null)
-            return;
+            throw new InvalidMoveException("Game is already over.");
 
         ChessPosition positionStart = move.getStartPosition();
         ChessPosition positionEnd = move.getEndPosition();
