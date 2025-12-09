@@ -56,7 +56,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         System.out.print("Connecting user " + username + "\n");
 
         connections.add(session);
-        var message = String.format("%s is in the shop", username);
+        var message = String.format("Starting you game %s.", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
     }

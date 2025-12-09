@@ -169,6 +169,7 @@ public class Repl implements NotificationHandler  {
         }
         catch (Exception e)
         {
+
             return "ERROR: Cannot play game";
         }
 
@@ -805,7 +806,7 @@ public class Repl implements NotificationHandler  {
     @Override
     public void notify(ServerMessage notification)
     {
-        System.out.print("Notifying that something happened!");
+        // System.out.print("Notifying that something happened!");
 
         switch (notification.getServerMessageType()) {
             case NOTIFICATION -> displayNotificiation(notification.getMessage());
@@ -823,11 +824,11 @@ public class Repl implements NotificationHandler  {
 
     void displayNotificiation(String message)
     {
-        System.out.print(message);
+        System.out.print(SET_TEXT_COLOR_BLUE + message + "\n" + SET_TEXT_COLOR_GREEN);
     }
     void displayError(String message)
     {
-        System.out.print("error: " + message);
+        System.out.print(SET_TEXT_COLOR_BLUE + "error: " + message + "\n" + SET_TEXT_COLOR_GREEN);
     }
 
 }

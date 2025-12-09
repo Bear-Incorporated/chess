@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.messages.ServerMessage;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import jakarta.websocket.*;
 
 import java.io.IOException;
@@ -28,10 +31,17 @@ public class ConnectionManager {
             System.out.print("Broadcasting " + c + "\n");
             if (c.isOpen()) {
                 if (!c.equals(excludeSession)) {
+                    // var serializer = new Gson();
+                    // var json = serializer.toJson(msg);
                     System.out.print("Sending String " + msg + "\n");
+                    // System.out.print("As json " + json + "\n");
+                    // c.getRemote().sendString(json);
                     c.getRemote().sendString(msg);
+                    // c.getBasicRemote().sendText(new Gson().toJson(msg));
                 }
             }
         }
     }
+
+
 }

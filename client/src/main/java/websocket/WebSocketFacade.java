@@ -1,6 +1,8 @@
 package websocket;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import exception.ResponseException;
 import jakarta.websocket.*;
 import websocket.commands.UserGameCommand;
@@ -32,24 +34,46 @@ public class WebSocketFacade extends Endpoint {
                     System.out.print("The message is " + message + "\n");
                     System.out.print("The message is " + message + "\n");
 
-                    ServerMessage notification;
+                    ServerMessage notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "error : bad notification");
 
                     try
                     {
+                        if (message.contains("ServerMessage{serverMessageType=NOTIFICATION"))
+                        {
+                            String[] messageSplit  = message.split("\'");
+                            notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, messageSplit[1]);
+                            System.out.print(messageSplit[1] + "\n");
+                        } else if (message.contains("ServerMessage{serverMessageType=ERROR"))
+                        {
+                            String[] messageSplit  = message.split("\'");
+                            notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, messageSplit[1]);
+                            System.out.print(messageSplit[1] + "\n");
+                        } else if (message.contains("ServerMessage{serverMessageType=LOAD_GAME"))
+                        {
+                            String[] messageSplit  = message.split("\'");
+                            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, messageSplit[1]);
+                            System.out.print(messageSplit[1] + "\n");
+                        }
+
                         // notification = new Gson().fromJson(message, ServerMessage.class);
                         // JSONObject jsonObj = new JSONObject(message.toString());
-                        notification = new Gson().fromJson(message, ServerMessage.class);
+                        //JsonObject tempJson = new JsonObject().getAsJsonObject(message);
+                        // JsonObject tempJson = JsonParser.parseString(message).getAsJsonObject();
+
+                        // System.out.print("Part 1" + tempJson + "\n");
+                        // notification = new Gson().fromJson(tempJson, ServerMessage.class);
+                        // System.out.print("Part 2\n");
+                        // notification = new Gson().fromJson(message, ServerMessage.class);
 
                     }
                     catch (Exception ex)
                     {
                         System.out.print("Error: " + ex.getMessage() + "\n");
-                        notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "error : bad notification");
                     }
 
 
                     System.out.print("The notification is ");
-                    System.out.print(notification.getMessage());
+                    System.out.print(notification);
                     System.out.print("\n");
 
                     notificationHandler.notify(notification);

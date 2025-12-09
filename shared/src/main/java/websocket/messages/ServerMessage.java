@@ -23,6 +23,8 @@ public class ServerMessage {
         this.serverMessageType = type;
     }
 
+
+
     public ServerMessage(ServerMessageType type, String message) {
         System.out.print("ServerMessage 2 types\n");
         System.out.print("Type = " + type + "\n");
@@ -31,6 +33,14 @@ public class ServerMessage {
         this.message = message;
     }
 
+    @Override
+    public String toString()
+    {
+        return "ServerMessage{" +
+                "serverMessageType=" + serverMessageType +
+                ", message='" + message + '\'' +
+                '}';
+    }
     public String getMessage() {
         return this.message;
     }
