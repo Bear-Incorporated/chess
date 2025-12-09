@@ -1,13 +1,13 @@
 package server.websocket;
 
-import chess.ChessBoard;
 import chess.ChessGame;
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import io.javalin.websocket.*;
+import model.gameDataShort;
 import org.eclipse.jetty.websocket.api.Session;
 import service.GameService;
+import service.UserService;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
@@ -17,6 +17,9 @@ import java.io.IOException;
 public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsCloseHandler {
 
     private final ConnectionManager connections = new ConnectionManager();
+
+    GameService serviceGame = new GameService();
+    UserService serviceUser = new UserService();
 
     @Override
     public void handleConnect(WsConnectContext ctx) {
@@ -32,9 +35,9 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         try {
             UserGameCommand command = new Gson().fromJson(ctx.message(), UserGameCommand.class);
             gameId = command.getGameID();
-            AuthDAO authTemp = new AuthDAO();
+
             String username;
-            username = authTemp.authGetUserNameViaAuthToken(command.getAuthToken());
+            username = serviceUser.getUserNameViaAuthToken(command.getAuthToken());
             // saveSession(gameId, session);
 
             switch (command.getCommandType()) {
@@ -58,30 +61,55 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
     private void connect(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Connecting user " + username + "\n");
+        System.out.print("Command " + command + "\n");
 
-        connections.add(ctx);
-
-        var message = String.format("%s has joined the game", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(ctx, notification);
+        String message;
+        ServerMessage notification;
 
 
         try
         {
-            GameService gameTemp = new GameService();
+//
+//            I need to implement this client side if I want to ensure they are playing their game.
+//            Maybe, have them store the list every time it comes up, so I can check it.
+//
+//
+//            gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
+//            if (gameData.blackUsername().equals(username) || gameData.whiteUsername().equals(username))
+//            {
+//                System.out.print(String.format("%s is a player in the game.", username));
+//            } else {
+//                message = String.format("error : %s is not a part of that game.", username);
+//                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+//                connections.narrowcast(ctx, notification);
+//            }
+
+
+
+
             ChessGame game;
-            game = gameTemp.view(command.getGameID());
+            game = serviceGame.view(command.getGameID());
             System.out.print(String.format("Starting your game %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
+
+            connections.add(ctx);
+
+            connections.narrowcast(ctx, notification);
+
+            message = String.format("%s has joined the game", username);
+            notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(ctx, notification);
+
 
         }
         catch (Exception ex)
         {
             message = String.format("error : %s", ex);
             notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+            connections.narrowcast(ctx, notification);
         }
 
-        connections.narrowcast(ctx, notification);
+
     }
 
     private void makeMove(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
@@ -108,8 +136,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         try
         {
-            GameService gameTemp = new GameService();
-            gameTemp.gameOver(command.getGameID());
+            serviceGame.gameOver(command.getGameID());
 
         }
         catch (Exception ex)

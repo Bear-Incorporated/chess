@@ -5,11 +5,11 @@ import chess.ChessGame;
 import dataaccess.DataAccessException;
 import model.*;
 
-public class Chess_Service
+public class ChessService
 {
 
-    private final GameService service_game = new GameService();
-    private final UserService service_user = new UserService();
+    private final GameService serviceGame = new GameService();
+    private final UserService serviceUser = new UserService();
 
 
     /**
@@ -23,14 +23,14 @@ public class Chess_Service
         System.out.println("clear");
 
         try {
-            service_game.clear();
+            serviceGame.clear();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
 
 
         try {
-            service_user.clear();
+            serviceUser.clear();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -45,13 +45,13 @@ public class Chess_Service
      * @param
      * @return
      */
-    public gameResponseCreate Game_Create(gameRequestCreate data) throws DataAccessException
+    public gameResponseCreate gameCreate(gameRequestCreate data) throws DataAccessException
     {
         System.out.println("game_create");
 
 
         try {
-            return service_game.create(data);
+            return serviceGame.create(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -63,21 +63,21 @@ public class Chess_Service
      * @param
      * @return
      */
-    public gameResponseJoin Game_Join(gameRequestJoin data) throws Exception
+    public gameResponseJoin gameJoin(gameRequestJoin data) throws Exception
     {
         System.out.println("game_join");
 
         // Swaps the AuthToken with correct userName
         String auth_token = data.username(); // actually AuthToken at this point
         System.out.println("auth token: " + auth_token);
-        String username = service_user.get_userName_via_authToken(auth_token);
+        String username = serviceUser.getUserNameViaAuthToken(auth_token);
         gameRequestJoin data_with_name = new gameRequestJoin(username, data.playerColor(), data.gameID());
         System.out.println("username: " + username);
 
         try {
             System.out.println("trying game_join");
             System.out.println(data_with_name);
-            gameResponseJoin gameResponseJoinTemp = service_game.join(data_with_name);
+            gameResponseJoin gameResponseJoinTemp = serviceGame.join(data_with_name);
             return gameResponseJoinTemp;
         } catch (DataAccessException e)
         {
@@ -100,7 +100,7 @@ public class Chess_Service
         }
 
         try {
-            return service_game.view(gameIDViewing.gameID());
+            return serviceGame.view(gameIDViewing.gameID());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -112,12 +112,12 @@ public class Chess_Service
      * @param
      * @return
      */
-    public gameResponseList Game_List(gameRequestList data) throws DataAccessException
+    public gameResponseList gameList(gameRequestList data) throws DataAccessException
     {
         System.out.println("game_list");
 
         try {
-            return service_game.list(data);
+            return serviceGame.list(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -129,12 +129,12 @@ public class Chess_Service
      * @param
      * @return
      */
-    public userResponseRegister User_Register(userRequestRegister data) throws DataAccessException
+    public userResponseRegister userRegister(userRequestRegister data) throws DataAccessException
     {
         System.out.println("user_register");
 
         try {
-            return service_user.register(data);
+            return serviceUser.register(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -146,13 +146,13 @@ public class Chess_Service
      * @param
      * @return
      */
-    public userResponseLogin User_Login(userRequestLogin data) throws DataAccessException
+    public userResponseLogin userLogin(userRequestLogin data) throws DataAccessException
     {
         System.out.println("user_login");
 
 
         try {
-            return service_user.login(data);
+            return serviceUser.login(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -165,13 +165,13 @@ public class Chess_Service
      * @param
      * @return
      */
-    public void User_Logout(userRequestLogout data) throws DataAccessException
+    public void userLogout(userRequestLogout data) throws DataAccessException
     {
         System.out.println("user_logout");
 
 
         try {
-            service_user.logout(data);
+            serviceUser.logout(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -183,12 +183,12 @@ public class Chess_Service
      * @param
      * @return
      */
-    public boolean User_Authorized(String data) throws DataAccessException {
+    public boolean userAuthorized(String data) throws DataAccessException {
         System.out.println("user_authorize");
 
 
         try {
-            return service_user.authorized(data);
+            return serviceUser.authorized(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }

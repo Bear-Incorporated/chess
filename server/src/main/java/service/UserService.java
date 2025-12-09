@@ -92,7 +92,7 @@ public class UserService
 
 
 
-    public String get_userName_via_authToken(String data) throws DataAccessException
+    public String getUserNameViaAuthToken(String data) throws DataAccessException
     {
         return auth_list.authGetUserNameViaAuthToken(data);
     }
@@ -144,7 +144,7 @@ public class UserService
     public userResponseLogin login(userRequestLogin data) throws DataAccessException
     {
         System.out.println("Checking user_list.User_find_name ");
-        String output_auth = User_login(data);
+        String output_auth = userLogin(data);
 
         System.out.println("auth: " + output_auth);
         if (output_auth.equals(""))
@@ -154,7 +154,7 @@ public class UserService
         return new userResponseLogin(data.username(), output_auth);
     }
 
-    public String User_login(userRequestLogin loginer) throws DataAccessException
+    public String userLogin(userRequestLogin loginer) throws DataAccessException
     {
         System.out.println("Looking for Name!" + loginer.username());
         String name = loginer.username();

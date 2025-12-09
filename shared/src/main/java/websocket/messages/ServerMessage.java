@@ -15,6 +15,8 @@ public class ServerMessage {
     ServerMessageType serverMessageType;
     String message;
 
+    String errorMessage;
+
     ChessGame game;
 
     public enum ServerMessageType {
@@ -35,7 +37,17 @@ public class ServerMessage {
         System.out.print("Type = " + type + "\n");
         System.out.print("Message = " + message + "\n");
         this.serverMessageType = type;
-        this.message = message;
+        if (serverMessageType == ServerMessageType.ERROR)
+        {
+            System.out.print("Error = " + message + "\n");
+            this.errorMessage = message;
+        } else if (serverMessageType == ServerMessageType.NOTIFICATION)
+        {
+            System.out.print("Notification = " + message + "\n");
+            this.message = message;
+        }
+
+
     }
 
     public ServerMessage(ServerMessageType type, String message, ChessGame chessGame) {

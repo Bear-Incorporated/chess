@@ -4,6 +4,7 @@ import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
 import exception.ResponseException;
+import model.gameDataShort;
 import websocket.HttpTalker;
 import websocket.NotificationHandler;
 import websocket.WebSocketFacade;

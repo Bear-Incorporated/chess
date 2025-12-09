@@ -8,7 +8,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
 import model.*;
-import service.Chess_Service;
+import service.ChessService;
 import server.websocket.WebSocketHandler;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class Server {
     private ArrayList<String> names = new ArrayList<>();
 
 
-    private Chess_Service service = new Chess_Service();
+    private ChessService service = new ChessService();
 
 
 
@@ -378,7 +378,7 @@ public class Server {
             try
             {
                 // Run Function
-                userResponseRegister output = service.User_Register(input);
+                userResponseRegister output = service.userRegister(input);
 
                 if (output.authToken().equals("404"))
                 {
@@ -434,7 +434,7 @@ public class Server {
                 System.out.println("Inputing " + input);
 
                 // Run Function
-                userResponseLogin output = service.User_Login(input);
+                userResponseLogin output = service.userLogin(input);
 
                 System.out.println(context.headerMap());
 
@@ -456,7 +456,7 @@ public class Server {
         {
             // Check to see if they are authorized
             String auth_input = context.headerMap().get("Authorization");
-            if (!service.User_Authorized(auth_input))
+            if (!service.userAuthorized(auth_input))
             {
                 throw new DataAccessException("401");
             }
@@ -477,7 +477,7 @@ public class Server {
 
 
             // Run Function
-            gameResponseCreate output = service.Game_Create(input);
+            gameResponseCreate output = service.gameCreate(input);
 
             // serialize to JSON
             var json = serializer.toJson(output);
@@ -544,7 +544,7 @@ public class Server {
     {
         // Check to see if they are authorized
         String auth_input = context.headerMap().get("Authorization");
-        if (!service.User_Authorized(auth_input))
+        if (!service.userAuthorized(auth_input))
         {
             System.out.println("Unauthorized!!!!");
             throw new DataAccessException("401");
@@ -567,7 +567,7 @@ public class Server {
             input = serializer.fromJson(context.body(), gameRequestList.class);
 
             // Run Function
-            gameResponseList output = service.Game_List(input);
+            gameResponseList output = service.gameList(input);
 
             // serialize to JSON
             var json = serializer.toJson(output);
@@ -589,7 +589,7 @@ public class Server {
 
             // Check to see if they are authorized
             String auth_input = context.headerMap().get("Authorization");
-            if (!service.User_Authorized(auth_input))
+            if (!service.userAuthorized(auth_input))
             {
                 throw new DataAccessException("401");
             }
@@ -603,7 +603,7 @@ public class Server {
 
 
             // Run Function
-            service.User_Logout(input);
+            service.userLogout(input);
 
 
         } else if (context.path().equals("/db"))
@@ -629,7 +629,7 @@ public class Server {
     {
         // Check to see if they are authorized
         String auth_input = context.headerMap().get("Authorization");
-        if (!service.User_Authorized(auth_input))
+        if (!service.userAuthorized(auth_input))
         {
             throw new DataAccessException("401");
         }
@@ -657,7 +657,7 @@ public class Server {
             try
             {
                 // Run Function
-                gameResponseJoin output = service.Game_Join(input);
+                gameResponseJoin output = service.gameJoin(input);
 
                 // serialize to JSON
                 var json = serializer.toJson(output);
