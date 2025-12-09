@@ -1,5 +1,8 @@
 package ui;
 
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessPiece;
 import exception.ResponseException;
 import websocket.HttpTalker;
 import websocket.NotificationHandler;
@@ -465,9 +468,9 @@ public class Repl implements NotificationHandler  {
             String viewGameOutput = "\nGame #" + gameID + "\n---------\n";
             viewGameOutput = viewGameOutput.concat("Active Player is " + gameListSplit[3] + "\n");
 
-            String[][] chess_board = new String[8][8];
-            int r = 0;
-            int c = 0;
+            ChessBoard chessBoard = new ChessBoard();
+            int r = 1;
+            int c = 1;
 
             for (int i = 8; i < gameListSplit.length; i++ )
             {
@@ -477,14 +480,41 @@ public class Repl implements NotificationHandler  {
                     String pieceType = gameListSplit[i+2];
                     String pieceColor = gameListSplit[i+6];
 
-                    chess_board[r][c] = pieceColor + " " + pieceType;
+                    ChessGame.TeamColor pieceColorNew = ChessGame.TeamColor.BLACK;
+                    ChessPiece.PieceType pieceTypeNew = ChessPiece.PieceType.PAWN;
+
+                    if (pieceColor.equals("WHITE"))
+                    {
+                        pieceColorNew = ChessGame.TeamColor.WHITE;
+                    }
+
+                    if (pieceType.equals("ROOK"))
+                    {
+                        pieceTypeNew = ChessPiece.PieceType.ROOK;
+                    } else if (pieceType.equals("KNIGHT"))
+                    {
+                        pieceTypeNew = ChessPiece.PieceType.KNIGHT;
+                    } else if (pieceType.equals("BISHOP"))
+                    {
+                        pieceTypeNew = ChessPiece.PieceType.BISHOP;
+                    } else if (pieceType.equals("KING"))
+                    {
+                        pieceTypeNew = ChessPiece.PieceType.KING;
+                    } else if (pieceType.equals("QUEEN"))
+                    {
+                        pieceTypeNew = ChessPiece.PieceType.QUEEN;
+                    }
+
+
+                    // chess_board[r][c] = pieceColor + " " + pieceType;
+                    chessBoard.addPiece(r, c, new ChessPiece(pieceColorNew, pieceTypeNew));
 
                     // Move to the next row
                     c++;
-                    if (c>7)
+                    if (c>8)
                     {
                         r++;
-                        c=0;
+                        c=1;
                     }
                 }
                 if (gameListSplit[i].contains("null"))
@@ -499,15 +529,14 @@ public class Repl implements NotificationHandler  {
                         if (gameListSplitNull[j].contains("null"))
                         {
 
-                            chess_board[r][c] = "";
                             System.out.print(" Empty Place Found!");
 
                             // Move to the next row
                             c++;
-                            if (c>7)
+                            if (c>8)
                             {
                                 r++;
-                                c=0;
+                                c=1;
                             }
                         }
                         System.out.print(" good ");
@@ -523,7 +552,7 @@ public class Repl implements NotificationHandler  {
             System.out.print(" out of for \n");
 
             // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
-            viewGameOutput = viewGameOutput.concat(printBoard(chess_board, "WHITE"));
+            viewGameOutput = viewGameOutput.concat(printBoard(chessBoard, "WHITE"));
 
             // return gameList;
             return viewGameOutput;
@@ -539,7 +568,7 @@ public class Repl implements NotificationHandler  {
     }
 
 
-    private String printBoard(String[][] chess_board, String activePlayer)
+    private String printBoard(ChessBoard chessBoard, String activePlayer)
     {
 
         try {
@@ -556,13 +585,13 @@ public class Repl implements NotificationHandler  {
             if (activePlayer.equals("BLACK"))
             {
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
-                for (int row = 0; row < 8; row++ )
+                for (int row = 1; row <= 8; row++ )
                 {
                     // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + "\u2003");
-                    for (int col = 0; col < 8; col++ )
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
+                    for (int col = 1; col <= 8; col++ )
                     {
-                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chess_board[row][col] + "\n");
+                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
                         // Move to the next col
 
@@ -576,65 +605,29 @@ public class Repl implements NotificationHandler  {
                             printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                         }
 
-                        if (chess_board[row][col].equals(""))
-                        {
-                            printBoardOutput = printBoardOutput.concat(EMPTY);
-                        } else if (chess_board[row][col].equals("WHITE ROOK"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_ROOK);
-                        } else if (chess_board[row][col].equals("WHITE KNIGHT"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KNIGHT);
-                        } else if (chess_board[row][col].equals("WHITE BISHOP"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_BISHOP);
-                        } else if (chess_board[row][col].equals("WHITE QUEEN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_QUEEN);
-                        } else if (chess_board[row][col].equals("WHITE KING"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KING);
-                        } else if (chess_board[row][col].equals("WHITE PAWN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_PAWN);
-                        }  else if (chess_board[row][col].equals("BLACK ROOK"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_ROOK);
-                        } else if (chess_board[row][col].equals("BLACK KNIGHT"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KNIGHT);
-                        } else if (chess_board[row][col].equals("BLACK BISHOP"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_BISHOP);
-                        } else if (chess_board[row][col].equals("BLACK QUEEN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_QUEEN);
-                        } else if (chess_board[row][col].equals("BLACK KING"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KING);
-                        } else if (chess_board[row][col].equals("BLACK PAWN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_PAWN);
-                        }
+
+                        printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
+
+
 
 
                         squareColorWhite = !squareColorWhite;
                     }
                     squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row + 1) + " " + RESET + "\n");
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
             }
             else if (activePlayer.equals("WHITE"))
             {
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
-                for (int row = 7; row >= 0; row-- )
+                for (int row = 8; row >= 1; row-- )
                 {
                     // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row + 1) + "\u2003");
-                    for (int col = 7; col >= 0; col-- )
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
+                    for (int col = 8; col >= 1; col-- )
                     {
-                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chess_board[row][col] + "\n");
+                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
                         // Move to the next col
 
@@ -648,52 +641,13 @@ public class Repl implements NotificationHandler  {
                             printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                         }
 
-                        if (chess_board[row][col].equals(""))
-                        {
-                            printBoardOutput = printBoardOutput.concat(EMPTY);
-                        } else if (chess_board[row][col].equals("WHITE ROOK"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_ROOK);
-                        } else if (chess_board[row][col].equals("WHITE KNIGHT"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KNIGHT);
-                        } else if (chess_board[row][col].equals("WHITE BISHOP"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_BISHOP);
-                        } else if (chess_board[row][col].equals("WHITE QUEEN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_QUEEN);
-                        } else if (chess_board[row][col].equals("WHITE KING"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_KING);
-                        } else if (chess_board[row][col].equals("WHITE PAWN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_RED + BLACK_PAWN);
-                        }  else if (chess_board[row][col].equals("BLACK ROOK"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_ROOK);
-                        } else if (chess_board[row][col].equals("BLACK KNIGHT"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KNIGHT);
-                        } else if (chess_board[row][col].equals("BLACK BISHOP"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_BISHOP);
-                        } else if (chess_board[row][col].equals("BLACK QUEEN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_QUEEN);
-                        } else if (chess_board[row][col].equals("BLACK KING"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_KING);
-                        } else if (chess_board[row][col].equals("BLACK PAWN"))
-                        {
-                            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + BLACK_PAWN);
-                        }
+                        printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
 
 
                         squareColorWhite = !squareColorWhite;
                     }
                     squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row + 1) + " " + RESET + "\n");
+                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
             }
@@ -711,6 +665,48 @@ public class Repl implements NotificationHandler  {
 
 
     }
+
+    private String printPiece(ChessPiece piece)
+    {
+        String printPieceOutput = "";
+
+        if (piece == null)
+        {
+            return EMPTY;
+        }
+
+        if (piece.getTeamColor() == ChessGame.TeamColor.WHITE)
+        {
+            printPieceOutput = printPieceOutput.concat(SET_TEXT_COLOR_RED);
+        } else if  (piece.getTeamColor() == ChessGame.TeamColor.BLACK)
+        {
+            // It is black
+            printPieceOutput = printPieceOutput.concat(SET_TEXT_COLOR_BLACK);
+        }
+
+        if (piece.getPieceType() == ChessPiece.PieceType.ROOK)
+        {
+            printPieceOutput = printPieceOutput.concat(BLACK_ROOK);
+        } else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT)
+        {
+            printPieceOutput = printPieceOutput.concat(BLACK_KNIGHT);
+        } else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP)
+        {
+            printPieceOutput = printPieceOutput.concat(BLACK_BISHOP);
+        } else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN)
+        {
+            printPieceOutput = printPieceOutput.concat(BLACK_QUEEN);
+        } else if (piece.getPieceType() == ChessPiece.PieceType.KING)
+        {
+            printPieceOutput = printPieceOutput.concat(BLACK_KING);
+        } else if (piece.getPieceType() == ChessPiece.PieceType.PAWN)
+        {
+            printPieceOutput = printPieceOutput.concat(BLACK_PAWN);
+        }
+
+        return printPieceOutput;
+    }
+
 
 
 //    public String adoptPet(String... params) {
