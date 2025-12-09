@@ -23,6 +23,9 @@ public class Repl implements NotificationHandler  {
 
     private String authToken;
     private String usernameLoggedInAs;
+    private ChessBoard currentChessBoard;
+    private String currentPlayerColor;
+
 
     private final String SERVER_HOST = "localhost";
     private final int SERVER_PORT = 8080;
@@ -97,7 +100,7 @@ public class Repl implements NotificationHandler  {
             case "l" -> listGames();
             case "login" -> login(input1, input2);
             case "register" -> register(input1, input2, input3);
-            case "r" -> register(input1, input2, input3);
+            case "reg" -> register(input1, input2, input3);
             case "logout" -> logout();
             case "lo" -> logout();
             case "out" -> logout();
@@ -113,6 +116,8 @@ public class Repl implements NotificationHandler  {
             case "v" -> viewGame(input1);
             case "play" -> playGame(input1);
             case "p" -> playGame(input1);
+            case "redraw" -> redrawBoard();
+            case "r" -> redrawBoard();
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -137,8 +142,8 @@ public class Repl implements NotificationHandler  {
 //    else if (state == State.INGAME) {
 //        return """
 //
-//                "move <LOCAL_START> <LOCAL_END>" or "<LOCAL_START> <LOCAL_END>" - Moves a piece.
-//                "redraw" or "r" - Redraws the chess board
+//                "move <LOCAL_START> <LOCAL_END>" or "m <LOCAL_START> <LOCAL_END>" - Moves a piece.
+//
 //                "leave" - Leave the chess game
 //                "resign" - Resign the chess game
 //                "legal <LOCAL_START>" - Shows legal moves
@@ -165,17 +170,30 @@ public class Repl implements NotificationHandler  {
         // Checks to see if game exists
         if (gameID.isBlank()) { return gameID + " is not a valid Game ID"; }
 
+
+
         state = State.INGAME;
         try {
             ws.connect(authToken, Integer.parseInt(gameID));
-            return String.format("You signed in as %s.", usernameLoggedInAs);
+            return String.format("You signed in as %s for game #%s.\n", usernameLoggedInAs, gameID);
         }
         catch (Exception e)
         {
-
-            return "ERROR: Cannot play game";
+            state = State.SIGNEDIN;
+            return "ERROR: Cannot play that game " + e;
         }
 
+    }
+
+    private String redrawBoard()
+    {
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
+
+        // Returns an error if not in game
+        if (!isInGame()) { return "You need to be in a game to do that!"; }
+
+        return printBoard(currentChessBoard, currentPlayerColor);
     }
 
 
@@ -570,14 +588,11 @@ public class Repl implements NotificationHandler  {
 
     private String printBoard(ChessBoard chessBoard, String activePlayer)
     {
+        currentChessBoard = chessBoard;
+        currentPlayerColor = activePlayer;
 
         try {
-
-
-
             String printBoardOutput = "";
-
-
 
             Boolean squareColorWhite = true;
 
@@ -759,7 +774,7 @@ public class Repl implements NotificationHandler  {
                     \"help\" or \"h\" - Displays text informing the user what actions you can take.
                     \"quit\" or \"q\" - Exits the program.
                     \"login <USERNAME> <PASSWORD>\" - Logs in.
-                    \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"r <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
+                    \"register <USERNAME> <PASSWORD> <EMAIL>\" or \"reg <USERNAME> <PASSWORD> <EMAIL>\" - Registers a new user.
                     """;
         }
         else if (state == State.SIGNEDIN) {
@@ -778,7 +793,7 @@ public class Repl implements NotificationHandler  {
             return """
                     Options:
                     "help" or "h" - Displays text informing the user what actions you can take.
-                    "move <LOCAL_START> <LOCAL_END>" or "<LOCAL_START> <LOCAL_END>" - Moves a piece.
+                    "move <LOCAL_START> <LOCAL_END>" or "m <LOCAL_START> <LOCAL_END>" - Moves a piece.
                     "redraw" or "r" - Redraws the chess board
                     "leave" - Leave the chess game
                     "resign" - Resign the chess game
@@ -799,15 +814,25 @@ public class Repl implements NotificationHandler  {
         }
     }
 
+    private boolean isInGame() {
+        if (state == State.INGAME) {
+            // System.out.print("You need to be logged in to do that!");
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
+
     @Override
     public void notify(ServerMessage notification)
     {
-        // System.out.print("Notifying that something happened!");
+        System.out.print("In Notify");
 
         switch (notification.getServerMessageType()) {
             case NOTIFICATION -> displayNotificiation(notification.getMessage());
             case ERROR -> displayError(notification.getMessage());
-            // case LOAD_GAME -> printBoard(chess_board, activePlayer);
+            case LOAD_GAME -> System.out.print(printBoard(notification.getBoard(), "WHITE"));
             // case LOAD_GAME -> printBoard(notification.getGame());
 
         }

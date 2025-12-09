@@ -63,6 +63,10 @@ public class ServerMessage {
         return this.serverMessageType;
     }
 
+    public ChessBoard getBoard() {
+        return this.chessBoard;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
