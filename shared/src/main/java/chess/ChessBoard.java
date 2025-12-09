@@ -43,7 +43,7 @@ public class ChessBoard {
      * @param position where to remove the piece from
      *
      */
-    public void piece_remove(ChessPosition position) {
+    public void pieceRemove(ChessPosition position) {
         chessBoard[position.getRow()-1][position.getColumn()-1] = null;
     }
 
@@ -53,7 +53,7 @@ public class ChessBoard {
      * @param row and col gives The position to get the piece from
      *
      */
-    public void piece_remove(int row, int col) {
+    public void pieceRemove(int row, int col) {
         chessBoard[row-1][col-1] = null;
     }
 

@@ -162,21 +162,58 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
 
 
+
+
             gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
-            if (gameData.blackUsername().equals(username) || gameData.whiteUsername().equals(username))
+            if (gameData.whiteUsername().equals(username))
             {
-                System.out.print(String.format("%s is a player in the game.", username));
-            } else {
+                System.out.print(String.format("%s is the white player in the game.", username));
+                ChessGame gameTemp = serviceGame.view(command.getGameID());
+                if (gameTemp.getTeamTurn() == ChessGame.TeamColor.BLACK)
+                {
+                    message = String.format("error : %s It is not your turn.", username);
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                    connections.narrowcast(ctx, notification);
+                    return;
+                }
+            }
+            else if (gameData.blackUsername().equals(username))
+            {
+                System.out.print(String.format("%s is the black player in the game.", username));
+                ChessGame gameTemp = serviceGame.view(command.getGameID());
+                if (gameTemp.getTeamTurn() == ChessGame.TeamColor.WHITE)
+                {
+                    message = String.format("error : %s It is not your turn.", username);
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                    connections.narrowcast(ctx, notification);
+                    return;
+                }
+            }
+            else
+            {
                 message = String.format("error : %s is not a part of that game.", username);
                 notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
                 connections.narrowcast(ctx, notification);
+                return;
             }
 
 
 
+            ChessGame game = null;
+            try
+            {
 
-            ChessGame game;
-            game = serviceGame.move(command.getGameID(), command.getMove());
+                game = serviceGame.move(command.getGameID(), command.getMove());
+            }
+            catch (Exception ex)
+            {
+                System.out.print(String.format("Error Starting your move %s.", username));
+                message = String.format("error : %s", ex);
+                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+                return;
+            }
+
 
 
             System.out.print(String.format("Starting your move %s.", username));

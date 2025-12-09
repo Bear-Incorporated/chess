@@ -88,11 +88,11 @@ public class ChessGame {
             //ChessBoard player_board_imaginary = player_board;
 
             // Kill the previous piece and add the new piece in its place
-            player_board_imaginary.piece_remove(move.getEndPosition());
+            player_board_imaginary.pieceRemove(move.getEndPosition());
             player_board_imaginary.addPiece(move.getEndPosition(), player_board_imaginary.getPiece(startPosition));
 
             // remove the piece from start position
-            player_board_imaginary.piece_remove(startPosition);
+            player_board_imaginary.pieceRemove(startPosition);
 
 
             if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
@@ -142,7 +142,7 @@ public class ChessGame {
 
                                             // Move the king left by 1
                                             player_board_imaginary.addPiece(piece_moving_row, 4, piece_moving);
-                                            player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                            player_board_imaginary.pieceRemove(piece_moving_row, 5);
                                             if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
                                                 // It is in check, so it won't be added
                                                 System.out.println("It is in check, so it won't be added");
@@ -152,7 +152,7 @@ public class ChessGame {
 
                                                 // Move the king left by 2
                                                 player_board_imaginary.addPiece(piece_moving_row, 3, piece_moving);
-                                                player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                                player_board_imaginary.pieceRemove(piece_moving_row, 5);
                                                 if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
                                                     // It is in check, so it won't be added
                                                     System.out.println("It is in check, so it won't be added");
@@ -185,7 +185,7 @@ public class ChessGame {
 
                                         // Move the king right by 1
                                         player_board_imaginary.addPiece(piece_moving_row, 6, piece_moving);
-                                        player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                        player_board_imaginary.pieceRemove(piece_moving_row, 5);
                                         if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
                                             // It is in check, so it won't be added
                                             System.out.println("It is in check, so it won't be added");
@@ -195,7 +195,7 @@ public class ChessGame {
 
                                             // Move the king left by 2
                                             player_board_imaginary.addPiece(piece_moving_row, 7, piece_moving);
-                                            player_board_imaginary.piece_remove(piece_moving_row, 5);
+                                            player_board_imaginary.pieceRemove(piece_moving_row, 5);
                                             if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
                                                 // It is in check, so it won't be added
                                                 System.out.println("It is in check, so it won't be added");
@@ -275,19 +275,36 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        System.out.println("In ChessGame.makeMove()");
+
         // If game is over, return null
         if (playerActive == null)
+        {
+            System.out.println("Game is already over.");
             throw new InvalidMoveException("Game is already over.");
+        }
+
 
         ChessPosition positionStart = move.getStartPosition();
         ChessPosition positionEnd = move.getEndPosition();
         Set<ChessMove> positionsPossible = (Set<ChessMove>) validMoves(positionStart);
 
         if (playerBoard.getPiece(positionStart) == null)
+        {
+            System.out.println("No Piece there");
             throw new InvalidMoveException("No Piece there");
+        }
+
+        System.out.println("Player active is " + playerActive);
+        System.out.println("Player of piece there is " + playerBoard.getPiece(move.getStartPosition()).getTeamColor());
+
 
         if(playerBoard.getPiece(move.getStartPosition()).getTeamColor() != playerActive)
+        {
+            System.out.println("Wrong Turn!!!");
             throw new InvalidMoveException("Wrong Turn!!!");
+        }
+
 
         //System.out.println("Checking if " + startPosition + " can move to " + end_position);
         // Check every move
@@ -315,14 +332,14 @@ public class ChessGame {
                         {
                             // Kill the pawn!!!
                             // The dead pawn will be on the starting row of the moving pawn and the ending column of the same pawn
-                            playerBoard.piece_remove(positionStart.getRow(), positionEnd.getColumn());
+                            playerBoard.pieceRemove(positionStart.getRow(), positionEnd.getColumn());
                         }
                     }
                 }
 
 
                 // Kill the previous piece and add the new piece in its place
-                playerBoard.piece_remove(positionEnd);
+                playerBoard.pieceRemove(positionEnd);
 
                 if(move.getPromotionPiece() == null) {
                     playerBoard.addPiece(positionEnd, playerBoard.getPiece(positionStart));
@@ -332,7 +349,7 @@ public class ChessGame {
 
 
                 // remove the piece from start position
-                playerBoard.piece_remove(positionStart);
+                playerBoard.pieceRemove(positionStart);
 
                 // Mark the moved piece as having moved
                 playerBoard.getPiece(positionEnd).tick_piece_moved();
@@ -348,7 +365,7 @@ public class ChessGame {
                         if(positionEnd.getColumn() == 3)
                         {
                             // Remove the Rook and add the Rook to the new place
-                            playerBoard.piece_remove(positionEnd.getRow(),1);
+                            playerBoard.pieceRemove(positionEnd.getRow(),1);
                             playerBoard.addPiece(positionEnd.getRow(), 4, new ChessPiece(playerBoard.getPiece(positionEnd).getTeamColor(), ChessPiece.PieceType.ROOK));
 
                             // Mark the moved piece as having moved
@@ -358,7 +375,7 @@ public class ChessGame {
                         if(positionEnd.getColumn() == 7)
                         {
                             // Remove the Rook and add the Rook to the new place
-                            playerBoard.piece_remove(positionEnd.getRow(),8);
+                            playerBoard.pieceRemove(positionEnd.getRow(),8);
                             playerBoard.addPiece(positionEnd.getRow(), 6, new ChessPiece(playerBoard.getPiece(positionEnd).getTeamColor(), ChessPiece.PieceType.ROOK));
 
                             // Mark the moved piece as having moved

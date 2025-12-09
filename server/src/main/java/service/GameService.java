@@ -2,6 +2,7 @@ package service;
 
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.InvalidMoveException;
 import dataaccess.DataAccessException;
 import dataaccess.GameDAO;
 import model.*;
@@ -245,7 +246,15 @@ public class GameService
         System.out.println("Game does exist still");
         System.out.println(gameMoving);
 
-        gameMoving.makeMove(chessMove);
+        try
+        {
+            gameMoving.makeMove(chessMove);
+        }
+        catch (InvalidMoveException ex)
+        {
+            throw new InvalidMoveException(ex.getMessage());
+        }
+
 
 
         dataList.gameDeleteViaGameID(gameIDMoving);
