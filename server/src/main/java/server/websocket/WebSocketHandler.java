@@ -84,6 +84,13 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 //                connections.narrowcast(ctx, notification);
 //            }
 
+            if (!serviceUser.authorized(command.getAuthToken()))
+            {
+                message = String.format("error : %s is not valid. Login", command.getAuthToken());
+                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+                return;
+            }
 
 
 
@@ -114,10 +121,55 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
     private void makeMove(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Moving user " + username + "\n");
+        System.out.print("Move " + command.getMove() + "\n");
 
-        var message = String.format("%s is in the shop", username);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(null, notification);
+        String message;
+        ServerMessage notification;
+
+
+        try
+        {
+
+            if (!serviceUser.authorized(command.getAuthToken()))
+            {
+                message = String.format("error : %s is not valid. Login", command.getAuthToken());
+                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+                return;
+            }
+
+
+
+
+            ChessGame game;
+            game = serviceGame.view(command.getGameID());
+            game.makeMove(command.getMove());
+            System.out.print(String.format("Starting your move %s.", username));
+            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
+
+            connections.narrowcast(ctx, notification);
+
+            message = String.format("%s has made a move", username);
+            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, message, game);
+            connections.broadcast(ctx, notification);
+
+
+
+
+        }
+        catch (Exception ex)
+        {
+            message = String.format("error : %s", ex);
+            notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+            connections.narrowcast(ctx, notification);
+        }
+
+
+
+
+        // var message = String.format("%s is in the shop", username);
+        // var notification = ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
+        // connections.broadcast(null, notification);
     }
 
     private void leaveGame(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
