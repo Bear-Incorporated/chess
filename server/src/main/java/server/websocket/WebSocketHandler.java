@@ -4,6 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.websocket.*;
+import model.SessionInfo;
 import model.gameDataShort;
 import org.eclipse.jetty.websocket.api.Session;
 import service.GameService;
@@ -20,6 +21,8 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
     GameService serviceGame = new GameService();
     UserService serviceUser = new UserService();
+
+    String usernameConnected = "";
 
     @Override
     public void handleConnect(WsConnectContext ctx) {
@@ -63,6 +66,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         System.out.print("Connecting user " + username + "\n");
         System.out.print("Command " + command + "\n");
 
+        usernameConnected = username;
         String message;
         ServerMessage notification;
 
@@ -99,7 +103,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             System.out.print(String.format("Starting your game %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
 
-            connections.add(ctx);
+            connections.add(ctx, new SessionInfo(username));
 
             connections.narrowcast(ctx, notification);
 
@@ -138,6 +142,36 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 return;
             }
 
+            System.out.print("Moving user " + username + "\n");
+            System.out.print("Moving user 2 " + usernameConnected + "\n");
+            System.out.print("Moving user 3 " + serviceUser.getUserNameViaAuthToken(command.getAuthToken()) + "\n");
+
+            System.out.print("Moving user 4 " + connections.checkUserName(ctx, new SessionInfo(username)) + "\n");
+
+
+
+
+
+            if (!connections.checkUserName(ctx, new SessionInfo(username)))
+            {
+                message = String.format("error : You are %s, not %s", usernameConnected, username);
+                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+                return;
+            }
+
+
+
+            gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
+            if (gameData.blackUsername().equals(username) || gameData.whiteUsername().equals(username))
+            {
+                System.out.print(String.format("%s is a player in the game.", username));
+            } else {
+                message = String.format("error : %s is not a part of that game.", username);
+                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
+                connections.narrowcast(ctx, notification);
+            }
+
 
 
 
@@ -174,6 +208,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     private void leaveGame(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
         System.out.print("Leaving user " + username + "\n");
 
+        usernameConnected = "";
         var message = String.format("%s left the game", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
@@ -200,11 +235,11 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
     }
-    private void saveSession(int gameId, WsMessageContext ctx)
-    {
-        connections.add(ctx);
-
-    }
+//    private void saveSession(int gameId, WsMessageContext ctx)
+//    {
+//        connections.add(ctx);
+//
+//    }
 
 
 //    private void enter(String visitorName, Session session) throws IOException {

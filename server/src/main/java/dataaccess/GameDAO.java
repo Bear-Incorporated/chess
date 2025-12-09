@@ -318,9 +318,9 @@ public class GameDAO
         var json = new Gson().toJson(added.chessGame());
         String jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
-        System.out.println(new ChessGame() + "\n");
-        System.out.println(new ChessGame() + "\n");
-        System.out.println(new ChessGame() + "\n");
+        // System.out.println(new ChessGame() + "\n");
+        // System.out.println(new ChessGame() + "\n");
+        // System.out.println(new ChessGame() + "\n");
 
         System.out.println(json + "\n");
         System.out.println(json + "\n");
