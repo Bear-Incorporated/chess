@@ -72,11 +72,11 @@ public class WebSocketFacade extends Endpoint {
                         System.out.print("Error: " + ex.getMessage() + "\n");
                     }
 
-
                     System.out.print("The notification is ");
                     System.out.print(notification);
                     System.out.print("\n");
                     System.out.print("Message Type = " + notification.getServerMessageType() + ", Message = " + notification.getMessage());
+
 
                     notificationHandler.notify(notification);
                 }

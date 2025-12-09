@@ -123,6 +123,39 @@ public class GameService
     }
 
 
+    public void gameOver(int gameOverID) throws Exception
+    {
+        System.out.println("I am in gameOver!!");
+
+        // If the game doesn't exist, give error
+        if (!data_list.gameFoundViaGameID(gameOverID))
+        {
+            System.out.println("Game doesn't exist");
+            throw new DataAccessException("400");
+        }
+        System.out.println("Game does exist");
+
+        // Find the game
+        GameData gameOverData = data_list.getGameDataViaGameID(gameOverID);
+        System.out.println("Game does exist still");
+        System.out.println(gameOverData);
+
+
+        ChessGame chessGameOver = gameOverData.chessGame();
+        chessGameOver.gameOver();
+        // if
+
+
+        data_list.gameDeleteViaGameID(gameOverID);
+        data_list.gameAddKeepGameID(new GameData(gameOverID, gameOverData.whiteUsername(), gameOverData.blackUsername(), gameOverData.gameName(), chessGameOver));
+
+        // throw new DataAccessException("400");
+        // throw new DataAccessException("403");
+        // throw new RuntimeException("Not implemented");
+        return;
+    }
+
+
     /**
      * View a game
      *

@@ -105,7 +105,20 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         System.out.print("Resigning user " + username + "\n");
 
 
-        var message = String.format("%s is in the shop", username);
+
+        try
+        {
+            GameService gameTemp = new GameService();
+            gameTemp.gameOver(command.getGameID());
+
+        }
+        catch (Exception ex)
+        {
+            System.out.print(String.format("error : %s", ex));
+        }
+
+
+        var message = String.format("%s is a quitter", username);
         var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(null, notification);
     }

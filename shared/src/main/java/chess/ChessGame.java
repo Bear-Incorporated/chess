@@ -57,6 +57,10 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+        // If game is over, return null
+        if (playerActive == null)
+            return null;
+
         Set<ChessMove> moves_output = new HashSet<ChessMove>();
 
         // If no piece there, return null
@@ -271,6 +275,10 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        // If game is over, return null
+        if (playerActive == null)
+            return;
+
         ChessPosition position_start = move.getStartPosition();
         ChessPosition position_end = move.getEndPosition();
         Set<ChessMove> positions_possible = (Set<ChessMove>) validMoves(position_start);
@@ -371,7 +379,7 @@ public class ChessGame {
                 // Change to new color turn
                 if (playerActive == TeamColor.WHITE) {
                     playerActive = TeamColor.BLACK;
-                } else {
+                } else if (playerActive == TeamColor.BLACK) {
                     playerActive = TeamColor.WHITE;
                 }
 
@@ -550,6 +558,16 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return playerBoard;
+    }
+
+    /**
+     * Mark the game as over by marking the Active player as null
+     *
+     * @return nothing
+     */
+    public void gameOver()
+    {
+        playerActive = null;
     }
 
     @Override
