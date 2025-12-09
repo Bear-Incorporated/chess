@@ -55,12 +55,14 @@ public class ConnectionManager {
 //
 //                    d.getBasicRemote().sendText(new Gson().toJson(msg));
 
-                        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-                        // jakarta.websocket.Session d = container.connectToServer(this, new URI("ws://localhost:8080/ws"));
-                        jakarta.websocket.Session d = container.
-                            connectToServer(this, new URI("ws://localhost:8080/ws"));
-                        d.getBasicRemote().sendText(new Gson().toJson(msg));
-                        // container.connectToServer(c.getRemote(), )
+//                        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+//                        // jakarta.websocket.Session d = container.connectToServer(this, new URI("ws://localhost:8080/ws"));
+//                        jakarta.websocket.Session d = container.
+//                            connectToServer(this, new URI("ws://localhost:8080/ws"));
+//                        d.getBasicRemote().sendText(new Gson().toJson(msg));
+//                        // container.connectToServer(c.getRemote(), )
+
+                        c.send(new Gson().toJson(notification));
 
                     }
                     catch (Exception ex)
@@ -80,7 +82,7 @@ public class ConnectionManager {
         }
     }
 
-    public void narrowcast(WsMessageContext ctx, ServerMessage notification, Boolean trash) throws IOException {
+    public void narrowcast(WsMessageContext ctx, ServerMessage notification) throws IOException {
         System.out.print("Narrowcasting\n");
 
         ctx.send(new Gson().toJson(notification));
