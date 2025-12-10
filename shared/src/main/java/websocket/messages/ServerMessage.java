@@ -50,6 +50,8 @@ public class ServerMessage {
 
     }
 
+
+
     public ServerMessage(ServerMessageType type, String message, ChessGame chessGame) {
         System.out.print("ServerMessage 3 types\n");
         System.out.print("Type = " + type + "\n");
@@ -66,14 +68,19 @@ public class ServerMessage {
         return "ServerMessage{" +
                 "serverMessageType=" + serverMessageType +
                 ", message='" + message + '\'' +
+                ", game='" + game + '\'' +
                 '}';
+    }
+
+    public ServerMessageType getServerMessageType() {
+        return this.serverMessageType;
     }
     public String getMessage() {
         return this.message;
     }
 
-    public ServerMessageType getServerMessageType() {
-        return this.serverMessageType;
+    public String getErrorMessage() {
+        return this.errorMessage;
     }
 
     public ChessGame getGame() {
