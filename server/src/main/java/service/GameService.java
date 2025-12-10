@@ -18,7 +18,7 @@ public class GameService
      * @param
      * @return
      */
-    public gameResponseCreate create(gameRequestCreate data) throws DataAccessException
+    public gameResponseCreate create(GameRequestCreate data) throws DataAccessException
     {
 
         // Bad Input

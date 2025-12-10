@@ -465,10 +465,10 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new gameRequestCreate("");
+            var input = new GameRequestCreate("");
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), gameRequestCreate.class);
+            input = serializer.fromJson(context.body(), GameRequestCreate.class);
 
             if (input.gameName() == null)
             {

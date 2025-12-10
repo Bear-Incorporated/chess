@@ -45,7 +45,7 @@ public class ChessService
      * @param
      * @return
      */
-    public gameResponseCreate gameCreate(gameRequestCreate data) throws DataAccessException
+    public gameResponseCreate gameCreate(GameRequestCreate data) throws DataAccessException
     {
         System.out.println("game_create");
 
