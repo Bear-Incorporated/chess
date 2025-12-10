@@ -178,7 +178,7 @@ public class GameService
      * @param
      * @return
      */
-    public gameDataShort getGameDataShort(int gameID) throws Exception
+    public GameDataShort getGameDataShort(int gameID) throws Exception
     {
 
         System.out.println("I am in GameService.java getPlayers!!");
@@ -202,7 +202,7 @@ public class GameService
         String gameName = join_game.gameName();
 
 
-        return(new gameDataShort(gameID, whiteUsername, blackUsername, gameName));
+        return(new GameDataShort(gameID, whiteUsername, blackUsername, gameName));
 
     }
 

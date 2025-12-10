@@ -3,7 +3,7 @@ package dataaccess;
 import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
-import model.gameDataShort;
+import model.GameDataShort;
 import model.gameResponseList;
 
 import java.sql.SQLException;
@@ -114,7 +114,7 @@ public class GameDAO
     {
         System.out.println("In Game_list");
 
-        ArrayList<gameDataShort> Game_List_output = new ArrayList<>();
+        ArrayList<GameDataShort> Game_List_output = new ArrayList<>();
 
         var statement = "SELECT * FROM GameSQL;";
         System.out.println(statement);
@@ -130,7 +130,7 @@ public class GameDAO
                 var blackUsername_found = rs.getString("blackUsername");
 
                 System.out.printf("User Found! gameName: %s, gameID: %s%n", gameName_found, gameID_found);
-                Game_List_output.add(new gameDataShort(gameID_found, whiteUsername_found, blackUsername_found, gameName_found));
+                Game_List_output.add(new GameDataShort(gameID_found, whiteUsername_found, blackUsername_found, gameName_found));
             }
         } catch (SQLException ex) {
             throw new DataAccessException("500");

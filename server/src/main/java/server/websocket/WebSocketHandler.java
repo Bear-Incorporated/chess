@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.websocket.*;
 import model.SessionInfo;
-import model.gameDataShort;
+import model.GameDataShort;
 import org.eclipse.jetty.websocket.api.Session;
 import service.GameService;
 import service.UserService;
@@ -164,7 +164,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
 
 
-            gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
+            GameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
             if (gameData.whiteUsername().equals(username))
             {
                 System.out.print(String.format("%s is the white player in the game.", username));
@@ -268,7 +268,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         try {
 
             // Check if they are a player
-            gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
+            GameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
             if (gameData.whiteUsername().equals(username))
             {
                 System.out.print(String.format("%s is the white player in the game.", username));
