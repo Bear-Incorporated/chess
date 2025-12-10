@@ -2,7 +2,7 @@ package websocket;
 
 
 import com.google.gson.Gson;
-import dataaccess.DataAccessException;
+// import dataaccess.DataAccessException;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -60,7 +60,7 @@ public class HttpTalker
 
             System.out.println(httpResponse.body());
 
-            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
+            throw new Exception(Integer.toString(httpResponse.statusCode()));
         }
     }
 
@@ -91,7 +91,7 @@ public class HttpTalker
 
             System.out.println(httpResponse.body());
 
-            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
+            throw new Exception(Integer.toString(httpResponse.statusCode()));
         }
     }
     public String post(String urlPath, String authToken, String body) throws Exception
@@ -121,7 +121,7 @@ public class HttpTalker
 
             System.out.println(httpResponse.body());
 
-            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
+            throw new Exception(Integer.toString(httpResponse.statusCode()));
         }
     }
 
@@ -152,7 +152,7 @@ public class HttpTalker
 
             System.out.println(httpResponse.body());
 
-            throw new DataAccessException(Integer.toString(httpResponse.statusCode()));
+            throw new Exception(Integer.toString(httpResponse.statusCode()));
 
         }
     }
