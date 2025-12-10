@@ -10,12 +10,12 @@ import java.util.Objects;
  */
 public class ChessPosition {
 
-    int position_row;
-    int position_column;
+    int positionRow;
+    int positionColumn;
 
     public ChessPosition(int row, int col) {
-        position_row = row;
-        position_column = col;
+        positionRow = row;
+        positionColumn = col;
     }
 
     /**
@@ -23,7 +23,7 @@ public class ChessPosition {
      * 1 codes for the bottom row
      */
     public int getRow() {
-        return position_row;
+        return positionRow;
     }
 
     /**
@@ -31,7 +31,7 @@ public class ChessPosition {
      * 1 codes for the left row
      */
     public int getColumn() {
-        return position_column;
+        return positionColumn;
     }
 
     @Override
@@ -42,46 +42,46 @@ public class ChessPosition {
         if (!(o instanceof ChessPosition that)) {
             return false;
         }
-        return position_row == that.position_row && position_column == that.position_column;
+        return positionRow == that.positionRow && positionColumn == that.positionColumn;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position_row, position_column);
+        return Objects.hash(positionRow, positionColumn);
     }
 
     @Override
     public String toString() {
         return "ChessPosition{" +
-                "position_row=" + position_row +
-                ", position_column=" + position_column +
+                "positionRow=" + positionRow +
+                ", positionColumn=" + positionColumn +
                 '}';
     }
 
     public String toStringShort() {
         Character columnChar;
-        if (position_column == 1)
+        if (positionColumn == 1)
         {
             columnChar = 'A';
-        } else if (position_column == 2)
+        } else if (positionColumn == 2)
         {
             columnChar = 'B';
-        } else if (position_column == 3)
+        } else if (positionColumn == 3)
         {
             columnChar = 'C';
-        } else if (position_column == 4)
+        } else if (positionColumn == 4)
         {
             columnChar = 'D';
-        } else if (position_column == 5)
+        } else if (positionColumn == 5)
         {
             columnChar = 'E';
-        } else if (position_column == 6)
+        } else if (positionColumn == 6)
         {
             columnChar = 'F';
-        } else if (position_column == 7)
+        } else if (positionColumn == 7)
         {
             columnChar = 'G';
-        } else if (position_column == 8)
+        } else if (positionColumn == 8)
         {
             columnChar = 'H';
         } else
@@ -89,6 +89,6 @@ public class ChessPosition {
             columnChar = '?';
         }
 
-        return columnChar.toString() + Integer.toString(position_row);
+        return columnChar.toString() + Integer.toString(positionRow);
     }
 }

@@ -10,8 +10,8 @@ import java.util.Random;
 public class UserService
 {
 
-    private UserDAO user_list;
-    private AuthDAO auth_list;
+    private UserDAO userList;
+    private AuthDAO authList;
 
     Random rand;
 
@@ -19,8 +19,8 @@ public class UserService
 
 
     public UserService(){
-        user_list = new UserDAO();
-        auth_list = new AuthDAO();
+        userList = new UserDAO();
+        authList = new AuthDAO();
         rand = new Random();
     }
     /**
@@ -49,25 +49,25 @@ public class UserService
             return new UserResponseRegister("404", "404");
         }
         // Check to see if name already used
-        Boolean user_found = false;
+        Boolean userFound = false;
 
         try {
-            user_found = user_list.userFoundViaUsername(added.username());
+            userFound = userList.userFoundViaUsername(added.username());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
 
-        if (user_found)
+        if (userFound)
         {
             return new UserResponseRegister("404", "404");
         }
 
         // Add to user list
-        user_list.userAdd(new UserData(added.username(), added.password(), added.email()));
+        userList.userAdd(new UserData(added.username(), added.password(), added.email()));
 
-        UserResponseLogin output_login = login(new UserRequestLogin(added.username(), added.password()));
+        UserResponseLogin outputLogin = login(new UserRequestLogin(added.username(), added.password()));
 
-        return new UserResponseRegister(added.username(), output_login.authToken());
+        return new UserResponseRegister(added.username(), outputLogin.authToken());
 
 
     }
@@ -83,7 +83,7 @@ public class UserService
     public void logout(UserRequestLogout data) throws DataAccessException
     {
         try {
-            auth_list.authDeleteViaAuthToken(data.authToken());
+            authList.authDeleteViaAuthToken(data.authToken());
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -94,19 +94,19 @@ public class UserService
 
     public String getUserNameViaAuthToken(String data) throws DataAccessException
     {
-        return auth_list.authGetUserNameViaAuthToken(data);
+        return authList.authGetUserNameViaAuthToken(data);
     }
 
     public void clear() throws DataAccessException
     {
 
         try {
-            user_list.userDeleteAll();
+            userList.userDeleteAll();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
         try {
-            auth_list.authDeleteAll();
+            authList.authDeleteAll();
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -116,7 +116,7 @@ public class UserService
 
     public Boolean authorized(String data) throws DataAccessException {
         try {
-            return auth_list.authorizedViaAuthToken(data);
+            return authList.authorizedViaAuthToken(data);
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -144,14 +144,14 @@ public class UserService
     public UserResponseLogin login(UserRequestLogin data) throws DataAccessException
     {
         System.out.println("Checking user_list.User_find_name ");
-        String output_auth = userLogin(data);
+        String outputAuth = userLogin(data);
 
-        System.out.println("auth: " + output_auth);
-        if (output_auth.equals(""))
+        System.out.println("auth: " + outputAuth);
+        if (outputAuth.equals(""))
         {
             throw new DataAccessException("401");
         }
-        return new UserResponseLogin(data.username(), output_auth);
+        return new UserResponseLogin(data.username(), outputAuth);
     }
 
     public String userLogin(UserRequestLogin loginer) throws DataAccessException
@@ -162,7 +162,7 @@ public class UserService
         System.out.println("Looking for " + loginer);
 
         // Check to see if using wrong username and password
-        if (!user_list.userLoginCredentials(new UserData(loginer.username(), loginer.password(), loginer.username())))
+        if (!userList.userLoginCredentials(new UserData(loginer.username(), loginer.password(), loginer.username())))
         {
             throw new DataAccessException("401");
         }
@@ -171,7 +171,7 @@ public class UserService
 
         // If they already are logged in, logout and log back in
         // Apparently don't do that, because we want to be easily accessible
-        if (auth_list.authorizedViaUsername(loginer.username()))
+        if (authList.authorizedViaUsername(loginer.username()))
         {
             // auth_list.Auth_delete_via_authToken(auth_list.Auth_get_authToken_via_username(loginer.username()));
 
@@ -183,7 +183,7 @@ public class UserService
 
         String authToken =  loginer.username() + randInt();
         System.out.println("New Auth Token " + authToken + " for " + loginer.username());
-        auth_list.authAdd(new AuthData(authToken, loginer.username()));
+        authList.authAdd(new AuthData(authToken, loginer.username()));
 
         return authToken;
 

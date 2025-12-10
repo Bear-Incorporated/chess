@@ -4,7 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.websocket.*;
-import model.SessionInfo;
+import servermodel.SessionInfo;
 import model.GameDataShort;
 import org.eclipse.jetty.websocket.api.Session;
 import service.GameService;

@@ -109,13 +109,13 @@ public class UserDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             var rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                var username_found = rs.getString("username");
-                var password_found = rs.getString("password");
-                var email_found = rs.getString("email");
-                System.out.printf("User Found! username: %s, password: %s, email: %s%n", username_found, password_found, email_found);
-                if (username_found != null)
+                var usernameFound = rs.getString("username");
+                var passwordFound = rs.getString("password");
+                var emailFound = rs.getString("email");
+                System.out.printf("User Found! username: %s, password: %s, email: %s%n", usernameFound, passwordFound, emailFound);
+                if (usernameFound != null)
                 {
-                    if (username_found.equals(username))
+                    if (usernameFound.equals(username))
                     {
                         System.out.println("User Found!");
                         return true;
@@ -143,10 +143,10 @@ public class UserDAO
             System.out.println("User_login_credentials 3" + rs.toString());
             while (rs.next()) {
                 System.out.println("User_login_credentials 4");
-                var username_found = rs.getString("username");
+                var usernameFound = rs.getString("username");
                 var hashedPassword = rs.getString("password");
-                var email_found = rs.getString("email");
-                System.out.printf("User Found! username: %s, password: %s, email: %s%n", username_found, hashedPassword, email_found);
+                var emailFound = rs.getString("email");
+                System.out.printf("User Found! username: %s, password: %s, email: %s%n", usernameFound, hashedPassword, emailFound);
                 System.out.println("Password Have: " + loggingIn.password());
                 if (hashedPassword != null)
                 {

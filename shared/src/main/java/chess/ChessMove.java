@@ -10,14 +10,14 @@ import java.util.Objects;
  */
 public class ChessMove {
 
-    ChessPosition position_start;
-    ChessPosition position_end;
+    ChessPosition positionStart;
+    ChessPosition positionEnd;
     ChessPiece.PieceType promoted;
 
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
-        position_start = startPosition;
-        position_end = endPosition;
+        positionStart = startPosition;
+        positionEnd = endPosition;
         promoted = promotionPiece;
     }
 
@@ -25,14 +25,14 @@ public class ChessMove {
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
-        return position_start;
+        return positionStart;
     }
 
     /**
      * @return ChessPosition of ending location
      */
     public ChessPosition getEndPosition() {
-        return position_end;
+        return positionEnd;
     }
 
     /**
@@ -53,19 +53,19 @@ public class ChessMove {
         if (!(o instanceof ChessMove move)) {
             return false;
         }
-        return Objects.equals(position_start, move.position_start) && Objects.equals(position_end, move.position_end) && promoted == move.promoted;
+        return Objects.equals(positionStart, move.positionStart) && Objects.equals(positionEnd, move.positionEnd) && promoted == move.promoted;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position_start, position_end, promoted);
+        return Objects.hash(positionStart, positionEnd, promoted);
     }
 
     @Override
     public String toString() {
         return "ChessMove{" +
-                "position_start=" + position_start +
-                ", position_end=" + position_end +
+                "positionStart=" + positionStart +
+                ", positionEnd=" + positionEnd +
                 ", promoted=" + promoted +
                 '}';
     }

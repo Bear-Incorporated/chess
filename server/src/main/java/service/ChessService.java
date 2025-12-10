@@ -4,6 +4,7 @@ package service;
 import chess.ChessGame;
 import dataaccess.DataAccessException;
 import model.*;
+import servermodel.GameRequestView;
 
 public class ChessService
 {
@@ -47,7 +48,7 @@ public class ChessService
      */
     public GameResponseCreate gameCreate(GameRequestCreate data) throws DataAccessException
     {
-        System.out.println("game_create");
+        System.out.println("gameCreate");
 
 
         try {
@@ -65,19 +66,19 @@ public class ChessService
      */
     public GameResponseJoin gameJoin(GameRequestJoin data) throws Exception
     {
-        System.out.println("game_join");
+        System.out.println("gameJoin");
 
         // Swaps the AuthToken with correct userName
-        String auth_token = data.username(); // actually AuthToken at this point
-        System.out.println("auth token: " + auth_token);
-        String username = serviceUser.getUserNameViaAuthToken(auth_token);
-        GameRequestJoin data_with_name = new GameRequestJoin(username, data.playerColor(), data.gameID());
+        String authToken = data.username(); // actually AuthToken at this point
+        System.out.println("auth token: " + authToken);
+        String username = serviceUser.getUserNameViaAuthToken(authToken);
+        GameRequestJoin dataWithName = new GameRequestJoin(username, data.playerColor(), data.gameID());
         System.out.println("username: " + username);
 
         try {
             System.out.println("trying game_join");
-            System.out.println(data_with_name);
-            GameResponseJoin gameResponseJoinTemp = serviceGame.join(data_with_name);
+            System.out.println(dataWithName);
+            GameResponseJoin gameResponseJoinTemp = serviceGame.join(dataWithName);
             return gameResponseJoinTemp;
         } catch (DataAccessException e)
         {

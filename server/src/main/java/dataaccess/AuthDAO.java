@@ -37,7 +37,7 @@ public class AuthDAO
 
 
     static public void createTableAuthSQL() throws DataAccessException {
-        System.out.println("createTable_AuthSQL");
+        System.out.println("createTableAuthSQL");
         var statement = "CREATE TABLE IF NOT EXISTS AuthSQL (authToken VARCHAR(255) DEFAULT NULL, username VARCHAR(255) DEFAULT NULL);";
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {
@@ -63,7 +63,7 @@ public class AuthDAO
 
 
     public void authDeleteAll() throws DataAccessException {
-        System.out.println("In Auth_delete_all");
+        System.out.println("In authDeleteAll");
 
         var statement = "DROP TABLE IF EXISTS AuthSQL;";
         System.out.println(statement);
@@ -87,22 +87,22 @@ public class AuthDAO
 
     public String authGetUserNameViaAuthToken(String authToken) throws DataAccessException
     {
-        System.out.println("In Auth_get_userName_via_authToken");
+        System.out.println("In authGetUserNameViaAuthToken");
 
         var statement = "SELECT * FROM AuthSQL;";
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {
             var rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                var authToken_found = rs.getString("authToken");
-                var username_found = rs.getString("username");
-                System.out.printf("User Found! AuthToken: %s, username: %s%n", authToken_found, username_found);
-                if (authToken_found != null)
+                var authTokenFound = rs.getString("authToken");
+                var usernameFound = rs.getString("username");
+                System.out.printf("User Found! AuthToken: %s, username: %s%n", authTokenFound, usernameFound);
+                if (authTokenFound != null)
                 {
-                    if (authToken_found.equals(authToken))
+                    if (authTokenFound.equals(authToken))
                     {
                         System.out.println("User Found!");
-                        return username_found;
+                        return usernameFound;
                     }
                 }
             }
@@ -127,19 +127,19 @@ public class AuthDAO
 
     public Boolean authorizedViaAuthToken(String data) throws DataAccessException
     {
-        System.out.println("In authorized_via_authToken");
+        System.out.println("In authorizedViaAuthToken");
 
         var statement = "SELECT * FROM AuthSQL;";
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {
             var rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                var authToken_found = rs.getString("authToken");
-                var username_found = rs.getString("username");
-                System.out.printf("User Found! AuthToken: %s, username: %s%n", authToken_found, username_found);
-                if (authToken_found != null)
+                var authTokenFound = rs.getString("authToken");
+                var usernameFound = rs.getString("username");
+                System.out.printf("User Found! AuthToken: %s, username: %s%n", authTokenFound, usernameFound);
+                if (authTokenFound != null)
                 {
-                    if (authToken_found.equals(data))
+                    if (authTokenFound.equals(data))
                     {
                         System.out.println("User Authorized!");
                         return true;
@@ -155,9 +155,9 @@ public class AuthDAO
         return false;
     }
 
-    public Boolean authorizedViaUsername(String new_name) throws DataAccessException
+    public Boolean authorizedViaUsername(String newName) throws DataAccessException
     {
-        System.out.println("In authorized_via_username");
+        System.out.println("In authorizedViaUsername");
 
 
 
@@ -166,12 +166,12 @@ public class AuthDAO
              var preparedStatement = conn.prepareStatement(statement)) {
             var rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                var authToken_found = rs.getString("authToken");
-                var username_found = rs.getString("username");
-                System.out.printf("User Found! AuthToken: %s, username: %s%n", authToken_found, username_found);
-                if (username_found != null)
+                var authTokenFound = rs.getString("authToken");
+                var usernameFound = rs.getString("username");
+                System.out.printf("User Found! AuthToken: %s, username: %s%n", authTokenFound, usernameFound);
+                if (usernameFound != null)
                 {
-                    if (username_found.equals(new_name))
+                    if (usernameFound.equals(newName))
                     {
                         System.out.println("User Authorized!");
                         return true;
@@ -193,7 +193,7 @@ public class AuthDAO
 
     public void authAdd(AuthData added) throws DataAccessException
     {
-        System.out.println("In Auth_add adding " + added.toString());
+        System.out.println("In authAdd adding " + added.toString());
 
 
         var statement = "INSERT INTO AuthSQL (authToken, username) VALUES ( \"" + added.authToken() + "\" , \"" + added.username() + "\" );";
@@ -209,7 +209,7 @@ public class AuthDAO
 
     public void authDeleteViaAuthToken(String removed) throws DataAccessException
     {
-        System.out.println("In Auth_delete_via_authToken");
+        System.out.println("In authDeleteViaAuthToken");
         var statement = "DELETE FROM AuthSQL WHERE authToken=\"" + removed + "\";";
         System.out.println(statement);
         try (var conn = DatabaseManager.getConnection();

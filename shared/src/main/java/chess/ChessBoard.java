@@ -126,18 +126,18 @@ public class ChessBoard {
     }
 
     public ChessBoard getBoard() {
-        ChessBoard board_copy = new ChessBoard();
+        ChessBoard boardCopy = new ChessBoard();
         for(int r=0; r<8; r++)
         {
             for(int c=0; c<8; c++)
             {
                 if (chessBoard[r][c] != null)
                 {
-                    board_copy.addPiece(new ChessPosition(r+1, c+1), new ChessPiece(chessBoard[r][c].getTeamColor(), chessBoard[r][c].getPieceType()));
+                    boardCopy.addPiece(new ChessPosition(r+1, c+1), new ChessPiece(chessBoard[r][c].getTeamColor(), chessBoard[r][c].getPieceType()));
                 }
             }
         }
-        return board_copy;
+        return boardCopy;
     }
 
 

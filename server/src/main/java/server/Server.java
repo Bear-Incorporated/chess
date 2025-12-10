@@ -8,6 +8,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
 import model.*;
+import servermodel.GameRequestView;
 import service.ChessService;
 import server.websocket.WebSocketHandler;
 
@@ -85,32 +86,32 @@ public class Server {
             JsonObject output = new JsonObject();
             try
             {
-                parse_post(ctx);
+                parsePost(ctx);
             }
             catch (DataAccessException e)
             {
                 System.out.println("I'm catching the issue in .post /user");
                 System.out.println(e.getMessage());
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
                 if (e.getMessage().equals("400"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    outputError.addProperty("message", DataAccessException.ERROR_400);
                     ctx.status(400);
                 } else if (e.getMessage().equals("403"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_403);
+                    outputError.addProperty("message", DataAccessException.ERROR_403);
                     ctx.status(403);
                 } else if (e.getMessage().equals("500"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
 
 
@@ -119,31 +120,31 @@ public class Server {
             JsonObject output = new JsonObject();
             try
             {
-                parse_post(ctx);
+                parsePost(ctx);
             }
             catch (DataAccessException e)
             {
                 System.out.println("I'm catching the issue in post /session");
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
                 if (e.getMessage().equals("400"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    outputError.addProperty("message", DataAccessException.ERROR_400);
                     ctx.status(400);
                 } else if (e.getMessage().equals("401"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    outputError.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
                 }  else if (e.getMessage().equals("500"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
 
         })
@@ -157,26 +158,26 @@ public class Server {
             {
                 System.out.println("I'm catching the issue in .delete/session");
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
 
                 if (e.getMessage().equals("401"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    outputError.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
                 }  else if (e.getMessage().equals("500"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
 
 
 
 
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
             //output.addProperty("not done", "Not implemented");
             //output.addProperty("message2", "Hello, JSON!");
@@ -193,7 +194,7 @@ public class Server {
             {
                 System.out.println("I'm catching the issue in .get/game");
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
 
 
 
@@ -201,19 +202,19 @@ public class Server {
 
                 if (e.getMessage().equals("401"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    outputError.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
                 }  else if (e.getMessage().equals("500"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
 
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
 
         })
@@ -221,31 +222,31 @@ public class Server {
 
             try
             {
-                parse_post(ctx);
+                parsePost(ctx);
             }
             catch (DataAccessException e)
             {
                 System.out.println("I'm catching the issue in ,post/game");
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
                 if (e.getMessage().equals("400"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    outputError.addProperty("message", DataAccessException.ERROR_400);
                     ctx.status(400);
                 } else if (e.getMessage().equals("401"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    outputError.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
                 }  else if (e.getMessage().equals("500"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
 
         })
@@ -258,25 +259,25 @@ public class Server {
             {
                 System.out.println("I'm catching the issue in .put/game");
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
                 if (e.getMessage().equals("400"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    outputError.addProperty("message", DataAccessException.ERROR_400);
                     ctx.status(400);
                 } else if (e.getMessage().equals("401"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    outputError.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
                 } else if (e.getMessage().equals("403"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_403);
+                    outputError.addProperty("message", DataAccessException.ERROR_403);
                     ctx.status(403);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
         })
         .delete("/db", (ctx) -> {
@@ -286,10 +287,10 @@ public class Server {
             try {
                 parseDelete(ctx);
             } catch (DataAccessException e) {
-                JsonObject output_error = new JsonObject();
-                output_error.addProperty("message", DataAccessException.ERROR_500);
+                JsonObject outputError = new JsonObject();
+                outputError.addProperty("message", DataAccessException.ERROR_500);
                 ctx.status(500);
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
 
             //output.addProperty("not done", "Not implemented");
@@ -301,37 +302,37 @@ public class Server {
 
             try
             {
-                parse_post(ctx);
+                parsePost(ctx);
             }
             catch (DataAccessException e)
             {
                 System.out.println("I'm catching the issue in .get/chess");
                 System.out.println(e.toString());
-                JsonObject output_error = new JsonObject();
+                JsonObject outputError = new JsonObject();
 
 
 
                 if (e.getMessage().equals("401"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_401);
+                    outputError.addProperty("message", DataAccessException.ERROR_401);
                     ctx.status(401);
                 }
                 else if (e.getMessage().equals("400"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_400);
+                    outputError.addProperty("message", DataAccessException.ERROR_400);
                     ctx.status(400);
                 }
                 else if (e.getMessage().equals("500"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 } else if (e.getMessage().equals("Error: failed to get connection"))
                 {
-                    output_error.addProperty("message", DataAccessException.ERROR_500);
+                    outputError.addProperty("message", DataAccessException.ERROR_500);
                     ctx.status(500);
                 }
 
-                ctx.result(output_error.toString());
+                ctx.result(outputError.toString());
             }
 
         })
@@ -345,7 +346,7 @@ public class Server {
 
     }
 
-    private void parse_post(Context context) throws Exception
+    private void parsePost(Context context) throws Exception
     {
 
 
@@ -455,8 +456,8 @@ public class Server {
         } else if (context.path().equals("/game"))
         {
             // Check to see if they are authorized
-            String auth_input = context.headerMap().get("Authorization");
-            if (!service.userAuthorized(auth_input))
+            String authInput = context.headerMap().get("Authorization");
+            if (!service.userAuthorized(authInput))
             {
                 throw new DataAccessException("401");
             }
@@ -489,19 +490,19 @@ public class Server {
 
             if (output.gameID() == -1)
             {
-                JsonObject output_error = new JsonObject();
-                output_error.addProperty("error", "Bad Input");
+                JsonObject outputError = new JsonObject();
+                outputError.addProperty("error", "Bad Input");
 
-                context.result(output_error.toString());
+                context.result(outputError.toString());
                 context.status(400);
             }
 
             if (output.gameID() == -2)
             {
-                JsonObject output_error = new JsonObject();
-                output_error.addProperty("error", "duplicate game name");
+                JsonObject outputError = new JsonObject();
+                outputError.addProperty("error", "duplicate game name");
 
-                context.result(output_error.toString());
+                context.result(outputError.toString());
                 context.status(400);
             }
 
@@ -543,8 +544,8 @@ public class Server {
     private void parseGet(Context context) throws Exception
     {
         // Check to see if they are authorized
-        String auth_input = context.headerMap().get("Authorization");
-        if (!service.userAuthorized(auth_input))
+        String authInput = context.headerMap().get("Authorization");
+        if (!service.userAuthorized(authInput))
         {
             System.out.println("Unauthorized!!!!");
             throw new DataAccessException("401");
@@ -588,8 +589,8 @@ public class Server {
         {
 
             // Check to see if they are authorized
-            String auth_input = context.headerMap().get("Authorization");
-            if (!service.userAuthorized(auth_input))
+            String authInput = context.headerMap().get("Authorization");
+            if (!service.userAuthorized(authInput))
             {
                 throw new DataAccessException("401");
             }
@@ -628,8 +629,8 @@ public class Server {
     private void parsePut(Context context) throws Exception
     {
         // Check to see if they are authorized
-        String auth_input = context.headerMap().get("Authorization");
-        if (!service.userAuthorized(auth_input))
+        String authInput = context.headerMap().get("Authorization");
+        if (!service.userAuthorized(authInput))
         {
             throw new DataAccessException("401");
         }

@@ -2,19 +2,12 @@ package server.websocket;
 
 import com.google.gson.Gson;
 import io.javalin.websocket.WsMessageContext;
-import model.SessionInfo;
-import org.eclipse.jetty.websocket.api.Session;
+import servermodel.SessionInfo;
 import websocket.messages.ServerMessage;
-
-import org.junit.jupiter.api.*;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 // import jakarta.websocket.*;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
