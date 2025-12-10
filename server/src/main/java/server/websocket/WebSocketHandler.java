@@ -108,7 +108,33 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             connections.narrowcast(ctx, notification);
 
 
-            message = String.format("%s has joined the game", username);
+
+            // Send different messages depending on color
+            // message = String.format("%s has joined the game", username);
+
+            GameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
+            if (gameData.whiteUsername().equals(username))
+            {
+                message = String.format("%s has joined the game as White", username);
+            }
+            else if (gameData.blackUsername().equals(username))
+            {
+                message = String.format("%s has joined the game as Black", username);
+            }
+            else
+            {
+                message = String.format("%s is observing the game", username);
+            }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -222,12 +248,95 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
             System.out.print(String.format("Starting your move %s.", username));
             notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
-
             connections.broadcastViaGameID(null, notification, command.getGameID());
 
-            message = String.format("%s has made a move", username);
+            // Tell them what piece was moved
+            message = String.format("%s has moved from %s to %s.", username, command.getMove().getStartPosition().toStringShort(), command.getMove().getEndPosition().toStringShort());
             notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcastViaGameID(ctx, notification, command.getGameID());
+
+
+
+
+
+            // Tell if in Checkmate.
+            if (game.isInCheckmate(ChessGame.TeamColor.WHITE))
+            {
+                if (gameData.whiteUsername().equals(username))
+                {
+                    message = "You are in Checkmate.";
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.narrowcast(ctx, notification);
+
+                    message = String.format("White player, %s, is in Checkmate.  Game over", gameData.whiteUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(ctx, notification, command.getGameID());
+                } else
+                {
+                    message = String.format("White player, %s, is in Checkmate.  Game over", gameData.whiteUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(null, notification, command.getGameID());
+                }
+                serviceGame.gameOver(command.getGameID());
+            }
+            // Tell if in Checkmate.
+            else if (game.isInCheckmate(ChessGame.TeamColor.BLACK))
+            {
+                if (gameData.blackUsername().equals(username))
+                {
+                    message = "You are in Checkmate.";
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.narrowcast(ctx, notification);
+
+                    message = String.format("Black player, %s, is in Checkmate.  Game over", gameData.blackUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(ctx, notification, command.getGameID());
+                } else
+                {
+                    message = String.format("Black player, %s, is in Checkmate.  Game over", gameData.blackUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(null, notification, command.getGameID());
+                }
+                serviceGame.gameOver(command.getGameID());
+            }
+            // Tell if in Check.
+            else if (game.isInCheck(ChessGame.TeamColor.WHITE))
+            {
+                if (gameData.whiteUsername().equals(username))
+                {
+                    message = "You are in Check.";
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.narrowcast(ctx, notification);
+
+                    message = String.format("White player, %s, is in Check.", gameData.whiteUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(ctx, notification, command.getGameID());
+                } else
+                {
+                    message = String.format("White player, %s, is in Check.", gameData.whiteUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(null, notification, command.getGameID());
+                }
+            }
+            // Tell if in Check.
+            else if (game.isInCheck(ChessGame.TeamColor.BLACK))
+            {
+                if (gameData.blackUsername().equals(username))
+                {
+                    message = "You are in Check.";
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.narrowcast(ctx, notification);
+
+                    message = String.format("Black player, %s, is in Check.", gameData.blackUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(ctx, notification, command.getGameID());
+                } else
+                {
+                    message = String.format("Black player, %s, is in Check.", gameData.blackUsername());
+                    notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                    connections.broadcastViaGameID(null, notification, command.getGameID());
+                }
+            }
 
 
         }
@@ -311,7 +420,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             }
 
 
-            var message = String.format("%s is a quitter", username);
+            var message = String.format("%s is a quitter. Game Over", username);
             var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcastViaGameID(null, notification, command.getGameID());
         }

@@ -57,4 +57,38 @@ public class ChessPosition {
                 ", position_column=" + position_column +
                 '}';
     }
+
+    public String toStringShort() {
+        Character columnChar;
+        if (position_column == 1)
+        {
+            columnChar = 'A';
+        } else if (position_column == 2)
+        {
+            columnChar = 'B';
+        } else if (position_column == 3)
+        {
+            columnChar = 'C';
+        } else if (position_column == 4)
+        {
+            columnChar = 'D';
+        } else if (position_column == 5)
+        {
+            columnChar = 'E';
+        } else if (position_column == 6)
+        {
+            columnChar = 'F';
+        } else if (position_column == 7)
+        {
+            columnChar = 'G';
+        } else if (position_column == 8)
+        {
+            columnChar = 'H';
+        } else
+        {
+            columnChar = '?';
+        }
+
+        return columnChar.toString() + Integer.toString(position_row);
+    }
 }

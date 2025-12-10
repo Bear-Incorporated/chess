@@ -130,8 +130,8 @@ public class Repl implements NotificationHandler  {
             case "resign" -> resign();
             case "legal" -> getLegalMoves(input1);
             case "valid" -> getLegalMoves(input1);
-            case "move" -> movePiece(input1, input2);
-            case "m" -> movePiece(input1, input2);
+            case "move" -> movePiece(input1, input2, input3);
+            case "m" -> movePiece(input1, input2, input3);
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -357,7 +357,7 @@ public class Repl implements NotificationHandler  {
     }
 
 
-    private String movePiece(String localStart, String localEnd)
+    private String movePiece(String localStart, String localEnd, String localPromotion)
     {
 
         // Returns an error if logged out
@@ -396,11 +396,29 @@ public class Repl implements NotificationHandler  {
 
         ChessPiece.PieceType promotion = null;
 
+        // Check if pawn is being promoted
         if (currentChessBoard.getPiece(positionStart).getPieceType() == ChessPiece.PieceType.PAWN)
         {
             if (positionEnd.getRow() == 1 || positionEnd.getRow() == 8)
             {
-                promotion = ChessPiece.PieceType.QUEEN;
+                if (localPromotion.isBlank())
+                {
+                    return "You need to add pawn promotion if you move to " + localEnd;
+                } else if (localPromotion.equals("queen"))
+                {
+                    promotion = ChessPiece.PieceType.QUEEN;
+                } else if (localPromotion.equals("rook"))
+                {
+                    promotion = ChessPiece.PieceType.ROOK;
+                } else if (localPromotion.equals("bishop"))
+                {
+                    promotion = ChessPiece.PieceType.BISHOP;
+                } else if (localPromotion.equals("knight"))
+                {
+                    promotion = ChessPiece.PieceType.KNIGHT;
+                } else {
+                    return localPromotion + " is not a piece type.";
+                }
             }
         }
 
@@ -415,7 +433,7 @@ public class Repl implements NotificationHandler  {
             return "Can't do that move";
         }
 
-        return String.format("Tried to moved the %s from %s to %s.", currentChessBoard.getPiece(positionStart).getPieceType(), localStart, localEnd);
+        return String.format("Tried to move the %s from %s to %s.", currentChessBoard.getPiece(positionStart).getPieceType(), localStart, localEnd);
 
 
     }
@@ -892,6 +910,8 @@ public class Repl implements NotificationHandler  {
         // Returns an error if in game
         if (isInGame()) { return "You are already in a game!"; }
 
+        listGames();
+
         try {
             Integer.parseInt(gameID);
         }
@@ -1357,6 +1377,7 @@ public class Repl implements NotificationHandler  {
                     Options:
                     "help" or "h" - Displays text informing the user what actions you can take.
                     "move <LOCAL_START> <LOCAL_END>" or "m <LOCAL_START> <LOCAL_END>" - Moves a piece.
+                    "move <LOCAL_START> <LOCAL_END> <QUEEN|BISHOP|KNIGHT|ROOK>" - Moves a pawn to promotion.
                     "redraw" or "reload" or "r" - Redraws the chess board
                     "leave" - Leave the chess game
                     "resign" - Resign the chess game
