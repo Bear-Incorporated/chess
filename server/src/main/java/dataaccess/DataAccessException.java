@@ -5,10 +5,10 @@ package dataaccess;
  */
 
 public class DataAccessException extends Exception{
-    public static String ERROR_403 = "Error: already taken";
-    public static String ERROR_400 = "Error: bad request";
-    public static String ERROR_401 = "Error: unauthorized";
-    public static String ERROR_500 = "Error: internal server";
+    public final static String ERROR_403 = "Error: already taken";
+    public final static String ERROR_400 = "Error: bad request";
+    public final static String ERROR_401 = "Error: unauthorized";
+    public final static String ERROR_500 = "Error: internal server";
 
     public DataAccessException(String message) {
         super(message);

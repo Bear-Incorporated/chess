@@ -19,7 +19,7 @@ public class ChessService
      * @param
      * @return
      */
-    public void Clear() throws DataAccessException
+    public void clear() throws DataAccessException
     {
         System.out.println("clear");
 

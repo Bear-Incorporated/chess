@@ -18,6 +18,8 @@ public class ChessPiece {
     Integer pieceMoved;
 
 
+    public static final int OFF_BOARD = 10;
+
     public ChessPiece(ChessGame.TeamColor pieceColorNew, ChessPiece.PieceType type) {
         pieceType = type;
         pieceColor = pieceColorNew;
@@ -83,7 +85,6 @@ public class ChessPiece {
         int offsetCol;
         int tempRow;
         int tempCol;
-        final int OFF_BOARD = 10;
 
         if (pieceType == PieceType.BISHOP)
         {

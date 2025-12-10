@@ -617,7 +617,7 @@ public class Server {
 
 
             try {
-                service.Clear();
+                service.clear();
             } catch (DataAccessException ex) {
                 throw new DataAccessException("500");
             }

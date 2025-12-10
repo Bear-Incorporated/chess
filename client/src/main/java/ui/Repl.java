@@ -34,8 +34,8 @@ public class Repl implements NotificationHandler  {
     private boolean resigning = false;
 
 
-    private final String SERVER_HOST = "localhost";
-    private final int SERVER_PORT = 8080;
+    private final static String SERVER_HOST = "localhost";
+    private final static int SERVER_PORT = 8080;
 
     // private Chess_Service service = new Chess_Service();
 

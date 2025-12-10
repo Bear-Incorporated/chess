@@ -18,7 +18,7 @@ public class HttpTalker
 {
     // Create an HttpClient for making requests
     // This should be long-lived and shared, so a static final field is good here
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
+    private static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 
     private static final int TIMEOUT_MILLIS = 5000;
 
@@ -45,7 +45,7 @@ public class HttpTalker
                 .GET()
                 .build();
 
-        HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> httpResponse = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
         if(httpResponse.statusCode() == 200) {
             HttpHeaders headers = httpResponse.headers();
@@ -76,7 +76,7 @@ public class HttpTalker
                 .PUT(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                 .build();
 
-        HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> httpResponse = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
         if(httpResponse.statusCode() == 200) {
             HttpHeaders headers = httpResponse.headers();
@@ -106,7 +106,7 @@ public class HttpTalker
                 .POST(HttpRequest.BodyPublishers.ofString(body, StandardCharsets.UTF_8))
                 .build();
 
-        HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> httpResponse = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
         if(httpResponse.statusCode() == 200) {
             HttpHeaders headers = httpResponse.headers();
@@ -137,7 +137,7 @@ public class HttpTalker
                 .DELETE()
                 .build();
 
-        HttpResponse<String> httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> httpResponse = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
         if(httpResponse.statusCode() == 200) {
             HttpHeaders headers = httpResponse.headers();
