@@ -25,6 +25,7 @@ public class Repl implements NotificationHandler  {
     private String usernameLoggedInAs;
     private ChessBoard currentChessBoard;
     private String currentPlayerColor;
+    private String currentGameID;
 
 
     private final String SERVER_HOST = "localhost";
@@ -118,6 +119,7 @@ public class Repl implements NotificationHandler  {
             case "p" -> playGame(input1);
             case "redraw" -> redrawBoard();
             case "r" -> redrawBoard();
+            case "leave" -> leave();
             // case "adopt" -> adoptPet(params);
             // case "adoptall" -> adoptAllPets();
             case "quit" -> "quit";
@@ -175,7 +177,9 @@ public class Repl implements NotificationHandler  {
         state = State.INGAME;
         try {
             ws.connect(authToken, Integer.parseInt(gameID));
+            currentGameID = gameID;
             return String.format("You signed in as %s for game #%s.\n", usernameLoggedInAs, gameID);
+
         }
         catch (Exception e)
         {
@@ -194,6 +198,29 @@ public class Repl implements NotificationHandler  {
         if (!isInGame()) { return "You need to be in a game to do that!"; }
 
         return printBoard(currentChessBoard, currentPlayerColor);
+    }
+
+
+    private String leave()
+    {
+        // Returns an error if logged out
+        if (!isLoggedIn()) { return "You need to be logged in to do that!"; }
+
+        // Returns an error if not in game
+        if (!isInGame()) { return "You need to be in a game to do that!"; }
+
+        state = State.INGAME;
+        try {
+            ws.leaveGame(authToken, Integer.parseInt(currentGameID));
+            currentGameID = "";
+            return String.format("You signed out as %s for game #%s.\n", usernameLoggedInAs, currentGameID);
+
+        }
+        catch (Exception e)
+        {
+            state = State.SIGNEDIN;
+            return "ERROR: Cannot leave that game " + e;
+        }
     }
 
 

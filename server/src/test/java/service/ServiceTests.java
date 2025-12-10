@@ -9,7 +9,8 @@ import java.net.HttpURLConnection;
 import java.util.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class service_tests {
+public class ServiceTests
+{
 
     private static TestUser existingUser;
     private static TestUser newUser;

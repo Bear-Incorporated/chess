@@ -18,26 +18,26 @@ public class GameService
      * @param
      * @return
      */
-    public gameResponseCreate create(GameRequestCreate data) throws DataAccessException
+    public GameResponseCreate create(GameRequestCreate data) throws DataAccessException
     {
 
         // Bad Input
         if (data == null)
         {
             // Return error
-            return new gameResponseCreate(-1);
+            return new GameResponseCreate(-1);
         }
         if (data.gameName() == null)
         {
             // Return error
-            return new gameResponseCreate(-1);
+            return new GameResponseCreate(-1);
         }
 
         // Check to see if name already used
         if (dataList.gameFoundViaGameName(data.gameName()))
         {
             // Return error
-            return new gameResponseCreate(-2);
+            return new GameResponseCreate(-2);
         }
 
         int game_id = -2;
@@ -48,7 +48,7 @@ public class GameService
         }
 
 
-        gameResponseCreate output = new gameResponseCreate(game_id);
+        GameResponseCreate output = new GameResponseCreate(game_id);
 
         return output;
 
@@ -60,7 +60,7 @@ public class GameService
      * @param
      * @return
      */
-    public gameResponseJoin join(gameRequestJoin data) throws Exception
+    public GameResponseJoin join(GameRequestJoin data) throws Exception
     {
         String join_userName = data.username();
         int join_gameID = data.gameID();
@@ -121,7 +121,7 @@ public class GameService
         // throw new DataAccessException("400");
         // throw new DataAccessException("403");
         // throw new RuntimeException("Not implemented");
-        return new gameResponseJoin();
+        return new GameResponseJoin();
     }
 
 
@@ -319,7 +319,7 @@ public class GameService
      * @param
      * @return
      */
-    public gameResponseList list(gameRequestList data) throws DataAccessException
+    public GameResponseList list(GameRequestList data) throws DataAccessException
     {
 
 

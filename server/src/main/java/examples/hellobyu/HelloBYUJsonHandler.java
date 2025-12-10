@@ -1,4 +1,4 @@
-package examples.HelloBYU;
+package examples.hellobyu;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 

@@ -356,10 +356,10 @@ public class Server {
             System.out.println("user");
             var serializer = new Gson();
 
-            var input = new userRequestRegister("", "", "");
+            var input = new UserRequestRegister("", "", "");
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), userRequestRegister.class);
+            input = serializer.fromJson(context.body(), UserRequestRegister.class);
 
             // Check inputs for errors
             if (input.username() == null)
@@ -378,7 +378,7 @@ public class Server {
             try
             {
                 // Run Function
-                userResponseRegister output = service.userRegister(input);
+                UserResponseRegister output = service.userRegister(input);
 
                 if (output.authToken().equals("404"))
                 {
@@ -403,10 +403,10 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new userRequestLogin("","");
+            var input = new UserRequestLogin("","");
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), userRequestLogin.class);
+            input = serializer.fromJson(context.body(), UserRequestLogin.class);
 
             System.out.println("post session json converted");
 
@@ -430,11 +430,11 @@ public class Server {
             {
                 System.out.println("Inputing " + input);
 
-                input = new userRequestLogin(input.username(), input.password());
+                input = new UserRequestLogin(input.username(), input.password());
                 System.out.println("Inputing " + input);
 
                 // Run Function
-                userResponseLogin output = service.userLogin(input);
+                UserResponseLogin output = service.userLogin(input);
 
                 System.out.println(context.headerMap());
 
@@ -477,7 +477,7 @@ public class Server {
 
 
             // Run Function
-            gameResponseCreate output = service.gameCreate(input);
+            GameResponseCreate output = service.gameCreate(input);
 
             // serialize to JSON
             var json = serializer.toJson(output);
@@ -561,13 +561,13 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new gameRequestList();
+            var input = new GameRequestList();
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), gameRequestList.class);
+            input = serializer.fromJson(context.body(), GameRequestList.class);
 
             // Run Function
-            gameResponseList output = service.gameList(input);
+            GameResponseList output = service.gameList(input);
 
             // serialize to JSON
             var json = serializer.toJson(output);
@@ -599,7 +599,7 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new userRequestLogout(context.headerMap().get("Authorization"));
+            var input = new UserRequestLogout(context.headerMap().get("Authorization"));
 
 
             // Run Function
@@ -641,10 +641,10 @@ public class Server {
 
             var serializer = new Gson();
 
-            var input = new gameRequestJoin("test user", "",1);
+            var input = new GameRequestJoin("test user", "",1);
 
             // deserialize back to ChessGame
-            input = serializer.fromJson(context.body(), gameRequestJoin.class);
+            input = serializer.fromJson(context.body(), GameRequestJoin.class);
 
             if (input.playerColor() == null)
             {
@@ -652,12 +652,12 @@ public class Server {
             }
 
             // Add the AuthToken to the input
-            input = new gameRequestJoin(context.headerMap().get("Authorization"), input.playerColor(), input.gameID());
+            input = new GameRequestJoin(context.headerMap().get("Authorization"), input.playerColor(), input.gameID());
 
             try
             {
                 // Run Function
-                gameResponseJoin output = service.gameJoin(input);
+                GameResponseJoin output = service.gameJoin(input);
 
                 // serialize to JSON
                 var json = serializer.toJson(output);
@@ -687,7 +687,7 @@ public class Server {
 
             var serializer = new Gson();
 
-            var game = new userRequestRegister("test user", "psw", "test email");
+            var game = new UserRequestRegister("test user", "psw", "test email");
             System.out.println(game);
 
             // serialize to JSON
@@ -696,7 +696,7 @@ public class Server {
 
 
             // deserialize back to ChessGame
-            game = serializer.fromJson(context.body(), userRequestRegister.class);
+            game = serializer.fromJson(context.body(), UserRequestRegister.class);
             System.out.println(game);
 
         }

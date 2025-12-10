@@ -4,7 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
 import model.GameDataShort;
-import model.gameResponseList;
+import model.GameResponseList;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -110,7 +110,7 @@ public class GameDAO
     }
 
 
-    public gameResponseList gameList() throws DataAccessException
+    public GameResponseList gameList() throws DataAccessException
     {
         System.out.println("In Game_list");
 
@@ -137,7 +137,7 @@ public class GameDAO
         }
 
 
-        return new gameResponseList(Game_List_output);
+        return new GameResponseList(Game_List_output);
     }
 
 

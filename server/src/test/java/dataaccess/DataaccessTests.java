@@ -9,7 +9,8 @@ import java.net.HttpURLConnection;
 import java.util.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class dataaccess_tests {
+public class DataaccessTests
+{
 
     private static TestUser existingUser;
     private static TestUser newUser;
