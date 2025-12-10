@@ -1,6 +1,9 @@
 package ui;
 
 import chess.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import exception.ResponseException;
 import model.GameDataShort;
 import websocket.HttpTalker;
@@ -90,11 +93,11 @@ public class Repl implements NotificationHandler  {
         String cmd = (tokens.length > 0) ? tokens[0] : "help";
         String[] params = Arrays.copyOfRange(tokens, 1, tokens.length);
         String input1 = (tokens.length > 1) ? tokens[1] : "";
-        System.out.print(input1 + "\n");
+//        System.out.print(input1 + "\n");
         String input2 = (tokens.length > 2) ? tokens[2] : "";
-        System.out.print(input2 + "\n");
+        // System.out.print(input2 + "\n");
         String input3 = (tokens.length > 3) ? tokens[3] : "";
-        System.out.print(input3 + "\n");
+        // System.out.print(input3 + "\n");
 
 
         return switch (cmd) {
@@ -118,8 +121,8 @@ public class Repl implements NotificationHandler  {
             case "o" -> observeGame(input1);
             case "view" -> viewGame(input1);
             case "v" -> viewGame(input1);
-            case "play" -> playGame(input1);
-            case "p" -> playGame(input1);
+            case "play" -> joinGame(input1, input2);
+            case "p" -> joinGame(input1, input2);
             case "redraw" -> redrawBoard();
             case "reload" -> redrawBoard();
             case "r" -> redrawBoard();
@@ -188,17 +191,17 @@ public class Repl implements NotificationHandler  {
         }
 
 
-        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
-        {
-            return gameID + " doesn't have enough players yet.";
-        }
-        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().isBlank())
-        {
-            return gameID + " doesn't have enough players yet.";
-        }
+//        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
+//        {
+//            return gameID + " doesn't have enough players yet.";
+//        }
+//        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().isBlank())
+//        {
+//            return gameID + " doesn't have enough players yet.";
+//        }
 
-        System.out.print("White Player is " + currentGameListArray[Integer.parseInt(gameID)].whiteUsername() + "\n");
-        System.out.print("Black Player is " + currentGameListArray[Integer.parseInt(gameID)].blackUsername() + "\n");
+        // System.out.print("White Player is " + currentGameListArray[Integer.parseInt(gameID)].whiteUsername() + "\n");
+        // System.out.print("Black Player is " + currentGameListArray[Integer.parseInt(gameID)].blackUsername() + "\n");
 
         if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().equals(usernameLoggedInAs))
         {
@@ -247,17 +250,17 @@ public class Repl implements NotificationHandler  {
         }
 
 
-        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
-        {
-            return gameID + " doesn't have enough players yet.";
-        }
-        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().isBlank())
-        {
-            return gameID + " doesn't have enough players yet.";
-        }
+//        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
+//        {
+//            return gameID + " doesn't have enough players yet.";
+//        }
+//        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().isBlank())
+//        {
+//            return gameID + " doesn't have enough players yet.";
+//        }
 
-        System.out.print("White Player is " + currentGameListArray[Integer.parseInt(gameID)].whiteUsername() + "\n");
-        System.out.print("Black Player is " + currentGameListArray[Integer.parseInt(gameID)].blackUsername() + "\n");
+        // System.out.print("White Player is " + currentGameListArray[Integer.parseInt(gameID)].whiteUsername() + "\n");
+        // System.out.print("Black Player is " + currentGameListArray[Integer.parseInt(gameID)].blackUsername() + "\n");
 
         currentPlayerColor = ChessGame.TeamColor.WHITE;
         state = State.INGAME;
@@ -300,6 +303,7 @@ public class Repl implements NotificationHandler  {
         try {
             ws.leaveGame(authToken, Integer.parseInt(currentGameID));
             currentGameID = "";
+            state = State.SIGNEDIN;
             return String.format("You signed out as %s for game #%s.\n", usernameLoggedInAs, currentGameID);
 
         }
@@ -391,6 +395,7 @@ public class Repl implements NotificationHandler  {
         }
 
 
+
         try
         {
             ws.makeMove(authToken, Integer.parseInt(currentGameID), new ChessMove(positionStart, positionEnd, promotion));
@@ -400,7 +405,7 @@ public class Repl implements NotificationHandler  {
             return "Can't do that move";
         }
 
-        return String.format("Moved the %s from %s to %s.", currentChessBoard.getPiece(positionStart), localStart, localEnd);
+        return String.format("Tried to moved the %s from %s to %s.", currentChessBoard.getPiece(positionStart).getPieceType(), localStart, localEnd);
 
 
     }
@@ -419,7 +424,7 @@ public class Repl implements NotificationHandler  {
         if (location.endsWith("1") || location.endsWith("2") || location.endsWith("3") || location.endsWith("4") || location.endsWith("5") || location.endsWith("6") || location.endsWith("7") || location.endsWith("8"))
         {
             row = Integer.parseInt(location.substring(1,2));
-            System.out.print("Row is " + row + "\n");
+            // System.out.print("Row is " + row + "\n");
         } else
         {
             throw new Exception("Invalid Position");
@@ -495,7 +500,7 @@ public class Repl implements NotificationHandler  {
 
         Collection<ChessMove> validMoves = new HashSet<ChessMove>();
         validMoves = chessGameTemp.validMoves(squareFindingLegal);
-        System.out.print("Here are the valid moves " + validMoves + "\n");
+        // ("Here are the valid moves " + validMoves + "\n");
 
 
 
@@ -507,11 +512,11 @@ public class Repl implements NotificationHandler  {
     {
 
         try {
-            String printBoardOutput = "";
+            String printBoardOutput = "\n";
 
             Boolean squareColorWhite = true;
 
-            System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
+            // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
 
             if (activePlayer.equals(ChessGame.TeamColor.BLACK))
             {
@@ -522,28 +527,31 @@ public class Repl implements NotificationHandler  {
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
                     for (int col = 1; col <= 8; col++ )
                     {
-                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
                         // Move to the next col
 
 
 
-                        // Set Backgroud Color
+                        // Set Background Color
                         if (squareColorWhite)
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
                         }
                         else
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
                         }
 
                         for (ChessMove move : validMoves)
                         {
-                            System.out.print("Checking " + move + "\n");
+                            // System.out.print("Checking " + move + "\n");
                             if (move.getEndPosition().getColumn() == col && move.getEndPosition().getRow() == row)
                             {
-                                printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
+                                // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
+                                printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                             }
                         }
 
@@ -569,26 +577,29 @@ public class Repl implements NotificationHandler  {
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
                     for (int col = 8; col >= 1; col-- )
                     {
-                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
                         // Move to the next col
 
                         // Set Backgroud Color
                         if (squareColorWhite)
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
                         }
                         else
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
                         }
 
                         for (ChessMove move : validMoves)
                         {
-                            System.out.print("Checking " + move + "\n");
+                            // System.out.print("Checking " + move + "\n");
                             if (move.getEndPosition().getColumn() == col && move.getEndPosition().getRow() == row)
                             {
-                                printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
+                                // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
+                                printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                             }
                         }
 
@@ -608,8 +619,8 @@ public class Repl implements NotificationHandler  {
             return printBoardOutput;
 
         } catch (Exception e) {
-            System.out.print("\n" + e + "\n");
-            return "Error";
+            // System.out.print("\n" + e + "\n");
+            return "Error " + e;
         }
 
 
@@ -628,16 +639,16 @@ public class Repl implements NotificationHandler  {
         try
         {
             String gameList = client.get("/game", authToken);
-            System.out.print(client.toString() + "\n");
+            // System.out.print(client.toString() + "\n");
             // Run Function
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
             String[] gameListSplit = gameList.split("\"");
             for (int i = 0; i < gameListSplit.length; i++ )
             {
-                System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
+                // System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
             }
-            System.out.print("\n");
+            // System.out.print("\n");
 
             String gameListOutput = "\nGame List\n---------\n";
 
@@ -656,7 +667,7 @@ public class Repl implements NotificationHandler  {
 
                     for (int j = i + 1; j < gameListSplit.length; j++ )
                     {
-                        System.out.print(" i=" + i + " j=" + j + ",");
+                        // System.out.print(" i=" + i + " j=" + j + ",");
 
                         if (gameListSplit[j].equals("gameID"))
                         {
@@ -667,22 +678,24 @@ public class Repl implements NotificationHandler  {
                         } else if (gameListSplit[j].equals("gameName"))
                         {
                             gameName = gameListSplit[j + 2];
-                            System.out.print(" gameName=" + gameName + ",");
+                            // System.out.print(" gameName=" + gameName + ",");
                         }
                         else if (gameListSplit[j].equals("blackUsername"))
                         {
                             blackUsername = gameListSplit[j + 2];
-                            System.out.print(" blackUsername=" + blackUsername + ",");
+                            // System.out.print(" blackUsername=" + blackUsername + ",");
                         }
                         else if (gameListSplit[j].equals("whiteUsername"))
                         {
                             whiteUsername = gameListSplit[j + 2];
-                            System.out.print(" whiteUsername=" + whiteUsername + ",");
+                            // System.out.print(" whiteUsername=" + whiteUsername + ",");
                         }
-                        System.out.print("\nAppending to gameListArray= \n" + gameListSplit[i+1].split(":")[1].split(",")[0] + "\n");
-                        currentGameListArray[Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0])] = new GameDataShort(Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0]), whiteUsername, blackUsername, gameName);
+
 
                     }
+
+                    // System.out.print("\nAppending to gameListArray= \n" + gameListSplit[i+1].split(":")[1].split(",")[0] + "\n");
+                    currentGameListArray[Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0])] = new GameDataShort(Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0]), whiteUsername, blackUsername, gameName);
 
                     // Only print the ones found.
                     gameListOutput = gameListOutput.concat(gameName);
@@ -696,9 +709,9 @@ public class Repl implements NotificationHandler  {
                     }
                     gameListOutput = gameListOutput.concat("\n");
 
-                    for (i=0; i< currentGameListArray.length; i++)
+                    for (int k=0; k < currentGameListArray.length; k++)
                     {
-                        System.out.print(" Game Data Short #" + i + " = " + currentGameListArray[i] + "\n");
+                        // System.out.print(" Game Data Short #" + i + " = " + currentGameListArray[i] + "\n");
                     }
 
                 }
@@ -728,11 +741,11 @@ public class Repl implements NotificationHandler  {
                   "gameName": "%s"
                   }
                   """, gameName);
-        System.out.print(body + "\n");
+        // System.out.print(body + "\n");
         try
         {
             client.post("/game", authToken, body);
-            System.out.print(client.toString() + "\n");
+            // System.out.print(client.toString() + "\n");
             // Run Function
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
@@ -752,8 +765,18 @@ public class Repl implements NotificationHandler  {
     {
 
         // assertSignedIn();
-        System.out.print("username = " + username + "\n");
-        System.out.print("password = " + password + "\n");
+        // System.out.print("username = " + username + "\n");
+        // System.out.print("password = " + password + "\n");
+
+        if (username.isBlank())
+        {
+            return "You need a name";
+        }
+        if (password.isBlank())
+        {
+            return "You need a password";
+        }
+
         String body = String.format(
                 """
                   {
@@ -761,21 +784,23 @@ public class Repl implements NotificationHandler  {
                   "password": "%s"
                   }
                   """, username, password);
-        System.out.print("body = " + body + "\n");
+        // System.out.print("body = " + body + "\n");
         try
         {
             String authTokenTemp = client.post("/session", authToken, body);
+
             //System.out.print(client.toString() + "\n");
+
 
             String[] authTokenTempSplit = authTokenTemp.split("\"");
             for (int i = 0; i < authTokenTempSplit.length; i++ )
             {
-                System.out.print("number " + i + " is " + authTokenTempSplit[i] + ", ");
+                // System.out.print("number " + i + " is " + authTokenTempSplit[i] + ", ");
             }
             authToken = authTokenTempSplit[7];
             usernameLoggedInAs = username;
             state = State.SIGNEDIN;
-            System.out.print("\nLogged in " + authToken);
+            // System.out.print("\nLogged in " + authToken);
 
 
             // Run Function
@@ -795,8 +820,30 @@ public class Repl implements NotificationHandler  {
 
     public String register(String username, String password, String email)
     {
-        System.out.print("username = " + username + "\n");
-        System.out.print("password = " + password + "\n");
+        // System.out.print("username = " + username + "\n");
+        // System.out.print("password = " + password + "\n");
+
+        if (username.isBlank())
+        {
+            return "You need a name";
+        }
+        if (password.isBlank())
+        {
+            return "You need a password";
+        }
+        if (email.isBlank())
+        {
+            return "You need an email address.";
+        }
+        if (!email.contains("@"))
+        {
+            return email + " is not an email address.";
+        }
+        if (!email.contains("."))
+        {
+            return " is not an email address.";
+        }
+
         String body = String.format(
                 """
                   {
@@ -805,11 +852,11 @@ public class Repl implements NotificationHandler  {
                   "email": "%s"
                   }
                   """, username, password, email);
-        System.out.print(body + "\n");
+        // System.out.print(body + "\n");
         try
         {
             String results = client.post("/user", authToken, body);
-            System.out.print(results + "\n");
+            // System.out.print(results + "\n");
 
 
             login(username, password);
@@ -834,6 +881,52 @@ public class Repl implements NotificationHandler  {
         // Returns an error if in game
         if (isInGame()) { return "You are already in a game!"; }
 
+        try {
+            Integer.parseInt(gameID);
+        }
+        catch (Exception ex)
+        {
+            return gameID + " is not a valid game.";
+        }
+
+
+
+
+
+        try {
+                if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().equals(usernameLoggedInAs))
+                {
+                    if (playerColor.equals("black") || playerColor.equals("b"))
+                    {
+                        playerColor = "BLACK";
+                    }
+                    if (playerColor == "BLACK")
+                    {
+                        return "You are already white in that game";
+                    }
+
+                    return playGame(gameID);
+                }
+                if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().equals(usernameLoggedInAs))
+                {
+                    if (playerColor.equals("white") || playerColor.equals("w"))
+                    {
+                        playerColor = "WHITE";
+                    }
+                    if (playerColor == "WHITE")
+                    {
+                        return "You are already black in that game";
+                    }
+
+                    // return "You are already in that game";
+                    return playGame(gameID);
+                }
+        }
+        catch (Exception ex)
+        {
+            return gameID + " is not a valid game.";
+        }
+
         if (playerColor.equals("white") || playerColor.equals("w"))
         {
             playerColor = "WHITE";
@@ -846,14 +939,7 @@ public class Repl implements NotificationHandler  {
             return playerColor + " is not a valid color.";
         }
 
-        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().equals(usernameLoggedInAs))
-        {
-            return "You are already in that game";
-        }
-        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().equals(usernameLoggedInAs))
-        {
-            return "You are already in that game";
-        }
+
 
         try {
             String body = String.format(
@@ -863,14 +949,16 @@ public class Repl implements NotificationHandler  {
                       "gameID": "%s"
                       }
                       """, playerColor, gameID);
-            System.out.print(body + "\n");
+            // System.out.print(body + "\n");
             client.put("/game", authToken, body);
-            System.out.print(client.toString() + "\n");
+            // System.out.print(client.toString() + "\n");
             // Run Function
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
+            listGames();
+
             // return output.toString();
-            return "Done";
+            return playGame(gameID);
 
         } catch (Exception e) {
             return "Error: " + e;
@@ -908,34 +996,34 @@ public class Repl implements NotificationHandler  {
 
         if (gameID.isBlank()) { return gameID + " is not a valid Game ID"; }
 
-        System.out.print("gameID = " + gameID + "\n");
+        // System.out.print("gameID = " + gameID + "\n");
         String body = String.format(
                 """
                   {
                   "gameID": "%s"
                   }
                   """, gameID);
-        System.out.print(body + "\n");
+        // System.out.print(body + "\n");
         try {
             String chessList = client.post("/chess", authToken, body);
 
-            System.out.print(chessList + "\n");
+            // System.out.print(chessList + "\n");
 
             if (chessList == null){
                 return "That game hasn't started yet.  Add players.";
             }
 
 
-            System.out.print(client.toString() + "\n");
+            // System.out.print(client.toString() + "\n");
             // Run Function
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
             String[] gameListSplit = chessList.split("\"");
             for (int i = 0; i < gameListSplit.length; i++ )
             {
-                System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
+                // System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
             }
-            System.out.print("\n");
+            // System.out.print("\n");
 
 
             String viewGameOutput = "\nGame #" + gameID + "\n---------\n";
@@ -992,17 +1080,17 @@ public class Repl implements NotificationHandler  {
                 }
                 if (gameListSplit[i].contains("null"))
                 {
-                    System.out.print("\n null found! \n");
+                    // System.out.print("\n null found! \n");
                     String[] gameListSplitNull = gameListSplit[i].split(",");
                     for (int j = 0; j < gameListSplitNull.length; j++ )
                     {
-                        System.out.print("number " + j + " is " + gameListSplitNull[j] + ", ");
+                        // System.out.print("number " + j + " is " + gameListSplitNull[j] + ", ");
 
 
                         if (gameListSplitNull[j].contains("null"))
                         {
 
-                            System.out.print(" Empty Place Found!");
+                            // System.out.print(" Empty Place Found!");
 
                             // Move to the next row
                             c++;
@@ -1012,17 +1100,17 @@ public class Repl implements NotificationHandler  {
                                 c=1;
                             }
                         }
-                        System.out.print(" good ");
+                        // System.out.print(" good ");
 
                     }
 
-                    System.out.print(" last null ");
+                    // System.out.print(" last null ");
 
                 }
-                System.out.print(" Did Number " + i);
+                // System.out.print(" Did Number " + i);
             }
 
-            System.out.print(" out of for \n");
+            // System.out.print(" out of for \n");
 
             // viewGameOutput = viewGameOutput.concat(printBoard(chess_board, gameListSplit[3]));
             viewGameOutput = viewGameOutput.concat(printBoard(chessBoard, ChessGame.TeamColor.WHITE));
@@ -1031,7 +1119,7 @@ public class Repl implements NotificationHandler  {
             return viewGameOutput;
 
         } catch (Exception e) {
-            System.out.print("\n" + e + "\n");
+            // System.out.print("\n" + e + "\n");
             return "Error";
         }
 
@@ -1043,11 +1131,11 @@ public class Repl implements NotificationHandler  {
         currentChessBoard = chessBoard;
 
         try {
-            String printBoardOutput = "";
+            String printBoardOutput = "\n";
 
             Boolean squareColorWhite = true;
 
-            System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
+            // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
             if (activePlayer.equals(ChessGame.TeamColor.BLACK))
             {
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
@@ -1057,18 +1145,20 @@ public class Repl implements NotificationHandler  {
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
                     for (int col = 1; col <= 8; col++ )
                     {
-                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
                         // Move to the next col
 
                         // Set Backgroud Color
                         if (squareColorWhite)
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
                         }
                         else
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
                         }
 
 
@@ -1093,18 +1183,20 @@ public class Repl implements NotificationHandler  {
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
                     for (int col = 8; col >= 1; col-- )
                     {
-                        System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
                         // Move to the next col
 
                         // Set Backgroud Color
                         if (squareColorWhite)
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
                         }
                         else
                         {
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
                         }
 
                         printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
@@ -1123,8 +1215,8 @@ public class Repl implements NotificationHandler  {
             return printBoardOutput;
 
         } catch (Exception e) {
-            System.out.print("\n" + e + "\n");
-            return "Error";
+            // System.out.print("\n" + e + "\n");
+            return "Error " + e;
         }
 
 
@@ -1143,7 +1235,7 @@ public class Repl implements NotificationHandler  {
 
         if (piece.getTeamColor() == ChessGame.TeamColor.WHITE)
         {
-            printPieceOutput = printPieceOutput.concat(SET_TEXT_COLOR_RED);
+            printPieceOutput = printPieceOutput.concat(SET_TEXT_COLOR_WHITE);
         } else if  (piece.getTeamColor() == ChessGame.TeamColor.BLACK)
         {
             // It is black
@@ -1235,9 +1327,10 @@ public class Repl implements NotificationHandler  {
                     \"logout\" or \"lo\" or \"out\" - Logs you out.
                     \"create <NAME>\" or \"c <NAME>\" or \"new <NAME>\" or \"n <NAME>\" - creates a new game.
                     \"list\" or \"l\" - Lists all the game.
-                    \"join <ID> [WHITE|BLACK]\" or \"j <ID> [WHITE|BLACK]\" - Join specified game.
+                    \"join <ID> [WHITE|BLACK]\" or \"j <ID> [W|B]\" - Join specified game.
+                    "play <ID> [WHITE|BLACK]" or "p <ID> [W|B]" - Play the game as your color (same as join)
                     \"view <ID>\" or \"v <ID>\" or \"observe <ID>\" or \"o <ID>\" - View specified game.
-                    "play <ID>" or "p <ID>" - Play the game as your color
+                    
                     """;
         }
         else if (state == State.INGAME) {
@@ -1278,11 +1371,11 @@ public class Repl implements NotificationHandler  {
     @Override
     public void notify(ServerMessage notification)
     {
-        System.out.print("In Notify");
+        // System.out.print("In Notify");
 
         switch (notification.getServerMessageType()) {
             case NOTIFICATION -> displayNotificiation(notification.getMessage());
-            case ERROR -> displayError(notification.getMessage());
+            case ERROR -> displayError(notification.getErrorMessage());
             case LOAD_GAME -> System.out.print(printBoard(notification.getGame().getBoard(), currentPlayerColor));
             // case LOAD_GAME -> printBoard(notification.getGame());
 

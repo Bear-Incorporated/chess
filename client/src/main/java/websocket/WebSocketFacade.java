@@ -32,8 +32,8 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    System.out.print("The message is " + message + "\n");
-                    System.out.print("The message is " + message + "\n");
+                    // System.out.print("The message is " + message + "\n");
+                    // System.out.print("The message is " + message + "\n");
 
                     ServerMessage notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, "error : bad notification");
 
@@ -59,24 +59,24 @@ public class WebSocketFacade extends Endpoint {
 //                         notification = new Gson().fromJson(message, ServerMessage.class);
 //                         JSONObject jsonObj = new JSONObject(message.toString());
 //                        JsonObject tempJson = new JsonObject().getAsJsonObject(message);
-                        System.out.print("Part 0" + message + "\n");
+                        // System.out.print("Part 0" + message + "\n");
                         JsonObject tempJson = JsonParser.parseString(message).getAsJsonObject();
 
-                        System.out.print("Part 1" + tempJson + "\n");
+                        // System.out.print("Part 1" + tempJson + "\n");
                         notification = new Gson().fromJson(tempJson, ServerMessage.class);
-                        System.out.print("Part 2 " + notification + "\n");
+                        // System.out.print("Part 2 " + notification + "\n");
                         // notification = new Gson().fromJson(message, ServerMessage.class);
 
                     }
                     catch (Exception ex)
                     {
-                        System.out.print("Error: " + ex.getMessage() + "\n");
+                        // System.out.print("Error: " + ex.getMessage() + "\n");
                     }
 
-                    System.out.print("The notification is ");
-                    System.out.print(notification);
-                    System.out.print("\n");
-                    System.out.print("Message Type = " + notification.getServerMessageType() + ", Message = " + notification.getMessage());
+                    // System.out.print("The notification is ");
+                    // System.out.print(notification);
+                    // System.out.print("\n");
+                    // System.out.print("Message Type = " + notification.getServerMessageType() + ", Message = " + notification.getMessage());
 
 
                     notificationHandler.notify(notification);
@@ -91,6 +91,8 @@ public class WebSocketFacade extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
+
+
 
 
     public void connect(String authToken, Integer gameID) throws ResponseException {

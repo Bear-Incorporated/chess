@@ -26,24 +26,24 @@ public class ServerMessage {
     }
 
     public ServerMessage(ServerMessageType type) {
-        System.out.print("ServerMessage 1 type\n");
+        // System.out.print("ServerMessage 1 type\n");
         this.serverMessageType = type;
     }
 
 
 
     public ServerMessage(ServerMessageType type, String message) {
-        System.out.print("ServerMessage 2 types\n");
-        System.out.print("Type = " + type + "\n");
-        System.out.print("Message = " + message + "\n");
+        // System.out.print("ServerMessage 2 types\n");
+        // System.out.print("Type = " + type + "\n");
+        // System.out.print("Message = " + message + "\n");
         this.serverMessageType = type;
         if (serverMessageType == ServerMessageType.ERROR)
         {
-            System.out.print("Error = " + message + "\n");
+            // System.out.print("Error = " + message + "\n");
             this.errorMessage = message;
         } else if (serverMessageType == ServerMessageType.NOTIFICATION)
         {
-            System.out.print("Notification = " + message + "\n");
+            // System.out.print("Notification = " + message + "\n");
             this.message = message;
         }
 
@@ -53,10 +53,10 @@ public class ServerMessage {
 
 
     public ServerMessage(ServerMessageType type, String message, ChessGame chessGame) {
-        System.out.print("ServerMessage 3 types\n");
-        System.out.print("Type = " + type + "\n");
-        System.out.print("Message = " + message + "\n");
-        System.out.print("ChessGame = " + game + "\n");
+        // System.out.print("ServerMessage 3 types\n");
+        // System.out.print("Type = " + type + "\n");
+        // System.out.print("Message = " + message + "\n");
+        // System.out.print("ChessGame = " + game + "\n");
         this.serverMessageType = type;
         this.message = message;
         this.game = chessGame;

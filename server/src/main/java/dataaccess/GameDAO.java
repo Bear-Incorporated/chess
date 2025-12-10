@@ -334,25 +334,39 @@ public class GameDAO
 
 
 
-        if (added.whiteUsername() == null)
+        if (added.whiteUsername() == null && added.blackUsername() == null)
         {
             // if white Username is null, need to keep null
+            System.out.println("whiteUsername() == null");
+            System.out.println("blackUsername() == null");
 
             // Add game new game to it at this point
             json = new Gson().toJson(new ChessGame());
             jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
-            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , null , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , NULL , NULL , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+
+        } else if (added.whiteUsername() == null)
+        {
+            // if white Username is null, need to keep null
+            System.out.println("whiteUsername() == null");
+
+            // Add game new game to it at this point
+            json = new Gson().toJson(new ChessGame());
+            jsonWithoutParenthesis = json.toString().replace('"', '\'');
+
+            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , NULL , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         } else if (added.blackUsername() == null)
         {
             // if black Username is null, need to keep null
+            System.out.println("blackUsername() == null");
 
             // Add game new game to it at this point
             json = new Gson().toJson(new ChessGame());
             jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
-            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , null , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+            statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , NULL , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         }
 

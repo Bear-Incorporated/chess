@@ -91,6 +91,8 @@ public class GameService
 
         if (join_color.equals("BLACK"))
         {
+            System.out.println("join_game.blackUsername() = " + join_game.blackUsername());
+
             if (join_game.blackUsername() == null)
             {
                 dataList.gameDeleteViaGameID(join_gameID);
@@ -102,6 +104,7 @@ public class GameService
             }
         } else if (join_color.equals("WHITE"))
         {
+            System.out.println("join_game.whiteUsername() = " + join_game.whiteUsername());
             if (join_game.whiteUsername() == null)
             {
                 dataList.gameDeleteViaGameID(join_gameID);
@@ -161,7 +164,7 @@ public class GameService
         }
 
         dataList.gameDeleteViaGameID(unjoinGameID);
-        dataList.gameAddKeepGameID(new GameData(unjoinGameID, unjoinWhiteUsername, unjoinUserName, unjoinGameName, unjoinChessgame));
+        dataList.gameAddKeepGameID(new GameData(unjoinGameID, unjoinWhiteUsername, unjoinBlackUsername, unjoinGameName, unjoinChessgame));
 
 
 

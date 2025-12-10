@@ -51,14 +51,14 @@ public class HttpTalker
             HttpHeaders headers = httpResponse.headers();
             Optional<String> lengthHeader = headers.firstValue("Content-Length");
 
-            System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
-            System.out.println(httpResponse.body());
+            // System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
+            // System.out.println(httpResponse.body());
 
             return httpResponse.body();
         } else {
-            System.out.println("Error: received status code " + httpResponse.statusCode());
+            // System.out.println("Error: received status code " + httpResponse.statusCode());
 
-            System.out.println(httpResponse.body());
+            // System.out.println(httpResponse.body());
 
             throw new Exception(Integer.toString(httpResponse.statusCode()));
         }
@@ -82,14 +82,14 @@ public class HttpTalker
             HttpHeaders headers = httpResponse.headers();
             Optional<String> lengthHeader = headers.firstValue("Content-Length");
 
-            System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
-            System.out.println(httpResponse.body());
+            // System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
+            // System.out.println(httpResponse.body());
 
             return httpResponse.body();
         } else {
-            System.out.println("Error: received status code " + httpResponse.statusCode());
+            // System.out.println("Error: received status code " + httpResponse.statusCode());
 
-            System.out.println(httpResponse.body());
+            // System.out.println(httpResponse.body());
 
             throw new Exception(Integer.toString(httpResponse.statusCode()));
         }
@@ -112,14 +112,14 @@ public class HttpTalker
             HttpHeaders headers = httpResponse.headers();
             Optional<String> lengthHeader = headers.firstValue("Content-Length");
 
-            System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
-            System.out.println(httpResponse.body());
+            // System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
+            // System.out.println(httpResponse.body());
 
             return httpResponse.body();
         } else {
-            System.out.println("Error: received status code " + httpResponse.statusCode());
+            // System.out.println("Error: received status code " + httpResponse.statusCode());
 
-            System.out.println(httpResponse.body());
+            // System.out.println(httpResponse.body());
 
             throw new Exception(Integer.toString(httpResponse.statusCode()));
         }
@@ -143,14 +143,14 @@ public class HttpTalker
             HttpHeaders headers = httpResponse.headers();
             Optional<String> lengthHeader = headers.firstValue("Content-Length");
 
-            System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
-            System.out.println(httpResponse.body());
+            // System.out.printf("Received %s bytes%n", lengthHeader.orElse("unknown"));
+            // System.out.println(httpResponse.body());
 
 
         } else {
-            System.out.println("Error: received status code " + httpResponse.statusCode());
+            // System.out.println("Error: received status code " + httpResponse.statusCode());
 
-            System.out.println(httpResponse.body());
+            // System.out.println(httpResponse.body());
 
             throw new Exception(Integer.toString(httpResponse.statusCode()));
 
@@ -179,7 +179,7 @@ public class HttpTalker
         var statusCode = response.statusCode();
 
         var responseBody = new Gson().fromJson(response.body(), Map.class);
-        System.out.printf("= Response =========\n[%d]\n\n%s\n\n", statusCode, responseBody);
+        // System.out.printf("= Response =========\n[%d]\n\n%s\n\n", statusCode, responseBody);
     }
 
 
