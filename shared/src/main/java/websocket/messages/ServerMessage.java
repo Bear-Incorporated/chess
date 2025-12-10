@@ -40,7 +40,15 @@ public class ServerMessage {
         if (serverMessageType == ServerMessageType.ERROR)
         {
             // System.out.print("Error = " + message + "\n");
-            this.errorMessage = message;
+            if (message == null)
+            {
+                this.errorMessage = null;
+            }
+            else
+            {
+                this.errorMessage = checkError(message);
+            }
+
         } else if (serverMessageType == ServerMessageType.NOTIFICATION)
         {
             // System.out.print("Notification = " + message + "\n");
@@ -58,8 +66,35 @@ public class ServerMessage {
         // System.out.print("Message = " + message + "\n");
         // System.out.print("ChessGame = " + game + "\n");
         this.serverMessageType = type;
-        this.message = message;
+        if (message == null)
+        {
+            this.errorMessage = null;
+        }
+        else
+        {
+            this.errorMessage = checkError(message);
+        }
         this.game = chessGame;
+    }
+
+    private String checkError (String errorMessageIn)
+    {
+        if (errorMessageIn.contains("400"))
+        {
+            return "Error: bad request - You cannot access that!";
+        } else if (errorMessageIn.contains("401"))
+        {
+            return "Error: unauthorized";
+        } else if (errorMessageIn.contains("403"))
+        {
+            return "Error: already taken";
+        } else if (errorMessageIn.contains("500"))
+        {
+            return "Error: server error";
+        } else
+        {
+            return errorMessageIn;
+        }
     }
 
     @Override
@@ -80,7 +115,7 @@ public class ServerMessage {
     }
 
     public String getErrorMessage() {
-        return this.errorMessage;
+        return checkError(this.errorMessage);
     }
 
     public ChessGame getGame() {

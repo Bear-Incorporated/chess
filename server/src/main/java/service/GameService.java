@@ -308,7 +308,7 @@ public class GameService
 
 
         dataList.gameDeleteViaGameID(gameIDMoving);
-        System.out.println("Moved Game re-adding: " + gameIDMoving + gameMovingData.whiteUsername() + gameMovingData.blackUsername() + gameMovingData.gameName() + gameMoving);
+        System.out.println("Moved Game re-adding: " + gameIDMoving + " " + gameMovingData.whiteUsername() + " " + gameMovingData.blackUsername() + " " + gameMovingData.gameName() + " " + gameMoving.toString());
         dataList.gameAddKeepGameID(new GameData(gameIDMoving, gameMovingData.whiteUsername(), gameMovingData.blackUsername(), gameMovingData.gameName(), gameMoving));
 
 

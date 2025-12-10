@@ -249,6 +249,16 @@ public class Repl implements NotificationHandler  {
             return gameID + " is not a number";
         }
 
+        if (Integer.parseInt(gameID) < 1 || Integer.parseInt(gameID) > 90)
+        {
+            return gameID + " is not a valid game.";
+        }
+
+        if (currentGameListArray[Integer.parseInt(gameID)] == null)
+        {
+            return gameID + " is not a valid game.";
+        }
+
 
 //        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
 //        {
@@ -432,35 +442,35 @@ public class Repl implements NotificationHandler  {
 
         if (location.startsWith("a"))
         {
-            col = 8;
+            col = 1;
         }
         else if (location.startsWith("b"))
         {
-            col = 7;
+            col = 2;
         }
         else if (location.startsWith("c"))
         {
-            col = 6;
+            col = 3;
         }
         else if (location.startsWith("d"))
         {
-            col = 5;
+            col = 4;
         }
         else if (location.startsWith("e"))
         {
-            col = 4;
+            col = 5;
         }
         else if (location.startsWith("f"))
         {
-            col = 3;
+            col = 6;
         }
         else if (location.startsWith("g"))
         {
-            col = 2;
+            col = 7;
         }
         else if (location.startsWith("h"))
         {
-            col = 1;
+            col = 8;
         } else
         {
             throw new Exception("Invalid Position");
@@ -525,7 +535,7 @@ public class Repl implements NotificationHandler  {
                 {
                     // Move to the next row
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 1; col <= 8; col++ )
+                    for (int col = 8; col >= 1; col-- )
                     {
                         // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
@@ -575,7 +585,7 @@ public class Repl implements NotificationHandler  {
                 {
                     // Move to the next row
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 8; col >= 1; col-- )
+                    for (int col = 1; col <= 8; col++ )
                     {
                         // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
@@ -750,6 +760,7 @@ public class Repl implements NotificationHandler  {
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
             // return output.toString();
+            listGames();
             return gameName + " created";
 
         } catch (Exception e) {
@@ -886,10 +897,18 @@ public class Repl implements NotificationHandler  {
         }
         catch (Exception ex)
         {
+            return gameID + " is not a number.";
+        }
+
+        if (Integer.parseInt(gameID) < 1 || Integer.parseInt(gameID) > 90)
+        {
             return gameID + " is not a valid game.";
         }
 
-
+        if (currentGameListArray[Integer.parseInt(gameID)] == null)
+        {
+            return gameID + " is not a valid game.";
+        }
 
 
 
@@ -900,7 +919,7 @@ public class Repl implements NotificationHandler  {
                     {
                         playerColor = "BLACK";
                     }
-                    if (playerColor == "BLACK")
+                    if (playerColor.equals("BLACK"))
                     {
                         return "You are already white in that game";
                     }
@@ -913,7 +932,7 @@ public class Repl implements NotificationHandler  {
                     {
                         playerColor = "WHITE";
                     }
-                    if (playerColor == "WHITE")
+                    if (playerColor.equals("WHITE"))
                     {
                         return "You are already black in that game";
                     }
@@ -961,7 +980,7 @@ public class Repl implements NotificationHandler  {
             return playGame(gameID);
 
         } catch (Exception e) {
-            return "Error: " + e;
+            return "Error: Cannot join that game";
         }
     }
 
@@ -1143,7 +1162,7 @@ public class Repl implements NotificationHandler  {
                 {
                     // Move to the next row
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 1; col <= 8; col++ )
+                    for (int col = 8; col >= 1; col-- )
                     {
                         // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
@@ -1181,7 +1200,7 @@ public class Repl implements NotificationHandler  {
                 {
                     // Move to the next row
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 8; col >= 1; col-- )
+                    for (int col = 1; col <= 8; col++ )
                     {
                         // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
@@ -1395,7 +1414,7 @@ public class Repl implements NotificationHandler  {
     }
     void displayError(String message)
     {
-        System.out.print(SET_TEXT_COLOR_BLUE + "error: " + message + "\n" + SET_TEXT_COLOR_GREEN);
+        System.out.print(SET_TEXT_COLOR_MAGENTA + message + "\n" + SET_TEXT_COLOR_GREEN);
     }
 
 }

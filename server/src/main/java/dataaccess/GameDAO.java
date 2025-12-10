@@ -318,14 +318,17 @@ public class GameDAO
         var json = new Gson().toJson(added.chessGame());
         String jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
+        System.out.println("json = " + json + "\n");
+        System.out.println("jsonWithoutParenthesis = " + jsonWithoutParenthesis + "\n");
+
         // System.out.println(new ChessGame() + "\n");
         // System.out.println(new ChessGame() + "\n");
         // System.out.println(new ChessGame() + "\n");
 
-        System.out.println(json + "\n");
-        System.out.println(json + "\n");
-        System.out.println(json + "\n");
-        System.out.println(json + "\n");
+//        System.out.println(json + "\n");
+//        System.out.println(json + "\n");
+//        System.out.println(json + "\n");
+//        System.out.println(json + "\n");
 
 
         var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
@@ -333,16 +336,19 @@ public class GameDAO
         // var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" );");
 
 
+        if (added.chessGame() == null)
+        {
+            // Add game new game to it at this point
+            json = new Gson().toJson(new ChessGame());
+            jsonWithoutParenthesis = json.toString().replace('"', '\'');
+
+        }
 
         if (added.whiteUsername() == null && added.blackUsername() == null)
         {
             // if white Username is null, need to keep null
             System.out.println("whiteUsername() == null");
             System.out.println("blackUsername() == null");
-
-            // Add game new game to it at this point
-            json = new Gson().toJson(new ChessGame());
-            jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
             statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , NULL , NULL , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
@@ -351,20 +357,12 @@ public class GameDAO
             // if white Username is null, need to keep null
             System.out.println("whiteUsername() == null");
 
-            // Add game new game to it at this point
-            json = new Gson().toJson(new ChessGame());
-            jsonWithoutParenthesis = json.toString().replace('"', '\'');
-
             statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , NULL , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         } else if (added.blackUsername() == null)
         {
             // if black Username is null, need to keep null
             System.out.println("blackUsername() == null");
-
-            // Add game new game to it at this point
-            json = new Gson().toJson(new ChessGame());
-            jsonWithoutParenthesis = json.toString().replace('"', '\'');
 
             statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" + added.gameID() + "\" , \"" + added.whiteUsername() + "\" , NULL , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 

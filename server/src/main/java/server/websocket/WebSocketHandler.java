@@ -107,7 +107,11 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
             connections.narrowcast(ctx, notification);
 
+
             message = String.format("%s has joined the game", username);
+
+
+
             notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcastViaGameID(ctx, notification, command.getGameID());
 

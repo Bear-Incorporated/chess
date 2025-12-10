@@ -82,7 +82,7 @@ public class ChessGame {
         // Check every move
         for (ChessMove move : moves_input)
         {
-            System.out.println("Checking if " + move.getStartPosition() + " can move to " + move.getEndPosition());
+            // System.out.println("Checking if " + move.getStartPosition() + " can move to " + move.getEndPosition());
 
             // This imaginary board will be the board if it completes the specific move
             player_board_imaginary = playerBoard.getBoard();
@@ -98,9 +98,9 @@ public class ChessGame {
 
             if (isInCheck(piece_moving.getTeamColor(), player_board_imaginary)) {
                 // It is in check, so it won't be added
-                System.out.println("It is in check, so it won't be added");
+                // System.out.println("It is in check, so it won't be added");
             } else {
-                System.out.println("It is not in check, so it will be added");
+                // System.out.println("It is not in check, so it will be added");
                 moves_output.add(move);
             }
 
