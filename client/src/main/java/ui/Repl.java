@@ -491,109 +491,112 @@ public class Repl implements NotificationHandler  {
     private String printBoardValid(ChessBoard chessBoard, ChessGame.TeamColor activePlayer, Collection<ChessMove> validMoves)
     {
 
-        try {
-            String printBoardOutput = "\n";
 
-            Boolean squareColorWhite = true;
+        String printBoardOutput = "\n";
 
-            // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
+        Boolean squareColorWhite = true;
 
-            if (activePlayer.equals(ChessGame.TeamColor.BLACK))
+        // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
+
+        if (activePlayer.equals(ChessGame.TeamColor.BLACK))
+        {
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+            for (int row = 1; row <= 8; row++ )
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
-                for (int row = 1; row <= 8; row++ )
+                // Move to the next row
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
+                for (int col = 8; col >= 1; col-- )
                 {
-                    // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 8; col >= 1; col-- )
+                    // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+
+                    // Move to the next col
+
+
+                    // Set Backgroud Color
+                    printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
+
+
+
+                    if (printBoardValidHelperIsValidEndPosition(validMoves, col, row))
                     {
-                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
-
-                        // Move to the next col
-
-
-                        // Set Backgroud Color
-                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
-
-
-
-                        for (ChessMove move : validMoves)
-                        {
-                            // System.out.print("Checking " + move + "\n");
-                            if (move.getEndPosition().getColumn() == col && move.getEndPosition().getRow() == row)
-                            {
-                                // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
-                                printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
-                            }
-                        }
-
-
-                        printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
-
-
-
-
-                        squareColorWhite = !squareColorWhite;
+                        printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                     }
+
+
+                    printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
+
+
+
+
                     squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
+                squareColorWhite = !squareColorWhite;
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+                        "\u2003" + (row) + " " + RESET + "\n");
             }
-            else if (activePlayer.equals(ChessGame.TeamColor.WHITE))
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+        }
+        else if (activePlayer.equals(ChessGame.TeamColor.WHITE))
+        {
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+            for (int row = 8; row >= 1; row-- )
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
-                for (int row = 8; row >= 1; row-- )
+                // Move to the next row
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
+                for (int col = 1; col <= 8; col++ )
                 {
-                    // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 1; col <= 8; col++ )
+                    // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+
+                    // Move to the next col
+
+                    // Set Backgroud Color
+                    printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
+
+                    if (printBoardValidHelperIsValidEndPosition(validMoves, col, row))
                     {
-                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
-
-                        // Move to the next col
-
-                        // Set Backgroud Color
-                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
-
-                        for (ChessMove move : validMoves)
-                        {
-                            // System.out.print("Checking " + move + "\n");
-                            if (move.getEndPosition().getColumn() == col && move.getEndPosition().getRow() == row)
-                            {
-                                // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
-                                printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
-                            }
-                        }
-
-                        printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
-
-
-                        squareColorWhite = !squareColorWhite;
+                        printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
                     }
+
+
+                    printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
+
+
                     squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
+                squareColorWhite = !squareColorWhite;
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+                        "\u2003" + (row) + " " + RESET + "\n");
             }
-
-
-            // return gameList;
-            return printBoardOutput;
-
-        } catch (Exception e) {
-            // System.out.print("\n" + e + "\n");
-            return "Error " + e;
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
         }
 
 
+        // return gameList;
+        return printBoardOutput;
 
 
     }
+
+
+    private Boolean printBoardValidHelperIsValidEndPosition(Collection<ChessMove> validMoves, int col, int row)
+    {
+        for (ChessMove move : validMoves)
+        {
+            // System.out.print("Checking " + move + "\n");
+            if (move.getEndPosition().getColumn() == col && move.getEndPosition().getRow() == row)
+            {
+                // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_YELLOW);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public String listGames()
     {
@@ -753,8 +756,6 @@ public class Repl implements NotificationHandler  {
 
     public String login(String username, String password)
     {
-
-        // assertSignedIn();
         // System.out.print("username = " + username + "\n");
         // System.out.print("password = " + password + "\n");
 
@@ -1078,35 +1079,40 @@ public class Repl implements NotificationHandler  {
                         c=1;
                     }
                 }
-                if (gameListSplit[i].contains("null"))
+                if (!gameListSplit[i].contains("null"))
                 {
-                    // System.out.print("\n null found! \n");
-                    String[] gameListSplitNull = gameListSplit[i].split(",");
-                    for (int j = 0; j < gameListSplitNull.length; j++ )
+                    continue;
+                }
+
+                // System.out.print("\n null found! \n");
+                String[] gameListSplitNull = gameListSplit[i].split(",");
+                for (int j = 0; j < gameListSplitNull.length; j++ )
+                {
+                    // System.out.print("number " + j + " is " + gameListSplitNull[j] + ", ");
+
+
+                    if (!gameListSplitNull[j].contains("null"))
                     {
-                        // System.out.print("number " + j + " is " + gameListSplitNull[j] + ", ");
-
-
-                        if (gameListSplitNull[j].contains("null"))
-                        {
-
-                            // System.out.print(" Empty Place Found!");
-
-                            // Move to the next row
-                            c++;
-                            if (c>8)
-                            {
-                                r++;
-                                c=1;
-                            }
-                        }
-                        // System.out.print(" good ");
-
+                        continue;
                     }
+
+                    // System.out.print(" Empty Place Found!");
+
+                    // Move to the next row
+                    c++;
+                    if (c>8)
+                    {
+                        r++;
+                        c=1;
+                    }
+
+                    // System.out.print(" good ");
+
+                }
 
                     // System.out.print(" last null ");
 
-                }
+
                 // System.out.print(" Did Number " + i);
             }
 
@@ -1130,80 +1136,80 @@ public class Repl implements NotificationHandler  {
     {
         currentChessBoard = chessBoard;
 
-        try {
-            String printBoardOutput = "\n";
 
-            Boolean squareColorWhite = true;
+        String printBoardOutput = "\n";
 
-            // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
-            if (activePlayer.equals(ChessGame.TeamColor.BLACK))
+        Boolean squareColorWhite = true;
+
+        // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
+        if (activePlayer.equals(ChessGame.TeamColor.BLACK))
+        {
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+            for (int row = 1; row <= 8; row++ )
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
-                for (int row = 1; row <= 8; row++ )
+                // Move to the next row
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
+                for (int col = 8; col >= 1; col-- )
                 {
-                    // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 8; col >= 1; col-- )
-                    {
-                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+                    // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
 
-                        // Move to the next col
+                    // Move to the next col
 
-                        // Set Backgroud Color
-                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
+                    // Set Backgroud Color
+                    printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
 
 
-                        printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
+                    printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
 
 
 
 
-                        squareColorWhite = !squareColorWhite;
-                    }
                     squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
+                squareColorWhite = !squareColorWhite;
                 printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+                        "\u2003" + (row) + " " + RESET + "\n");
             }
-            else if (activePlayer.equals(ChessGame.TeamColor.WHITE))
-            {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
-                for (int row = 8; row >= 1; row-- )
-                {
-                    // Move to the next row
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
-                    for (int col = 1; col <= 8; col++ )
-                    {
-                        // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
-
-                        // Move to the next col
-
-                        // Set Backgroud Color
-                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
-
-                        printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
-
-
-                        squareColorWhite = !squareColorWhite;
-                    }
-                    squareColorWhite = !squareColorWhite;
-                    printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
-                }
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
-                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
-            }
-
-
-            // return gameList;
-            return printBoardOutput;
-
-        } catch (Exception e) {
-            // System.out.print("\n" + e + "\n");
-            return "Error " + e;
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" +
+                    RESET + "\n");
         }
+        else if (activePlayer.equals(ChessGame.TeamColor.WHITE))
+        {
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                    "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003"+
+                    RESET + "\n");
+            for (int row = 8; row >= 1; row-- )
+            {
+                // Move to the next row
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + " " + (row) + "\u2003");
+                for (int col = 1; col <= 8; col++ )
+                {
+                    // System.out.print("Current Board: row = " + row + ", col = " + col + ", piece = " + chessBoard.getPiece(row, col) + "\n");
+
+                    // Move to the next col
+
+                    // Set Backgroud Color
+                    printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
+
+                    printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
+
+
+                    squareColorWhite = !squareColorWhite;
+                }
+                squareColorWhite = !squareColorWhite;
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK+SET_BG_COLOR_LIGHT_GREY+"\u2003" +
+                        (row) + " " + RESET + "\n");
+            }
+            printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK+SET_BG_COLOR_LIGHT_GREY+
+                    "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003"+RESET + "\n");
+        }
+
+
+        // return gameList;
+        return printBoardOutput;
+
 
 
 

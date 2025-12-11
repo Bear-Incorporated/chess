@@ -328,7 +328,8 @@ public class GameDAO
 
 
         var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" +
-                added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+                added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() +
+                "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         // var statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName) VALUES ( \"" +
         // added.gameID() + "\" , \"" + added.whiteUsername() + "\" , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" );");
@@ -357,7 +358,8 @@ public class GameDAO
             System.out.println("whiteUsername() == null");
 
             statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" +
-                    added.gameID() + "\" , NULL , \"" + added.blackUsername() + "\" , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+                    added.gameID() + "\" , NULL , \"" + added.blackUsername() + "\" , \"" +
+                    added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         } else if (added.blackUsername() == null)
         {
@@ -365,7 +367,8 @@ public class GameDAO
             System.out.println("blackUsername() == null");
 
             statement = ("INSERT INTO GameSQL (gameID, whiteUsername, blackUsername, gameName, chessGame) VALUES ( \"" +
-                    added.gameID() + "\" , \"" + added.whiteUsername() + "\" , NULL , \"" + added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
+                    added.gameID() + "\" , \"" + added.whiteUsername() + "\" , NULL , \"" +
+                    added.gameName() + "\" , \"" + jsonWithoutParenthesis + "\" );");
 
         }
 

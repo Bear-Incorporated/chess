@@ -44,6 +44,7 @@ public class PostExample {
                 .uri(new URI(urlString))
                 .timeout(java.time.Duration.ofMillis(TIMEOUT_MILLIS))
                 .header("authorization", "abc123")
+//                .GET()
                 .POST(HttpRequest.BodyPublishers.ofString(message, StandardCharsets.UTF_8))
                 .build();
 
