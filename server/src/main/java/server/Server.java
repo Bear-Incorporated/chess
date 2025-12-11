@@ -672,46 +672,6 @@ public class Server {
         }
     }
 
-    private void parsedOld(Context context)
-    {
-        System.out.println("post");
-        if (context.path().equals("/user"))
-        {
-            System.out.println("user");
-            System.out.println(context);
-
-            System.out.println("gameName = " + context.path());
-            System.out.println("body = " + context.body());
-
-            System.out.println("Authorization = " + context.headerMap().get("Authorization"));
-            context.headerMap().get("Authorization");
-
-            var serializer = new Gson();
-
-            var game = new UserRequestRegister("test user", "psw", "test email");
-            System.out.println(game);
-
-            // serialize to JSON
-            var json = serializer.toJson(game);
-            System.out.println(json);
-
-
-            // deserialize back to ChessGame
-            game = serializer.fromJson(context.body(), UserRequestRegister.class);
-            System.out.println(game);
-
-        }
-    }
-
-
-    private void addGame(Context context) {
-        System.out.println("Opened program");
-        System.out.println("gameName = " + context.path());
-        System.out.println("body = " + context.body());
-        System.out.println("Authorization = " + context.headerMap().get("Authorization"));
-        context.headerMap().get("Authorization");
-
-    }
 
     private void addName(Context context) {
         names.add(context.pathParam("name"));

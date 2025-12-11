@@ -39,27 +39,7 @@ public class WebSocketFacade extends Endpoint {
 
                     try
                     {
-//                        if (message.contains("ServerMessage{serverMessageType=NOTIFICATION"))
-//                        {
-//                            String[] messageSplit  = message.split("\'");
-//                            notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, messageSplit[1]);
-//                            System.out.print(messageSplit[1] + "\n");
-//                        } else if (message.contains("ServerMessage{serverMessageType=ERROR"))
-//                        {
-//                            String[] messageSplit  = message.split("\'");
-//                            notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, messageSplit[1]);
-//                            System.out.print(messageSplit[1] + "\n");
-//                        } else if (message.contains("ServerMessage{serverMessageType=LOAD_GAME"))
-//                        {
-//                            String[] messageSplit  = message.split("\'");
-//                            notification = new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, messageSplit[1]);
-//                            System.out.print(messageSplit[1] + "\n");
-//                        }
-
-//                         notification = new Gson().fromJson(message, ServerMessage.class);
-//                         JSONObject jsonObj = new JSONObject(message.toString());
-//                        JsonObject tempJson = new JsonObject().getAsJsonObject(message);
-                        // System.out.print("Part 0" + message + "\n");
+//
                         JsonObject tempJson = JsonParser.parseString(message).getAsJsonObject();
 
                         // System.out.print("Part 1" + tempJson + "\n");
@@ -72,11 +52,6 @@ public class WebSocketFacade extends Endpoint {
                     {
                         // System.out.print("Error: " + ex.getMessage() + "\n");
                     }
-
-                    // System.out.print("The notification is ");
-                    // System.out.print(notification);
-                    // System.out.print("\n");
-                    // System.out.print("Message Type = " + notification.getServerMessageType() + ", Message = " + notification.getMessage());
 
 
                     notificationHandler.notify(notification);
@@ -134,23 +109,6 @@ public class WebSocketFacade extends Endpoint {
     }
 
 
-//    public void enterPetShop(String visitorName) throws ResponseException {
-//        try {
-//            var action = new UserGameCommand(UserGameCommand.CommandType.CONNECT, visitorName);
-//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-//        } catch (IOException ex) {
-//            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-//        }
-//    }
-//
-//    public void leavePetShop(String visitorName) throws ResponseException {
-//        try {
-//            var action = new UserGameCommand(UserGameCommand.CommandType.LEAVE, visitorName);
-//            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-//        } catch (IOException ex) {
-//            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-//        }
-//    }
 
 }
 

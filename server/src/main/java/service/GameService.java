@@ -121,9 +121,6 @@ public class GameService
         }
 
 
-        // throw new DataAccessException("400");
-        // throw new DataAccessException("403");
-        // throw new RuntimeException("Not implemented");
         return new GameResponseJoin();
     }
 
@@ -168,10 +165,6 @@ public class GameService
 
 
 
-        // throw new DataAccessException("400");
-        // throw new DataAccessException("403");
-        // throw new RuntimeException("Not implemented");
-        return;
     }
 
 
@@ -232,11 +225,9 @@ public class GameService
 
 
         dataList.gameDeleteViaGameID(gameOverID);
-        dataList.gameAddKeepGameID(new GameData(gameOverID, gameOverData.whiteUsername(), gameOverData.blackUsername(), gameOverData.gameName(), chessGameOver));
+        dataList.gameAddKeepGameID(new GameData(gameOverID, gameOverData.whiteUsername(),
+                gameOverData.blackUsername(), gameOverData.gameName(), chessGameOver));
 
-        // throw new DataAccessException("400");
-        // throw new DataAccessException("403");
-        // throw new RuntimeException("Not implemented");
         return;
     }
 
@@ -308,8 +299,10 @@ public class GameService
 
 
         dataList.gameDeleteViaGameID(gameIDMoving);
-        System.out.println("Moved Game re-adding: " + gameIDMoving + " " + gameMovingData.whiteUsername() + " " + gameMovingData.blackUsername() + " " + gameMovingData.gameName() + " " + gameMoving.toString());
-        dataList.gameAddKeepGameID(new GameData(gameIDMoving, gameMovingData.whiteUsername(), gameMovingData.blackUsername(), gameMovingData.gameName(), gameMoving));
+        System.out.println("Moved Game re-adding: " + gameIDMoving + " " + gameMovingData.whiteUsername() + " " +
+                gameMovingData.blackUsername() + " " + gameMovingData.gameName() + " " + gameMoving.toString());
+        dataList.gameAddKeepGameID(new GameData(gameIDMoving, gameMovingData.whiteUsername(),
+                gameMovingData.blackUsername(), gameMovingData.gameName(), gameMoving));
 
 
         return gameMoving;

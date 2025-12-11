@@ -60,13 +60,19 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         // If game is over, return null
         if (playerActive == null)
+        {
             return null;
+        }
+
 
         Set<ChessMove> movesOutput = new HashSet<ChessMove>();
 
         // If no piece there, return null
         if (playerBoard.getPiece(startPosition) == null)
+        {
             return null;
+        }
+
 
         ChessPiece pieceMoving = playerBoard.getPiece(startPosition);
 
@@ -113,11 +119,11 @@ public class ChessGame {
         int pieceMovingCol = startPosition.getColumn();
 
         // Check if King
-        if (pieceMoving.getPieceType() == ChessPiece.PieceType.KING)
+        // Check if moved already
+
+        if (pieceMoving.getPieceType() == ChessPiece.PieceType.KING && pieceMoving.getPieceMoved() == 0)
         {
-            // Check if moved already
-            if (pieceMoving.getPieceMoved() == 0)
-            {
+
                 // Check if King is in Check
                 if (isInCheck(pieceMoving.getTeamColor()) == false)
                 {
@@ -126,138 +132,126 @@ public class ChessGame {
                     // Check if Rook is in position
 
                     // Look left, on Queen's side
-                    if (playerBoard.getPiece(pieceMovingRow, 4) == null)
+                    if (playerBoard.getPiece(pieceMovingRow, 4) == null && playerBoard.getPiece(pieceMovingRow, 3) == null &&
+                            playerBoard.getPiece(pieceMovingRow, 2) == null && playerBoard.getPiece(pieceMovingRow, 1) != null)
                     {
-                        if (playerBoard.getPiece(pieceMovingRow, 3) == null)
+
+                        if (playerBoard.getPiece(pieceMovingRow, 1).getPieceType() == ChessPiece.PieceType.ROOK &&
+                                playerBoard.getPiece(pieceMovingRow, 1).getPieceMoved() == 0)
                         {
-                            if (playerBoard.getPiece(pieceMovingRow, 2) == null)
-                            {
-                                if (playerBoard.getPiece(pieceMovingRow, 1) != null)
-                                {
-                                    if (playerBoard.getPiece(pieceMovingRow, 1).getPieceType() == ChessPiece.PieceType.ROOK)
-                                    {
-                                        if (playerBoard.getPiece(pieceMovingRow, 1).getPieceMoved() == 0)
-                                        {
-                                            // This imaginary board will be the board if it completes the specific move
-                                            playerBoardImaginary = playerBoard.getBoard();
 
-                                            // Move the king left by 1
-                                            playerBoardImaginary.addPiece(pieceMovingRow, 4, pieceMoving);
-                                            playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
-                                            if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
-                                                // It is in check, so it won't be added
-                                                System.out.println("It is in check, so it won't be added");
-                                            } else {
-                                                // This imaginary board will be the board if it completes the specific move
-                                                playerBoardImaginary = playerBoard.getBoard();
+                            // This imaginary board will be the board if it completes the specific move
+                            playerBoardImaginary = playerBoard.getBoard();
 
-                                                // Move the king left by 2
-                                                playerBoardImaginary.addPiece(pieceMovingRow, 3, pieceMoving);
-                                                playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
-                                                if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
-                                                    // It is in check, so it won't be added
-                                                    System.out.println("It is in check, so it won't be added");
-                                                } else {
-                                                    System.out.println("It is not in check, so it will be added");
-                                                    movesOutput.add(new ChessMove(startPosition, new ChessPosition(pieceMovingRow, 3), null));
-                                                }
-                                            }
+                            // Move the king left by 1
+                            playerBoardImaginary.addPiece(pieceMovingRow, 4, pieceMoving);
+                            playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
+                            if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
+                                // It is in check, so it won't be added
+                                System.out.println("It is in check, so it won't be added");
+                            } else {
+                                // This imaginary board will be the board if it completes the specific move
+                                playerBoardImaginary = playerBoard.getBoard();
 
-                                        }
-                                    }
+                                // Move the king left by 2
+                                playerBoardImaginary.addPiece(pieceMovingRow, 3, pieceMoving);
+                                playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
+                                if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
+                                    // It is in check, so it won't be added
+                                    System.out.println("It is in check, so it won't be added");
+                                } else {
+                                    System.out.println("It is not in check, so it will be added");
+                                    movesOutput.add(new ChessMove(startPosition, new ChessPosition(pieceMovingRow, 3), null));
                                 }
                             }
                         }
                     }
 
+
                     // Look right, on King's side
-                    if (playerBoard.getPiece(pieceMovingRow, 6) == null)
+                    if (playerBoard.getPiece(pieceMovingRow, 6) == null && playerBoard.getPiece(pieceMovingRow, 7) == null &&
+                            playerBoard.getPiece(pieceMovingRow, 8) != null)
                     {
-                        if (playerBoard.getPiece(pieceMovingRow, 7) == null)
+
+                        if (playerBoard.getPiece(pieceMovingRow, 8).getPieceType() == ChessPiece.PieceType.ROOK &&
+                                playerBoard.getPiece(pieceMovingRow, 8).getPieceMoved() == 0)
                         {
-                            if (playerBoard.getPiece(pieceMovingRow, 8) != null)
-                            {
-                                if (playerBoard.getPiece(pieceMovingRow, 8).getPieceType() == ChessPiece.PieceType.ROOK)
-                                {
-                                    if (playerBoard.getPiece(pieceMovingRow, 8).getPieceMoved() == 0)
-                                    {
-                                        // This imaginary board will be the board if it completes the specific move
-                                        playerBoardImaginary = playerBoard.getBoard();
 
-                                        // Move the king right by 1
-                                        playerBoardImaginary.addPiece(pieceMovingRow, 6, pieceMoving);
-                                        playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
-                                        if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
-                                            // It is in check, so it won't be added
-                                            System.out.println("It is in check, so it won't be added");
-                                        } else {
-                                            // This imaginary board will be the board if it completes the specific move
-                                            playerBoardImaginary = playerBoard.getBoard();
+                            // This imaginary board will be the board if it completes the specific move
+                            playerBoardImaginary = playerBoard.getBoard();
 
-                                            // Move the king left by 2
-                                            playerBoardImaginary.addPiece(pieceMovingRow, 7, pieceMoving);
-                                            playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
-                                            if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
-                                                // It is in check, so it won't be added
-                                                System.out.println("It is in check, so it won't be added");
-                                            } else {
-                                                System.out.println("It is not in check, so it will be added");
-                                                movesOutput.add(new ChessMove(startPosition, new ChessPosition(pieceMovingRow, 7), null));
-                                            }
-                                        }
-                                    }
+                            // Move the king right by 1
+                            playerBoardImaginary.addPiece(pieceMovingRow, 6, pieceMoving);
+                            playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
+                            if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
+                                // It is in check, so it won't be added
+                                System.out.println("It is in check, so it won't be added");
+                            } else {
+                                // This imaginary board will be the board if it completes the specific move
+                                playerBoardImaginary = playerBoard.getBoard();
+
+                                // Move the king left by 2
+                                playerBoardImaginary.addPiece(pieceMovingRow, 7, pieceMoving);
+                                playerBoardImaginary.pieceRemove(pieceMovingRow, 5);
+                                if (isInCheck(pieceMoving.getTeamColor(), playerBoardImaginary)) {
+                                    // It is in check, so it won't be added
+                                    System.out.println("It is in check, so it won't be added");
+                                } else {
+                                    System.out.println("It is not in check, so it will be added");
+                                    movesOutput.add(new ChessMove(startPosition, new ChessPosition(pieceMovingRow, 7), null));
                                 }
+
                             }
 
                         }
                     }
 
                 }
-            }
+
         }
 
         // EnPassant Test
         // Check if piece moving is a Pawn
-        if(pieceMoving.getPieceType() ==  ChessPiece.PieceType.PAWN)
+        // Check is last moved piece exists
+        if(pieceMoving.getPieceType() == ChessPiece.PieceType.PAWN && playerInactiveLastMovePosition != null)
         {
             //System.out.println("EnPassant Test 1 Passed");
-            // Check is last moved piece exists
-            if (playerInactiveLastMovePosition != null)
-            {
-                //System.out.println("EnPassant Test 2 Passed");
-                // Check is last moved piece exists
-                if (playerBoard.getPiece(playerInactiveLastMovePosition) != null)
-                {
-                    //System.out.println("EnPassant Test 3 Passed");
-                    if (playerBoard.getPiece(playerInactiveLastMovePosition).getPieceMoved() == 1)
-                    {
-                        //System.out.println("EnPassant Test 4 Passed");
-                        // Check if inactive pawn only moved one time
-                        if (playerBoard.getPiece(playerInactiveLastMovePosition).getPieceMoved() == 1)
-                        {
-                            //System.out.println("EnPassant Test 5 Passed");
-                            // Check to see if they are now on the same row (required for EnPassant
-                            if (playerInactiveLastMovePosition.getRow() == pieceMovingRow)
-                            {
-                                //System.out.println("EnPassant Test 6 Passed");
-                                // If one row over from the other pawn
-                                if (pieceMovingCol == playerInactiveLastMovePosition.getColumn() + 1 || pieceMovingCol == playerInactiveLastMovePosition.getColumn() - 1)
-                                {
-                                    //System.out.println("EnPassant Test 7 Passed");
-                                    // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
-                                    if (pieceMovingRow == 4)
-                                    {
-                                        //System.out.println("EnPassant Test 8 Passed");
-                                        movesOutput.add(new ChessMove(startPosition, new ChessPosition(3, playerInactiveLastMovePosition.getColumn()), null));
-                                    } else if (pieceMovingRow == 5)
-                                    {
-                                        //System.out.println("EnPassant Test 9 Passed");
-                                        movesOutput.add(new ChessMove(startPosition, new ChessPosition(6, playerInactiveLastMovePosition.getColumn()), null));
-                                    }
-                                }
 
+
+            //System.out.println("EnPassant Test 2 Passed");
+            // Check is last moved piece exists
+            if (playerBoard.getPiece(playerInactiveLastMovePosition) != null)
+            {
+                //System.out.println("EnPassant Test 3 Passed");
+                //System.out.println("EnPassant Test 4 Passed");
+                // Check if inactive pawn only moved one time
+                if (playerBoard.getPiece(playerInactiveLastMovePosition).getPieceMoved() == 1)
+                {
+                    //System.out.println("EnPassant Test 5 Passed");
+                    // Check to see if they are now on the same row (required for EnPassant
+                    if (playerInactiveLastMovePosition.getRow() == pieceMovingRow)
+                    {
+                        //System.out.println("EnPassant Test 6 Passed");
+                        // If one row over from the other pawn
+                        if (pieceMovingCol == playerInactiveLastMovePosition.getColumn() + 1 || pieceMovingCol ==
+                                playerInactiveLastMovePosition.getColumn() - 1)
+                        {
+                            //System.out.println("EnPassant Test 7 Passed");
+                            // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
+                            if (pieceMovingRow == 4)
+                            {
+                                //System.out.println("EnPassant Test 8 Passed");
+                                movesOutput.add(new ChessMove(startPosition, new ChessPosition(3,
+                                        playerInactiveLastMovePosition.getColumn()), null));
+                            } else if (pieceMovingRow == 5)
+                            {
+                                //System.out.println("EnPassant Test 9 Passed");
+                                movesOutput.add(new ChessMove(startPosition, new ChessPosition(6,
+                                        playerInactiveLastMovePosition.getColumn()), null));
                             }
                         }
+
+
                     }
                 }
             }
@@ -324,20 +318,19 @@ public class ChessGame {
                 // This has to be done first, so I can check to see if a pawn moved diagonal into a blank space
 
                 // Only EnPassant if Pawn
-                if(playerBoard.getPiece(positionStart).getPieceType() == ChessPiece.PieceType.PAWN)
+                // Check if Pawn moved diagonal
+                // If the pawn moved diagonal without killing anything
+                if(playerBoard.getPiece(positionStart).getPieceType() == ChessPiece.PieceType.PAWN &&
+                        (positionEnd.getColumn() == positionStart.getColumn() + 1 || positionEnd.getColumn() == positionStart.getColumn() - 1 ) &&
+                        playerBoard.getPiece(positionEnd) == null)
                 {
-                    // Check if Pawn moved diagonal
-                    if (positionEnd.getColumn() == positionStart.getColumn() + 1 || positionEnd.getColumn() == positionStart.getColumn() - 1 )
-                    {
-                        // If the pawn moved diagonal without killing anything
-                        if (playerBoard.getPiece(positionEnd) == null)
-                        {
-                            // Kill the pawn!!!
-                            // The dead pawn will be on the starting row of the moving pawn and the ending column of the same pawn
-                            playerBoard.pieceRemove(positionStart.getRow(), positionEnd.getColumn());
-                        }
-                    }
+
+
+                    // Kill the pawn!!!
+                    // The dead pawn will be on the starting row of the moving pawn and the ending column of the same pawn
+                    playerBoard.pieceRemove(positionStart.getRow(), positionEnd.getColumn());
                 }
+
 
 
                 // Kill the previous piece and add the new piece in its place
@@ -358,32 +351,34 @@ public class ChessGame {
 
                 // If Castling, move the Rook as well
                 // Check if King
-                if(playerBoard.getPiece(positionEnd).getPieceType() == ChessPiece.PieceType.KING)
+                // If King in starting location
+                if(playerBoard.getPiece(positionEnd).getPieceType() == ChessPiece.PieceType.KING && positionStart.getColumn() == 5)
                 {
-                    // If King in starting location
-                    if (positionStart.getColumn() == 5)
+
+
+                    // If castling left
+                    if(positionEnd.getColumn() == 3)
                     {
-                        // If castling left
-                        if(positionEnd.getColumn() == 3)
-                        {
-                            // Remove the Rook and add the Rook to the new place
-                            playerBoard.pieceRemove(positionEnd.getRow(),1);
-                            playerBoard.addPiece(positionEnd.getRow(), 4, new ChessPiece(playerBoard.getPiece(positionEnd).getTeamColor(), ChessPiece.PieceType.ROOK));
+                        // Remove the Rook and add the Rook to the new place
+                        playerBoard.pieceRemove(positionEnd.getRow(),1);
+                        playerBoard.addPiece(positionEnd.getRow(), 4, new ChessPiece(playerBoard.getPiece(positionEnd).getTeamColor(),
+                                ChessPiece.PieceType.ROOK));
 
-                            // Mark the moved piece as having moved
-                            playerBoard.getPiece(positionEnd.getRow(), 4).tickPieceMoved();
-                        }
-                        // If castling right
-                        if(positionEnd.getColumn() == 7)
-                        {
-                            // Remove the Rook and add the Rook to the new place
-                            playerBoard.pieceRemove(positionEnd.getRow(),8);
-                            playerBoard.addPiece(positionEnd.getRow(), 6, new ChessPiece(playerBoard.getPiece(positionEnd).getTeamColor(), ChessPiece.PieceType.ROOK));
-
-                            // Mark the moved piece as having moved
-                            playerBoard.getPiece(positionEnd.getRow(), 6).tickPieceMoved();
-                        }
+                        // Mark the moved piece as having moved
+                        playerBoard.getPiece(positionEnd.getRow(), 4).tickPieceMoved();
                     }
+                    // If castling right
+                    if(positionEnd.getColumn() == 7)
+                    {
+                        // Remove the Rook and add the Rook to the new place
+                        playerBoard.pieceRemove(positionEnd.getRow(),8);
+                        playerBoard.addPiece(positionEnd.getRow(), 6, new ChessPiece(playerBoard.getPiece(positionEnd).getTeamColor(),
+                                ChessPiece.PieceType.ROOK));
+
+                        // Mark the moved piece as having moved
+                        playerBoard.getPiece(positionEnd.getRow(), 6).tickPieceMoved();
+                    }
+
                 }
 
 
@@ -503,7 +498,8 @@ public class ChessGame {
         {
             for(int c=1; c<=8; c++)
             {
-                if(playerBoard.getPiece(r,c) != null) {
+                if(playerBoard.getPiece(r,c) != null)
+                {
                     if(playerBoard.getPiece(r,c).getTeamColor() == teamColor)
                     {
                         if (validMoves(new ChessPosition(r,c)) != null)
@@ -543,16 +539,15 @@ public class ChessGame {
             for(int c=1; c<=8; c++)
             {
                 if(playerBoard.getPiece(r,c) != null) {
-                    if(playerBoard.getPiece(r,c).getTeamColor() == teamColor)
+                    if(playerBoard.getPiece(r,c).getTeamColor() == teamColor && validMoves(new ChessPosition(r,c)) != null)
                     {
-                        if (validMoves(new ChessPosition(r,c)) != null)
+
+                        if (!validMoves(new ChessPosition(r, c)).isEmpty())
                         {
-                            if (!validMoves(new ChessPosition(r, c)).isEmpty())
-                            {
-                                // Escape found!!!
-                                return false;
-                            }
+                            // Escape found!!!
+                            return false;
                         }
+
                     }
                 }
             }

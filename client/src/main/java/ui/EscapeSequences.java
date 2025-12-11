@@ -68,7 +68,8 @@ public class EscapeSequences {
 
     public static final String LOGO = " ♕ ";
 
-    public static final String RESET = RESET_TEXT_BOLD_FAINT + RESET_TEXT_ITALIC + RESET_TEXT_UNDERLINE + RESET_TEXT_BLINKING + RESET_TEXT_COLOR + RESET_BG_COLOR;
+    public static final String RESET = RESET_TEXT_BOLD_FAINT + RESET_TEXT_ITALIC + RESET_TEXT_UNDERLINE +
+            RESET_TEXT_BLINKING + RESET_TEXT_COLOR + RESET_BG_COLOR;
 
     public static String moveCursorToLocation(int x, int y) { return UNICODE_ESCAPE + "[" + y + ";" + x + "H"; }
 }

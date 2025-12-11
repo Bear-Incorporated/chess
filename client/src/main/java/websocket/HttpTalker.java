@@ -159,28 +159,6 @@ public class HttpTalker
 
 
 
-//    private static HttpResponse<String> sendRequest(String url, String method, String body)
-//    {
-//        var request = HttpRequest.newBuilder(URI.create(url))
-//                .method(method, requestBodyPublisher(body))
-//                .build();
-//        return httpClient.send(request, BodyHandlers.ofString());
-//    }
-
-    private static HttpRequest.BodyPublisher requestBodyPublisher(String body) {
-        if (body != null) {
-            return HttpRequest.BodyPublishers.ofString(body);
-        } else {
-            return HttpRequest.BodyPublishers.noBody();
-        }
-    }
-
-    private static void receiveResponse(HttpResponse<String> response) {
-        var statusCode = response.statusCode();
-
-        var responseBody = new Gson().fromJson(response.body(), Map.class);
-        // System.out.printf("= Response =========\n[%d]\n\n%s\n\n", statusCode, responseBody);
-    }
 
 
 

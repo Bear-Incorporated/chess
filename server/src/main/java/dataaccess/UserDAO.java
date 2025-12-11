@@ -39,7 +39,8 @@ public class UserDAO
 
     static public void createTableUserSQL() throws DataAccessException {
         System.out.println("createTable_UserSQL");
-        var statement = "CREATE TABLE IF NOT EXISTS UserSQL (username VARCHAR(255) DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL);";
+        var statement = "CREATE TABLE IF NOT EXISTS UserSQL (username VARCHAR(255) DEFAULT NULL, password VARCHAR(255) " +
+                "DEFAULT NULL, email VARCHAR(255) DEFAULT NULL);";
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {
             preparedStatement.executeUpdate();
@@ -90,7 +91,8 @@ public class UserDAO
 
         String hashedPassword = BCrypt.hashpw(added.password(), BCrypt.gensalt());
 
-        var statement = "INSERT INTO UserSQL (username, password, email) VALUES ( \"" + added.username() + "\" , \"" + hashedPassword + "\" , \"" + added.email() + "\" );";
+        var statement = "INSERT INTO UserSQL (username, password, email) VALUES ( \"" + added.username() + "\" , \"" +
+                hashedPassword + "\" , \"" + added.email() + "\" );";
         System.out.println(statement);
         try (var conn = DatabaseManager.getConnection();
              var preparedStatement = conn.prepareStatement(statement)) {

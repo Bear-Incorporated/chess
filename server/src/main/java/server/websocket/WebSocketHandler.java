@@ -73,20 +73,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         try
         {
-//
-//            I need to implement this client side if I want to ensure they are playing their game.
-//            Maybe, have them store the list every time it comes up, so I can check it.
-//
-//
-//            gameDataShort gameData = serviceGame.getGameDataShort(command.getGameID());
-//            if (gameData.blackUsername().equals(username) || gameData.whiteUsername().equals(username))
-//            {
-//                System.out.print(String.format("%s is a player in the game.", username));
-//            } else {
-//                message = String.format("error : %s is not a part of that game.", username);
-//                notification = new ServerMessage(ServerMessage.ServerMessageType.ERROR, message);
-//                connections.narrowcast(ctx, notification);
-//            }
 
             if (!serviceUser.authorized(command.getAuthToken()))
             {
@@ -251,7 +237,9 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             connections.broadcastViaGameID(null, notification, command.getGameID());
 
             // Tell them what piece was moved
-            message = String.format("%s has moved from %s to %s.", username, command.getMove().getStartPosition().toStringShort(), command.getMove().getEndPosition().toStringShort());
+            message = String.format("%s has moved from %s to %s.", username, command.getMove().getStartPosition().toStringShort(),
+                    command.getMove().getEndPosition().toStringShort());
+
             notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcastViaGameID(ctx, notification, command.getGameID());
 
@@ -350,9 +338,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
 
 
-        // var message = String.format("%s is in the shop", username);
-        // var notification = ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME, null, game);
-        // connections.broadcast(null, notification);
     }
 
     private void leaveGame(WsMessageContext ctx, String username, UserGameCommand command) throws IOException {
@@ -432,34 +417,5 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         }
 
     }
-//    private void saveSession(int gameId, WsMessageContext ctx)
-//    {
-//        connections.add(ctx);
-//
-//    }
 
-
-//    private void enter(String visitorName, Session session) throws IOException {
-//        connections.add(session);
-//        var message = String.format("%s is in the shop", visitorName);
-//        var notification = new Notification(Notification.Type.ARRIVAL, message);
-//        connections.broadcast(session, notification);
-//    }
-//
-//    private void exit(String visitorName, Session session) throws IOException {
-//        var message = String.format("%s left the shop", visitorName);
-//        var notification = new Notification(Notification.Type.DEPARTURE, message);
-//        connections.broadcast(session, notification);
-//        connections.remove(session);
-//    }
-
-//    public void makeNoise(String petName, String sound) throws ResponseException {
-//        try {
-//            var message = String.format("%s says %s", petName, sound);
-//            var notification = new ServerMessage(ServerMessage.Type.NOISE, message);
-//            connections.broadcast(null, notification);
-//        } catch (Exception ex) {
-//            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-//        }
-//    }
 }

@@ -33,9 +33,8 @@ public class ServerMessage {
 
 
     public ServerMessage(ServerMessageType type, String message) {
-        // System.out.print("ServerMessage 2 types\n");
-        // System.out.print("Type = " + type + "\n");
-        // System.out.print("Message = " + message + "\n");
+        // System.out.print("ServerMessage 2 types\n" + "Type = " + type + "\n" + "Message = " + message + "\n");
+
         this.serverMessageType = type;
         if (serverMessageType == ServerMessageType.ERROR)
         {
@@ -61,10 +60,8 @@ public class ServerMessage {
 
 
     public ServerMessage(ServerMessageType type, String message, ChessGame chessGame) {
-        // System.out.print("ServerMessage 3 types\n");
-        // System.out.print("Type = " + type + "\n");
-        // System.out.print("Message = " + message + "\n");
-        // System.out.print("ChessGame = " + game + "\n");
+        // System.out.print("ServerMessage 3 types\n" + "Type = " + type + "\n" + "Message = " + message + "\n" + "ChessGame = " + game + "\n");
+
         this.serverMessageType = type;
         if (message == null)
         {

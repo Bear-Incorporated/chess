@@ -49,10 +49,7 @@ public class Repl implements NotificationHandler  {
         usernameLoggedInAs = "";
     }
 
-//    public Repl(String serverUrl) {
-//        client = new HttpTalker();
-//        ws = new WebSocketFacade(serverUrl, this);
-//    }
+
 
     public void run() {
         System.out.println(LOGO + " Welcome to chess! Sign in to start.");
@@ -76,10 +73,6 @@ public class Repl implements NotificationHandler  {
     }
 
 
-//    public void notify(Notification notification) {
-//        System.out.println(SET_TEXT_COLOR_RED + notification.message());
-//        printPrompt();
-//    }
 
     private void printPrompt() {
         System.out.print("\n" + RESET + ">>> " + SET_TEXT_COLOR_GREEN);
@@ -145,30 +138,6 @@ public class Repl implements NotificationHandler  {
     }
 
 
-//
-//    """
-//    Options:
-//
-//    else if (state == State.INGAME) {
-//        return """
-//
-//                "move <LOCAL_START> <LOCAL_END>" or "m <LOCAL_START> <LOCAL_END>" - Moves a piece.
-//
-//
-//    """;
-
-
-
-
-//    public String signIn(String... params) {
-//        if (params.length >= 1) {
-//            state = State.SIGNEDIN;
-//            visitorName = String.join("-", params);
-//            ws.enterPetShop(visitorName);
-//            return String.format("You signed in as %s.", visitorName);
-//        }
-//    }
-
 
     private String playGame(String gameID)
     {
@@ -190,15 +159,6 @@ public class Repl implements NotificationHandler  {
             return gameID + " is not a number";
         }
 
-
-//        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
-//        {
-//            return gameID + " doesn't have enough players yet.";
-//        }
-//        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().isBlank())
-//        {
-//            return gameID + " doesn't have enough players yet.";
-//        }
 
         // System.out.print("White Player is " + currentGameListArray[Integer.parseInt(gameID)].whiteUsername() + "\n");
         // System.out.print("Black Player is " + currentGameListArray[Integer.parseInt(gameID)].blackUsername() + "\n");
@@ -259,15 +219,6 @@ public class Repl implements NotificationHandler  {
             return gameID + " is not a valid game.";
         }
 
-
-//        if (currentGameListArray[Integer.parseInt(gameID)].whiteUsername().isBlank())
-//        {
-//            return gameID + " doesn't have enough players yet.";
-//        }
-//        if (currentGameListArray[Integer.parseInt(gameID)].blackUsername().isBlank())
-//        {
-//            return gameID + " doesn't have enough players yet.";
-//        }
 
         // System.out.print("White Player is " + currentGameListArray[Integer.parseInt(gameID)].whiteUsername() + "\n");
         // System.out.print("Black Player is " + currentGameListArray[Integer.parseInt(gameID)].blackUsername() + "\n");
@@ -449,7 +400,8 @@ public class Repl implements NotificationHandler  {
         int col;
 
 
-        if (location.endsWith("1") || location.endsWith("2") || location.endsWith("3") || location.endsWith("4") || location.endsWith("5") || location.endsWith("6") || location.endsWith("7") || location.endsWith("8"))
+        if (location.endsWith("1") || location.endsWith("2") || location.endsWith("3") || location.endsWith("4") ||
+                location.endsWith("5") || location.endsWith("6") || location.endsWith("7") || location.endsWith("8"))
         {
             row = Integer.parseInt(location.substring(1,2));
             // System.out.print("Row is " + row + "\n");
@@ -548,7 +500,8 @@ public class Repl implements NotificationHandler  {
 
             if (activePlayer.equals(ChessGame.TeamColor.BLACK))
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
                 for (int row = 1; row <= 8; row++ )
                 {
                     // Move to the next row
@@ -560,18 +513,10 @@ public class Repl implements NotificationHandler  {
                         // Move to the next col
 
 
+                        // Set Backgroud Color
+                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
 
-                        // Set Background Color
-                        if (squareColorWhite)
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
-                        }
-                        else
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
-                        }
+
 
                         for (ChessMove move : validMoves)
                         {
@@ -594,11 +539,13 @@ public class Repl implements NotificationHandler  {
                     squareColorWhite = !squareColorWhite;
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
             }
             else if (activePlayer.equals(ChessGame.TeamColor.WHITE))
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
                 for (int row = 8; row >= 1; row-- )
                 {
                     // Move to the next row
@@ -610,16 +557,7 @@ public class Repl implements NotificationHandler  {
                         // Move to the next col
 
                         // Set Backgroud Color
-                        if (squareColorWhite)
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
-                        }
-                        else
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
-                        }
+                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
 
                         for (ChessMove move : validMoves)
                         {
@@ -639,7 +577,8 @@ public class Repl implements NotificationHandler  {
                     squareColorWhite = !squareColorWhite;
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
             }
 
 
@@ -671,6 +610,7 @@ public class Repl implements NotificationHandler  {
             // Run Function
             //Game_Response_List output = service.Game_List(new Game_Request_List());
 
+
             String[] gameListSplit = gameList.split("\"");
             for (int i = 0; i < gameListSplit.length; i++ )
             {
@@ -680,78 +620,99 @@ public class Repl implements NotificationHandler  {
 
             String gameListOutput = "\nGame List\n---------\n";
 
-            currentGameListArray = new GameDataShort[100];
+            updateCurrentGameListArray(gameList);
 
-            for (int i = 0; i < gameListSplit.length; i++ )
+            for (int k=0; k < currentGameListArray.length; k++)
             {
-                if (gameListSplit[i].equals("gameID"))
+                // System.out.print(" Game Data Short #" + i + " = " + currentGameListArray[i] + "\n");
+                if (currentGameListArray[k] != null)
                 {
-                    gameListOutput = gameListOutput.concat("Game #" + gameListSplit[i+1].split(":")[1] + " is ");
-
-                    String gameName = "";
-                    String whiteUsername = "";
-                    String blackUsername = "";
-
-
-                    for (int j = i + 1; j < gameListSplit.length; j++ )
-                    {
-                        // System.out.print(" i=" + i + " j=" + j + ",");
-
-                        if (gameListSplit[j].equals("gameID"))
-                        {
-                            break;
-                        } else if (gameListSplit[j].equals("}]}"))
-                        {
-                            break;
-                        } else if (gameListSplit[j].equals("gameName"))
-                        {
-                            gameName = gameListSplit[j + 2];
-                            // System.out.print(" gameName=" + gameName + ",");
-                        }
-                        else if (gameListSplit[j].equals("blackUsername"))
-                        {
-                            blackUsername = gameListSplit[j + 2];
-                            // System.out.print(" blackUsername=" + blackUsername + ",");
-                        }
-                        else if (gameListSplit[j].equals("whiteUsername"))
-                        {
-                            whiteUsername = gameListSplit[j + 2];
-                            // System.out.print(" whiteUsername=" + whiteUsername + ",");
-                        }
-
-
-                    }
-
-                    // System.out.print("\nAppending to gameListArray= \n" + gameListSplit[i+1].split(":")[1].split(",")[0] + "\n");
-                    currentGameListArray[Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0])] = new GameDataShort(Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0]), whiteUsername, blackUsername, gameName);
+                    gameListOutput = gameListOutput.concat("Game #" + k + ", is ");
 
                     // Only print the ones found.
-                    gameListOutput = gameListOutput.concat(gameName);
-                    if (!whiteUsername.isEmpty())
+                    gameListOutput = gameListOutput.concat(currentGameListArray[k].gameName());
+                    if (!currentGameListArray[k].whiteUsername().isEmpty())
                     {
-                        gameListOutput = gameListOutput.concat("     WhitePlayerName: " + whiteUsername);
+                        gameListOutput = gameListOutput.concat("     WhitePlayerName: " + currentGameListArray[k].whiteUsername());
                     }
-                    if (!blackUsername.isEmpty())
+                    if (!currentGameListArray[k].blackUsername().isEmpty())
                     {
-                        gameListOutput = gameListOutput.concat("     BlackPlayerName: " + blackUsername);
+                        gameListOutput = gameListOutput.concat("     BlackPlayerName: " + currentGameListArray[k].blackUsername());
                     }
                     gameListOutput = gameListOutput.concat("\n");
-
-                    for (int k=0; k < currentGameListArray.length; k++)
-                    {
-                        // System.out.print(" Game Data Short #" + i + " = " + currentGameListArray[i] + "\n");
-                    }
-
                 }
-
             }
 
-            // return gameList;
+
+            // return gameListOutput;
             return gameListOutput;
 
         } catch (Exception e) {
 
             return "There was an error listing games";
+        }
+    }
+
+    private void updateCurrentGameListArray(String gameList)
+    {
+        String[] gameListSplit = gameList.split("\"");
+        for (int i = 0; i < gameListSplit.length; i++ )
+        {
+            // System.out.print("number " + i + " is " + gameListSplit[i] + ", ");
+        }
+        // System.out.print("\n");
+
+        currentGameListArray = new GameDataShort[100];
+
+        for (int i = 0; i < gameListSplit.length; i++ )
+        {
+            if (gameListSplit[i].equals("gameID"))
+            {
+
+                String gameName = "";
+                String whiteUsername = "";
+                String blackUsername = "";
+
+
+                for (int j = i + 1; j < gameListSplit.length; j++ )
+                {
+                    // System.out.print(" i=" + i + " j=" + j + ",");
+
+                    if (gameListSplit[j].equals("gameID"))
+                    {
+                        break;
+                    } else if (gameListSplit[j].equals("}]}"))
+                    {
+                        break;
+                    } else if (gameListSplit[j].equals("gameName"))
+                    {
+                        gameName = gameListSplit[j + 2];
+                        // System.out.print(" gameName=" + gameName + ",");
+                    }
+                    else if (gameListSplit[j].equals("blackUsername"))
+                    {
+                        blackUsername = gameListSplit[j + 2];
+                        // System.out.print(" blackUsername=" + blackUsername + ",");
+                    }
+                    else if (gameListSplit[j].equals("whiteUsername"))
+                    {
+                        whiteUsername = gameListSplit[j + 2];
+                        // System.out.print(" whiteUsername=" + whiteUsername + ",");
+                    }
+
+
+                }
+
+                // System.out.print("\nAppending to gameListArray= \n" + gameListSplit[i+1].split(":")[1].split(",")[0] + "\n");
+                currentGameListArray[Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0])] =
+                        new GameDataShort(Integer.parseInt(gameListSplit[i+1].split(":")[1].split(",")[0]), whiteUsername, blackUsername, gameName);
+
+                for (int k=0; k < currentGameListArray.length; k++)
+                {
+                    // System.out.print(" Game Data Short #" + i + " = " + currentGameListArray[i] + "\n");
+                }
+            }
+
         }
     }
 
@@ -1177,7 +1138,8 @@ public class Repl implements NotificationHandler  {
             // System.out.print("Printing Board Now for the " + activePlayer + " player.\n");
             if (activePlayer.equals(ChessGame.TeamColor.BLACK))
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
                 for (int row = 1; row <= 8; row++ )
                 {
                     // Move to the next row
@@ -1189,16 +1151,7 @@ public class Repl implements NotificationHandler  {
                         // Move to the next col
 
                         // Set Backgroud Color
-                        if (squareColorWhite)
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
-                        }
-                        else
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
-                        }
+                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
 
 
                         printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
@@ -1211,11 +1164,13 @@ public class Repl implements NotificationHandler  {
                     squareColorWhite = !squareColorWhite;
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003h\u2003 g\u2003 f\u2003 e\u2003 d\u2003 c\u2003 b\u2003 a\u2003\u2003\u2003" + RESET + "\n");
             }
             else if (activePlayer.equals(ChessGame.TeamColor.WHITE))
             {
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
                 for (int row = 8; row >= 1; row-- )
                 {
                     // Move to the next row
@@ -1227,16 +1182,7 @@ public class Repl implements NotificationHandler  {
                         // Move to the next col
 
                         // Set Backgroud Color
-                        if (squareColorWhite)
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_PEACH);
-                        }
-                        else
-                        {
-                            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
-                            printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_BROWN);
-                        }
+                        printBoardOutput = printBoardOutput.concat(printSquare(squareColorWhite));
 
                         printBoardOutput = printBoardOutput.concat(printPiece(chessBoard.getPiece(row, col)));
 
@@ -1246,7 +1192,8 @@ public class Repl implements NotificationHandler  {
                     squareColorWhite = !squareColorWhite;
                     printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003" + (row) + " " + RESET + "\n");
                 }
-                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY + "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
+                printBoardOutput = printBoardOutput.concat(SET_TEXT_COLOR_BLACK + SET_BG_COLOR_LIGHT_GREY +
+                        "\u2003\u2003\u2003a\u2003 b\u2003 c\u2003 d\u2003 e\u2003 f\u2003 g\u2003 h\u2003\u2003\u2003" + RESET + "\n");
             }
 
 
@@ -1262,6 +1209,22 @@ public class Repl implements NotificationHandler  {
 
 
     }
+
+    private String printSquare(boolean squareColorWhite)
+    {
+        // Set Backgroud Color
+        if (squareColorWhite)
+        {
+            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_WHITE);
+            return SET_BG_COLOR_PEACH;
+        }
+        else
+        {
+            // printBoardOutput = printBoardOutput.concat(SET_BG_COLOR_GREEN);
+            return SET_BG_COLOR_BROWN;
+        }
+    }
+
 
     private String printPiece(ChessPiece piece)
     {
@@ -1305,49 +1268,6 @@ public class Repl implements NotificationHandler  {
     }
 
 
-
-//    public String adoptPet(String... params) {
-//        assertSignedIn();
-//        if (params.length == 1) {
-//            try {
-//                int id = Integer.parseInt(params[0]);
-//                Pet pet = getPet(id);
-//                if (pet != null) {
-//                    server.deletePet(id);
-//                    return String.format("%s says %s", pet.name(), pet.sound());
-//                }
-//            } catch (NumberFormatException ignored) {
-//            }
-//        }
-//
-//    }
-
-//    public String adoptAllPets() {
-//        assertSignedIn();
-//        var buffer = new StringBuilder();
-//        for (Pet pet : server.listPets()) {
-//            buffer.append(String.format("%s says %s%n", pet.name(), pet.sound()));
-//        }
-//
-//        server.deleteAllPets();
-//        return buffer.toString();
-//    }
-
-//    public String signOut() {
-//        assertSignedIn();
-//        ws.leavePetShop(visitorName);
-//        state = State.SIGNEDOUT;
-//        return String.format("%s left the shop", visitorName);
-//    }
-
-//    private Pet getPet(int id) {
-//        for (Pet pet : server.listPets()) {
-//            if (pet.id() == id) {
-//                return pet;
-//            }
-//        }
-//        return null;
-//    }
 
     public String help() {
         if (state == State.SIGNEDOUT) {
