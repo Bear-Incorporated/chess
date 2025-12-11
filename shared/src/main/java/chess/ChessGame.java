@@ -213,6 +213,27 @@ public class ChessGame {
         // EnPassant Test
         // Check if piece moving is a Pawn
         // Check is last moved piece exists
+
+        movesOutput.addAll(validMovesHelperCheckEnPassant(startPosition));
+
+
+        return movesOutput;
+
+
+    }
+
+    private Collection<ChessMove> validMovesHelperCheckEnPassant(ChessPosition startPosition) {
+
+        Set<ChessMove> movesOutput = new HashSet<ChessMove>();
+
+        int pieceMovingRow = startPosition.getRow();
+        int pieceMovingCol = startPosition.getColumn();
+
+        ChessPiece pieceMoving = playerBoard.getPiece(startPosition);
+
+        // EnPassant Test
+        // Check if piece moving is a Pawn
+        // Check is last moved piece exists
         if(pieceMoving.getPieceType() == ChessPiece.PieceType.PAWN && playerInactiveLastMovePosition != null)
         {
             //System.out.println("EnPassant Test 1 Passed");
@@ -220,48 +241,48 @@ public class ChessGame {
 
             //System.out.println("EnPassant Test 2 Passed");
             // Check is last moved piece exists
-            if (playerBoard.getPiece(playerInactiveLastMovePosition) != null)
+            if (playerBoard.getPiece(playerInactiveLastMovePosition) == null)
             {
-                //System.out.println("EnPassant Test 3 Passed");
-                //System.out.println("EnPassant Test 4 Passed");
-                // Check if inactive pawn only moved one time
-                if (playerBoard.getPiece(playerInactiveLastMovePosition).getPieceMoved() == 1)
+                return movesOutput;
+            }
+
+            //System.out.println("EnPassant Test 3 Passed");
+            //System.out.println("EnPassant Test 4 Passed");
+            // Check if inactive pawn only moved one time
+            if (playerBoard.getPiece(playerInactiveLastMovePosition).getPieceMoved() == 1)
+            {
+                //System.out.println("EnPassant Test 5 Passed");
+                // Check to see if they are now on the same row (required for EnPassant
+                if (playerInactiveLastMovePosition.getRow() == pieceMovingRow)
                 {
-                    //System.out.println("EnPassant Test 5 Passed");
-                    // Check to see if they are now on the same row (required for EnPassant
-                    if (playerInactiveLastMovePosition.getRow() == pieceMovingRow)
+                    //System.out.println("EnPassant Test 6 Passed");
+                    // If one row over from the other pawn
+                    if (pieceMovingCol == playerInactiveLastMovePosition.getColumn() + 1 || pieceMovingCol ==
+                            playerInactiveLastMovePosition.getColumn() - 1)
                     {
-                        //System.out.println("EnPassant Test 6 Passed");
-                        // If one row over from the other pawn
-                        if (pieceMovingCol == playerInactiveLastMovePosition.getColumn() + 1 || pieceMovingCol ==
-                                playerInactiveLastMovePosition.getColumn() - 1)
+                        //System.out.println("EnPassant Test 7 Passed");
+                        // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
+                        if (pieceMovingRow == 4)
                         {
-                            //System.out.println("EnPassant Test 7 Passed");
-                            // Because I have only moved the enemy pawn once, if it is on row 4 or 5, it must have jumped up
-                            if (pieceMovingRow == 4)
-                            {
-                                //System.out.println("EnPassant Test 8 Passed");
-                                movesOutput.add(new ChessMove(startPosition, new ChessPosition(3,
-                                        playerInactiveLastMovePosition.getColumn()), null));
-                            } else if (pieceMovingRow == 5)
-                            {
-                                //System.out.println("EnPassant Test 9 Passed");
-                                movesOutput.add(new ChessMove(startPosition, new ChessPosition(6,
-                                        playerInactiveLastMovePosition.getColumn()), null));
-                            }
+                            //System.out.println("EnPassant Test 8 Passed");
+                            movesOutput.add(new ChessMove(startPosition, new ChessPosition(3,
+                                    playerInactiveLastMovePosition.getColumn()), null));
+                        } else if (pieceMovingRow == 5)
+                        {
+                            //System.out.println("EnPassant Test 9 Passed");
+                            movesOutput.add(new ChessMove(startPosition, new ChessPosition(6,
+                                    playerInactiveLastMovePosition.getColumn()), null));
                         }
-
-
                     }
+
+
                 }
+
             }
         }
-
-
         return movesOutput;
-
-
     }
+
 
     /**
      * Makes a move in a chess game
@@ -433,46 +454,14 @@ public class ChessGame {
                 if (playerBoardChecking.getPiece(r, c) != null)
                 {
                     // Check to see if it is the king of the correct color
-                    ChessPiece pieceKing = playerBoardChecking.getPiece(r,c);
-                    ChessPosition pieceKingPosition = new ChessPosition(r,c);
-                    //System.out.println("Found the KING @" + pieceKingPosition);
-                    if (pieceKing.getTeamColor() == teamColor && pieceKing.getPieceType() == ChessPiece.PieceType.KING)
+                    ChessPiece pieceChecking = playerBoardChecking.getPiece(r,c);
+
+                    //System.out.println("Found the KING @" + pieceCheckingPosition);
+
+                    if (pieceChecking.getTeamColor() == teamColor && pieceChecking.getPieceType() == ChessPiece.PieceType.KING)
                     {
                         // Check every spot on the board to see if it can kill the king
-                        for(int rr=1; rr<=8; rr++)
-                        {
-                            for(int cc=1; cc<=8; cc++)
-                            {
-                                if (playerBoardChecking.getPiece(rr,cc) != null)
-                                {
-                                    // Check to see if it is the opposite color
-                                    ChessPiece pieceOther = playerBoardChecking.getPiece(rr,cc);
-                                    ChessPosition pieceOtherPosition = new ChessPosition(rr,cc);
-                                    //System.out.println("Checking Piece @" + pieceOtherPosition);
-                                    // Check to see if they are not teammates
-                                    if (pieceOther.getTeamColor() != pieceKing.getTeamColor())
-                                    {
-                                        //System.out.println("Different Team!!!");
-                                        Set<ChessMove> pieceOtherMoves = new HashSet<ChessMove>();
-                                        pieceOtherMoves = (Set<ChessMove>) pieceOther.pieceMoves(playerBoardChecking, pieceOtherPosition);
-
-                                        //System.out.println("Found moves");
-                                        //System.out.println("King @ " + pieceKingPosition);
-                                        if(pieceOtherMoves != null)
-                                        {
-                                            for (ChessMove move : pieceOtherMoves)
-                                            {
-                                                //System.out.println(m.getEndPosition());
-                                                if(move.getEndPosition().equals(pieceKingPosition))
-                                                {
-                                                    return true;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        return isInChecKHelperCanKillKing(playerBoardChecking, r, c);
                     }
                 }
 
@@ -480,6 +469,50 @@ public class ChessGame {
         }
         return false;
     }
+
+
+    private boolean isInChecKHelperCanKillKing(ChessBoard playerBoardChecking, int r, int c) {
+        ChessPiece pieceChecking = playerBoardChecking.getPiece(r,c);
+
+        // Check every spot on the board to see if it can kill the king
+        for(int rr=1; rr<=8; rr++)
+        {
+            for(int cc=1; cc<=8; cc++)
+            {
+                if (playerBoardChecking.getPiece(rr,cc) != null)
+                {
+                    // Check to see if it is the opposite color
+                    ChessPiece pieceOther = playerBoardChecking.getPiece(rr,cc);
+                    ChessPosition pieceOtherPosition = new ChessPosition(rr,cc);
+                    //System.out.println("Checking Piece @" + pieceOtherPosition);
+                    // Check to see if they are not teammates
+                    if (pieceOther.getTeamColor() != pieceChecking.getTeamColor())
+                    {
+                        //System.out.println("Different Team!!!");
+                        Set<ChessMove> pieceOtherMoves = new HashSet<ChessMove>();
+                        pieceOtherMoves = (Set<ChessMove>) pieceOther.pieceMoves(playerBoardChecking, pieceOtherPosition);
+
+                        //System.out.println("Found moves");
+                        //System.out.println("King @ " + pieceCheckingPosition);
+                        if(pieceOtherMoves != null)
+                        {
+                            for (ChessMove move : pieceOtherMoves)
+                            {
+                                //System.out.println(m.getEndPosition());
+                                if(move.getEndPosition().equals(new ChessPosition(r,c)))
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
 
 
 
@@ -500,16 +533,9 @@ public class ChessGame {
             {
                 if(playerBoard.getPiece(r,c) != null)
                 {
-                    if(playerBoard.getPiece(r,c).getTeamColor() == teamColor)
+                    if(playerBoard.getPiece(r,c).getTeamColor() == teamColor && validMoves(new ChessPosition(r,c)) != null &&  !validMoves(new ChessPosition(r, c)).isEmpty())
                     {
-                        if (validMoves(new ChessPosition(r,c)) != null)
-                        {
-                            if (!validMoves(new ChessPosition(r, c)).isEmpty())
-                            {
-                                // Escape found!!!
-                                return false;
-                            }
-                        }
+                        return false;
                     }
                 }
             }
@@ -539,15 +565,10 @@ public class ChessGame {
             for(int c=1; c<=8; c++)
             {
                 if(playerBoard.getPiece(r,c) != null) {
-                    if(playerBoard.getPiece(r,c).getTeamColor() == teamColor && validMoves(new ChessPosition(r,c)) != null)
+                    if(playerBoard.getPiece(r,c).getTeamColor() == teamColor && validMoves(new ChessPosition(r,c)) != null && !validMoves(new ChessPosition(r, c)).isEmpty())
                     {
-
-                        if (!validMoves(new ChessPosition(r, c)).isEmpty())
-                        {
-                            // Escape found!!!
-                            return false;
-                        }
-
+                        // Escape found!!!
+                        return false;
                     }
                 }
             }
