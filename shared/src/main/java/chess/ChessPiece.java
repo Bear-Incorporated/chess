@@ -154,54 +154,58 @@ public class ChessPiece {
 
         if (tempRow >= 1 && tempRow <= 8 && tempCol >= 1 && tempCol <= 8)
         {
-            if (board.getPiece(tempRow, tempCol) == null)
+            // Check if spot open
+            if (board.getPiece(tempRow, tempCol) != null)
             {
-                // If not at edge of board
-                if (tempRow >= 2 && tempRow <= 7)
-                {
-                    // Keep going buddy.
-                    returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol), new ChessPosition(tempRow, tempCol), null));
-                } else
-                {
-                    // PROMOTED!!!!!
-                    returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
-                            new ChessPosition(tempRow, tempCol), PieceType.ROOK));
-                    returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
-                            new ChessPosition(tempRow, tempCol), PieceType.KNIGHT));
-                    returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
-                            new ChessPosition(tempRow, tempCol), PieceType.BISHOP));
-                    returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
-                            new ChessPosition(tempRow, tempCol), PieceType.QUEEN));
-                }
+                return returnMoves;
+            }
 
-                // Check if on starting row
-                // If in starting place for White
-                if (pieceRow == 2 && pieceColor == ChessGame.TeamColor.WHITE)
-                {
-                    tempRow = pieceRow + offsetRow + offsetRow;
-                    if (tempRow >= 1 && tempRow <= 8 && tempCol >= 1 && tempCol <= 8)
-                    {
-                        if (board.getPiece(tempRow, tempCol) == null)
-                        {
-                            returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol), new ChessPosition(tempRow, tempCol), null));
-                        }
-                    }
-                }
+            // If not at edge of board
+            if (tempRow >= 2 && tempRow <= 7)
+            {
+                // Keep going buddy.
+                returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol), new ChessPosition(tempRow, tempCol), null));
+            } else
+            {
+                // PROMOTED!!!!!
+                returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
+                        new ChessPosition(tempRow, tempCol), PieceType.ROOK));
+                returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
+                        new ChessPosition(tempRow, tempCol), PieceType.KNIGHT));
+                returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
+                        new ChessPosition(tempRow, tempCol), PieceType.BISHOP));
+                returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol),
+                        new ChessPosition(tempRow, tempCol), PieceType.QUEEN));
+            }
 
-                // Check if on starting row
-                // If in starting place for Black
-                if (pieceRow == 7 && pieceColor == ChessGame.TeamColor.BLACK)
+            // Check if on starting row
+            // If in starting place for White
+            if (pieceRow == 2 && pieceColor == ChessGame.TeamColor.WHITE)
+            {
+                tempRow = pieceRow + offsetRow + offsetRow;
+                if (tempRow >= 1 && tempRow <= 8 && tempCol >= 1 && tempCol <= 8)
                 {
-                    tempRow = pieceRow + offsetRow + offsetRow;
-                    if (tempRow >= 1 && tempRow <= 8 && tempCol >= 1 && tempCol <= 8)
+                    if (board.getPiece(tempRow, tempCol) == null)
                     {
-                        if (board.getPiece(tempRow, tempCol) == null)
-                        {
-                            returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol), new ChessPosition(tempRow, tempCol), null));
-                        }
+                        returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol), new ChessPosition(tempRow, tempCol), null));
                     }
                 }
             }
+
+            // Check if on starting row
+            // If in starting place for Black
+            if (pieceRow == 7 && pieceColor == ChessGame.TeamColor.BLACK)
+            {
+                tempRow = pieceRow + offsetRow + offsetRow;
+                if (tempRow >= 1 && tempRow <= 8 && tempCol >= 1 && tempCol <= 8)
+                {
+                    if (board.getPiece(tempRow, tempCol) == null)
+                    {
+                        returnMoves.add(new ChessMove(new ChessPosition(pieceRow, pieceCol), new ChessPosition(tempRow, tempCol), null));
+                    }
+                }
+            }
+
         }
         return returnMoves;
     }
